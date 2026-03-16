@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 interface ResourceCardProps {
   resource: Resource;
   size?: "sm" | "lg";
+  asDiv?: boolean;
 }
 
 const categoryConfig: Record<string, { icon: React.ElementType; gradient: string; badge: string }> = {
