@@ -41,30 +41,16 @@ export default function TriageResults({ needs, onBack }: TriageResultsProps) {
         Change my needs
       </motion.button>
 
-      {/* Active filter chips */}
-      <motion.div
-        className="flex flex-wrap gap-2 mb-5"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
-      >
-        {needs.map((need) => (
-          <Badge key={need} variant="secondary" className="text-xs">
-            {need}
-          </Badge>
-        ))}
-      </motion.div>
-
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.15 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
       >
         <h1 className="text-xl font-bold text-foreground mb-1">
-          We found {results.length} resource{results.length !== 1 ? "s" : ""} for you
+          Here's what we recommend
         </h1>
         <p className="text-sm text-muted-foreground mb-6">
-          Start with the top recommendation below.
+          Tap an action below to get started right away.
         </p>
       </motion.div>
 
