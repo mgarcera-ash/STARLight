@@ -3,8 +3,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { ResourceProvider } from "@/context/ResourceContext";
+import BottomNav from "@/components/BottomNav";
+import Index from "./pages/Index";
+import ResourceDetail from "./pages/ResourceDetail";
+import Search from "./pages/Search";
+import SubmitResource from "./pages/SubmitResource";
+import ReviewQueue from "./pages/ReviewQueue";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -13,13 +19,19 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <ResourceProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/resource/:id" element={<ResourceDetail />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/submit" element={<SubmitResource />} />
+            <Route path="/review" element={<ReviewQueue />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <BottomNav />
+        </BrowserRouter>
+      </ResourceProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
