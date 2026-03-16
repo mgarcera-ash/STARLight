@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 interface ResourceCardProps {
   resource: Resource;
   size?: "sm" | "lg";
-  asDiv?: boolean;
 }
 
 const categoryConfig: Record<string, { icon: React.ElementType; gradient: string }> = {
