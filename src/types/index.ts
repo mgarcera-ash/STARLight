@@ -1,0 +1,29 @@
+export type Category =
+  | "Housing"
+  | "Food"
+  | "Healthcare"
+  | "Legal"
+  | "Community"
+  | "Internal Programs";
+
+export interface Resource {
+  id: string;
+  title: string;
+  description: string;
+  categories: Category[];
+  tags: string[];
+  eligibility: string;
+  hours: string;
+  contact: {
+    phone?: string;
+    email?: string;
+    website?: string;
+  };
+  location: string;
+  featured: boolean;
+  status: "approved" | "pending" | "returned";
+  returnComment?: string;
+  createdAt: string;
+}
+
+export type NewResource = Omit<Resource, "id" | "status" | "createdAt">;
