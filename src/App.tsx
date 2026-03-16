@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ResourceProvider } from "@/context/ResourceContext";
 import BottomNav from "@/components/BottomNav";
 import Index from "./pages/Index";
+import Browse from "./pages/Browse";
 import ResourceDetail from "./pages/ResourceDetail";
 import Search from "./pages/Search";
 import SubmitResource from "./pages/SubmitResource";
