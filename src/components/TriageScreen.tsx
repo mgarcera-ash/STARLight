@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Category } from "@/types";
 import { Home, Utensils, HeartPulse, Scale, Users, Building2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -73,7 +74,12 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background px-5 pt-12 pb-24">
       {/* Header */}
-      <div className="mb-8 text-center">
+      <motion.div
+        className="mb-8 text-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
         <p className="text-sm font-medium text-primary tracking-wide uppercase mb-2">
           STARlight
         </p>
@@ -83,47 +89,68 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
         <p className="text-sm text-muted-foreground mt-2">
           Tap all that apply — we'll find the best resources for you.
         </p>
-      </div>
+      </motion.div>
 
       {/* Need cards */}
       <div className="grid grid-cols-2 gap-3 flex-1">
-        {needOptions.map(({ category, label, icon: Icon, color, activeBg }) => {
+        {needOptions.map(({ category, label, icon: Icon, color, activeBg }, index) => {
           const isSelected = selected.includes(category);
           return (
-            <button
+            <motion.button
               key={category}
               onClick={() => toggle(category)}
+              initial={{ opacity: 0, y: 24, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                duration: 0.4,
+                delay: 0.15 + index * 0.07,
+                ease: "easeOut",
+              }}
+              whileTap={{ scale: 0.96 }}
               className={cn(
-                "relative flex flex-col items-center justify-center gap-2 rounded-2xl border-2 p-5 transition-all text-center",
+                "relative flex flex-col items-center justify-center gap-2 rounded-2xl border-2 p-5 transition-colors text-center",
                 isSelected
                   ? cn(activeBg, "ring-2 border-2 shadow-md")
                   : "border-border bg-card hover:bg-muted/50"
               )}
             >
-              {isSelected && (
-                <div className="absolute top-2 right-2 rounded-full bg-primary p-0.5">
-                  <Check className="h-3 w-3 text-primary-foreground" />
-                </div>
-              )}
+              <AnimatePresence>
+                {isSelected && (
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-2 right-2 rounded-full bg-primary p-0.5"
+                  >
+                    <Check className="h-3 w-3 text-primary-foreground" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
               <Icon
-                className={cn("h-8 w-8", isSelected ? color : "text-muted-foreground")}
+                className={cn("h-8 w-8 transition-colors", isSelected ? color : "text-muted-foreground")}
                 strokeWidth={1.5}
               />
               <span
                 className={cn(
-                  "text-sm font-semibold leading-tight",
+                  "text-sm font-semibold leading-tight transition-colors",
                   isSelected ? "text-foreground" : "text-muted-foreground"
                 )}
               >
                 {label}
               </span>
-            </button>
+            </motion.button>
           );
         })}
       </div>
 
       {/* CTA */}
-      <div className="mt-6">
+      <motion.div
+        className="mt-6"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.6, ease: "easeOut" }}
+      >
         <Button
           onClick={() => onSubmit(selected)}
           disabled={selected.length === 0}
@@ -132,7 +159,7 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
         >
           Show me my options
         </Button>
-      </div>
+      </motion.div>
     </div>
   );
 }
