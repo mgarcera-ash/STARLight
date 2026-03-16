@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Search, PlusCircle, ClipboardCheck } from "lucide-react";
+import { Compass, LayoutGrid, Search, PlusCircle, ClipboardCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { to: "/", icon: Home, label: "Browse" },
+  { to: "/", icon: Compass, label: "Get Help" },
+  { to: "/browse", icon: LayoutGrid, label: "Browse" },
   { to: "/search", icon: Search, label: "Search" },
   { to: "/submit", icon: PlusCircle, label: "Submit" },
   { to: "/review", icon: ClipboardCheck, label: "Review" },
