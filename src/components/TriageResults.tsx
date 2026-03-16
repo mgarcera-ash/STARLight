@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
+
 
 interface TriageResultsProps {
   needs: Category[];

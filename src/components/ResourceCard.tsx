@@ -118,6 +118,6 @@ export default function ResourceCard({ resource, size = "sm", asDiv = false }: R
           <span className="text-[11px] truncate">{resource.location}</span>
         </div>
       </div>
-    </Link>
+    </Wrapper>
   );
 }
