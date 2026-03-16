@@ -47,6 +47,7 @@ export default function SubmissionForm() {
       description: description.trim(),
       categories,
       tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
+      subTags: [],
       eligibility: eligibility.trim(),
       hours: hours.trim(),
       contact: {

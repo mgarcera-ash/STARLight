@@ -8,28 +8,60 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
-
 interface TriageResultsProps {
   needs: Category[];
+  followUpAnswers: Record<string, string>;
   onBack: () => void;
 }
 
-export default function TriageResults({ needs, onBack }: TriageResultsProps) {
+export default function TriageResults({ needs, followUpAnswers, onBack }: TriageResultsProps) {
   const { approvedResources } = useResources();
 
-  const results = useMemo(() => {
+  const answerSubTags = useMemo(
+    () => Object.values(followUpAnswers).filter(Boolean),
+    [followUpAnswers]
+  );
+
+  const { bestMatches, otherMatches } = useMemo(() => {
     const matched = approvedResources.filter((r) =>
       r.categories.some((c) => needs.includes(c))
     );
-    return matched.sort((a, b) => a.urgency - b.urgency);
-  }, [approvedResources, needs]);
 
-  const priorityResource = results[0];
-  const otherResources = results.slice(1);
+    if (answerSubTags.length === 0) {
+      const sorted = matched.sort((a, b) => a.urgency - b.urgency);
+      return { bestMatches: sorted, otherMatches: [] };
+    }
+
+    const best: typeof matched = [];
+    const other: typeof matched = [];
+
+    for (const r of matched) {
+      const matchCount = answerSubTags.filter((tag) => r.subTags.includes(tag)).length;
+      if (matchCount > 0) {
+        best.push(r);
+      } else {
+        other.push(r);
+      }
+    }
+
+    // Sort best by match count (desc) then urgency
+    best.sort((a, b) => {
+      const aCount = answerSubTags.filter((t) => a.subTags.includes(t)).length;
+      const bCount = answerSubTags.filter((t) => b.subTags.includes(t)).length;
+      if (bCount !== aCount) return bCount - aCount;
+      return a.urgency - b.urgency;
+    });
+
+    other.sort((a, b) => a.urgency - b.urgency);
+
+    return { bestMatches: best, otherMatches: other };
+  }, [approvedResources, needs, answerSubTags]);
+
+  const priorityResource = bestMatches[0];
+  const remainingBest = bestMatches.slice(1);
 
   return (
     <div className="min-h-screen bg-background px-4 pt-6 pb-24">
-      {/* Back button */}
       <motion.button
         onClick={onBack}
         className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4 hover:text-foreground transition-colors"
@@ -38,7 +70,7 @@ export default function TriageResults({ needs, onBack }: TriageResultsProps) {
         transition={{ duration: 0.3 }}
       >
         <ArrowLeft className="h-4 w-4" />
-        Change my needs
+        Start over
       </motion.button>
 
       <motion.div
@@ -50,7 +82,7 @@ export default function TriageResults({ needs, onBack }: TriageResultsProps) {
           Here's what we recommend
         </h1>
         <p className="text-sm text-muted-foreground mb-6">
-          Tap an action below to get started right away.
+          Based on what you told us, these fit best.
         </p>
       </motion.div>
 
@@ -77,28 +109,24 @@ export default function TriageResults({ needs, onBack }: TriageResultsProps) {
         </motion.div>
       )}
 
-      {/* Other results */}
-      {otherResources.length > 0 && (
-        <div>
+      {/* Remaining best matches */}
+      {remainingBest.length > 0 && (
+        <div className="mb-6">
           <motion.h2
             className="text-sm font-bold text-muted-foreground uppercase tracking-wide mb-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.4 }}
           >
-            More options
+            Also a good fit
           </motion.h2>
           <div className="flex flex-col gap-3">
-            {otherResources.map((r, i) => (
+            {remainingBest.map((r, i) => (
               <motion.div
                 key={r.id}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.35,
-                  delay: 0.45 + i * 0.06,
-                  ease: "easeOut",
-                }}
+                transition={{ duration: 0.35, delay: 0.45 + i * 0.06, ease: "easeOut" }}
               >
                 <ResourceCard resource={r} size="sm" />
               </motion.div>
@@ -107,7 +135,33 @@ export default function TriageResults({ needs, onBack }: TriageResultsProps) {
         </div>
       )}
 
-      {results.length === 0 && (
+      {/* Other category matches */}
+      {otherMatches.length > 0 && (
+        <div>
+          <motion.h2
+            className="text-sm font-bold text-muted-foreground uppercase tracking-wide mb-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.5 }}
+          >
+            Other options
+          </motion.h2>
+          <div className="flex flex-col gap-3">
+            {otherMatches.map((r, i) => (
+              <motion.div
+                key={r.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: 0.55 + i * 0.06, ease: "easeOut" }}
+              >
+                <ResourceCard resource={r} size="sm" />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {bestMatches.length === 0 && otherMatches.length === 0 && (
         <motion.div
           className="text-center py-16"
           initial={{ opacity: 0 }}

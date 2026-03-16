@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Category, FollowUpQuestion } from "@/types";
+import { Category } from "@/types";
 import { getQuestionsForCategories } from "@/data/followUpQuestions";
 
 interface FollowUpFlowProps {
