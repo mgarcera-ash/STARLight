@@ -21,6 +21,7 @@ export interface Resource {
   };
   location: string;
   featured: boolean;
+  urgency: 1 | 2 | 3;
   status: "approved" | "pending" | "returned";
   returnComment?: string;
   createdAt: string;
