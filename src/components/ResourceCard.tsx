@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 interface ResourceCardProps {
   resource: Resource;
   size?: "sm" | "lg";
+  asDiv?: boolean;
 }
 
 const categoryConfig: Record<string, { icon: React.ElementType; gradient: string; badge: string }> = {
@@ -41,15 +42,18 @@ const categoryConfig: Record<string, { icon: React.ElementType; gradient: string
   },
 };
 
-export default function ResourceCard({ resource, size = "sm" }: ResourceCardProps) {
+export default function ResourceCard({ resource, size = "sm", asDiv = false }: ResourceCardProps) {
   const isLarge = size === "lg";
   const primaryCat = resource.categories[0] || "Housing";
   const config = categoryConfig[primaryCat] || categoryConfig.Housing;
   const IconComp = config.icon;
 
+  const Wrapper = asDiv ? "div" : Link;
+  const wrapperProps = asDiv ? {} : { to: `/resource/${resource.id}` };
+
   return (
-    <Link
-      to={`/resource/${resource.id}`}
+    <Wrapper
+      {...(wrapperProps as any)}
       className={cn(
         "group block rounded-2xl border border-border bg-card shadow-md transition-all hover:shadow-lg hover:-translate-y-1 overflow-hidden",
         isLarge ? "min-w-[280px]" : "min-w-[200px]"
@@ -114,6 +118,6 @@ export default function ResourceCard({ resource, size = "sm" }: ResourceCardProp
           <span className="text-[11px] truncate">{resource.location}</span>
         </div>
       </div>
-    </Link>
+    </Wrapper>
   );
 }

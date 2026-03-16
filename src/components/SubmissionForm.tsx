@@ -56,6 +56,7 @@ export default function SubmissionForm() {
       },
       location: location.trim(),
       featured: false,
+      urgency: 3,
     };
 
     submitResource(newResource);
