@@ -72,7 +72,7 @@ export default function TriageResults({ needs, onBack }: TriageResultsProps) {
             to={`/resource/${priorityResource.id}`}
             className="block rounded-2xl border-2 border-primary/40 bg-primary/5 shadow-lg overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1"
           >
-            <ResourceCard resource={priorityResource} size="lg" asDiv />
+            <ResourceCard resource={priorityResource} size="lg" />
           </Link>
         </motion.div>
       )}
