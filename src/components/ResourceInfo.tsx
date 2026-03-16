@@ -1,112 +1,118 @@
+import { useState } from "react";
 import { Resource } from "@/types";
-import {
-  Clock,
-  MapPin,
-  Phone,
-  Mail,
-  Globe,
-  Users,
-  Tag,
-} from "lucide-react";
+import { Clock, MapPin, Users, Phone, Navigation, Mail, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+
+function getMapsUrl(location: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+}
+
+function getMapsEmbedUrl(location: string) {
+  return `https://maps.google.com/maps?q=${encodeURIComponent(location)}&output=embed`;
+}
+
+function CollapsibleSection({ title, icon: Icon, children, defaultOpen = false }: {
+  title: string;
+  icon: React.ElementType;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-border last:border-b-0">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between w-full py-3 text-sm font-semibold text-foreground"
+      >
+        <div className="flex items-center gap-2">
+          <Icon className="h-4 w-4 text-primary" />
+          {title}
+        </div>
+        <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform duration-200", open && "rotate-180")} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            <div className="pb-3 text-sm text-muted-foreground">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default function ResourceInfo({ resource }: { resource: Resource }) {
+  const hasPhone = !!resource.contact.phone;
+  const hasEmail = !!resource.contact.email;
+
   return (
     <div className="space-y-6">
-      {/* Description */}
-      <section>
-        <p className="text-foreground leading-relaxed">{resource.description}</p>
-      </section>
+      {/* Action buttons */}
+      <div className="flex flex-col gap-2">
+        {hasPhone && (
+          <a
+            href={`tel:${resource.contact.phone}`}
+            className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3.5 text-base font-bold text-white hover:bg-green-700 transition-colors"
+          >
+            <Phone className="h-5 w-5" />
+            Call Now — {resource.contact.phone}
+          </a>
+        )}
+        <a
+          href={getMapsUrl(resource.location)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3.5 text-base font-bold text-primary-foreground hover:bg-primary/90 transition-colors"
+        >
+          <Navigation className="h-5 w-5" />
+          Get Directions
+        </a>
+        {hasEmail && (
+          <a
+            href={`mailto:${resource.contact.email}`}
+            className="flex items-center justify-center gap-2 rounded-xl border border-border px-4 py-3.5 text-base font-bold text-foreground hover:bg-muted transition-colors"
+          >
+            <Mail className="h-5 w-5" />
+            Send Email
+          </a>
+        )}
+      </div>
 
-      {/* Eligibility */}
-      <section className="rounded-2xl bg-muted p-4 border-l-4 border-primary">
-        <div className="flex items-center gap-2 mb-2">
-          <Users className="h-4 w-4 text-primary" />
-          <h3 className="font-bold text-sm text-foreground">Eligibility</h3>
+      {/* Embedded map */}
+      <div className="rounded-2xl overflow-hidden border border-border shadow-sm">
+        <iframe
+          title="Location map"
+          src={getMapsEmbedUrl(resource.location)}
+          className="w-full h-48"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+        />
+        <div className="flex items-center gap-2 px-3 py-2 bg-muted text-xs text-muted-foreground">
+          <MapPin className="h-3.5 w-3.5 shrink-0" />
+          {resource.location}
         </div>
-        <p className="text-sm text-muted-foreground">{resource.eligibility}</p>
-      </section>
+      </div>
 
-      {/* Hours */}
-      <section className="flex items-start gap-3">
-        <div className="rounded-full bg-primary/10 p-2">
-          <Clock className="h-4 w-4 text-primary" />
-        </div>
-        <div>
-          <h3 className="font-bold text-sm text-foreground">Hours</h3>
-          <p className="text-sm text-muted-foreground">{resource.hours}</p>
-        </div>
-      </section>
-
-      {/* Location */}
-      <section className="flex items-start gap-3">
-        <div className="rounded-full bg-primary/10 p-2">
-          <MapPin className="h-4 w-4 text-primary" />
-        </div>
-        <div>
-          <h3 className="font-bold text-sm text-foreground">Location</h3>
-          <p className="text-sm text-muted-foreground">{resource.location}</p>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section>
-        <h3 className="font-bold text-sm text-foreground mb-3">Contact</h3>
-        <div className="space-y-2">
-          {resource.contact.phone && (
-            <a
-              href={`tel:${resource.contact.phone}`}
-              className="flex items-center gap-3 rounded-xl border border-border p-3 hover:bg-muted transition-colors"
-            >
-              <div className="rounded-full bg-primary/10 p-2">
-                <Phone className="h-4 w-4 text-primary" />
-              </div>
-              <span className="text-sm font-medium">{resource.contact.phone}</span>
-            </a>
-          )}
-          {resource.contact.email && (
-            <a
-              href={`mailto:${resource.contact.email}`}
-              className="flex items-center gap-3 rounded-xl border border-border p-3 hover:bg-muted transition-colors"
-            >
-              <div className="rounded-full bg-primary/10 p-2">
-                <Mail className="h-4 w-4 text-primary" />
-              </div>
-              <span className="text-sm font-medium">{resource.contact.email}</span>
-            </a>
-          )}
-          {resource.contact.website && (
-            <a
-              href={resource.contact.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 rounded-xl border border-border p-3 hover:bg-muted transition-colors"
-            >
-              <div className="rounded-full bg-primary/10 p-2">
-                <Globe className="h-4 w-4 text-primary" />
-              </div>
-              <span className="text-sm font-medium">{resource.contact.website}</span>
-            </a>
-          )}
-        </div>
-      </section>
-
-      {/* Tags */}
-      <section>
-        <div className="flex items-center gap-2 mb-2">
-          <Tag className="h-4 w-4 text-muted-foreground" />
-          <h3 className="font-bold text-sm text-foreground">Tags</h3>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {resource.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </section>
+      {/* Collapsible details */}
+      <div className="rounded-2xl border border-border bg-card overflow-hidden px-4">
+        <CollapsibleSection title="Hours" icon={Clock}>
+          {resource.hours}
+        </CollapsibleSection>
+        <CollapsibleSection title="Eligibility" icon={Users}>
+          {resource.eligibility}
+        </CollapsibleSection>
+        <CollapsibleSection title="About this resource" icon={MapPin}>
+          <p className="leading-relaxed">{resource.description}</p>
+        </CollapsibleSection>
+      </div>
     </div>
   );
 }

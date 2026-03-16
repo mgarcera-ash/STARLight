@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Category } from "@/types";
 import { useResources } from "@/context/ResourceContext";
 import ResourceCard from "@/components/ResourceCard";
-import { Badge } from "@/components/ui/badge";
+
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Star } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -41,30 +41,16 @@ export default function TriageResults({ needs, onBack }: TriageResultsProps) {
         Change my needs
       </motion.button>
 
-      {/* Active filter chips */}
-      <motion.div
-        className="flex flex-wrap gap-2 mb-5"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
-      >
-        {needs.map((need) => (
-          <Badge key={need} variant="secondary" className="text-xs">
-            {need}
-          </Badge>
-        ))}
-      </motion.div>
-
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.15 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
       >
         <h1 className="text-xl font-bold text-foreground mb-1">
-          We found {results.length} resource{results.length !== 1 ? "s" : ""} for you
+          Here's what we recommend
         </h1>
         <p className="text-sm text-muted-foreground mb-6">
-          Start with the top recommendation below.
+          Tap an action below to get started right away.
         </p>
       </motion.div>
 
@@ -86,7 +72,7 @@ export default function TriageResults({ needs, onBack }: TriageResultsProps) {
             to={`/resource/${priorityResource.id}`}
             className="block rounded-2xl border-2 border-primary/40 bg-primary/5 shadow-lg overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1"
           >
-            <ResourceCard resource={priorityResource} size="lg" asDiv />
+            <ResourceCard resource={priorityResource} size="lg" />
           </Link>
         </motion.div>
       )}
