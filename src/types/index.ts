@@ -12,6 +12,7 @@ export interface Resource {
   description: string;
   categories: Category[];
   tags: string[];
+  subTags: string[];
   eligibility: string;
   hours: string;
   contact: {
@@ -28,3 +29,10 @@ export interface Resource {
 }
 
 export type NewResource = Omit<Resource, "id" | "status" | "createdAt">;
+
+export interface FollowUpQuestion {
+  id: string;
+  category: Category;
+  question: string;
+  options: { label: string; subTag: string }[];
+}
