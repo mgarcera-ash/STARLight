@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Category } from "@/types";
 import { useResources } from "@/context/ResourceContext";
 import ResourceCard from "@/components/ResourceCard";
-import { Badge } from "@/components/ui/badge";
+
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Star } from "lucide-react";
 import { Link } from "react-router-dom";

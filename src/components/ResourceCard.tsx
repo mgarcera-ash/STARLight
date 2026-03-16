@@ -23,7 +23,7 @@ function getMapsUrl(location: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
 }
 
-export default function ResourceCard({ resource, size = "sm", asDiv = false }: ResourceCardProps) {
+export default function ResourceCard({ resource, size = "sm" }: ResourceCardProps) {
   const [expanded, setExpanded] = useState(false);
   const isLarge = size === "lg";
   const primaryCat = resource.categories[0] || "Housing";
