@@ -118,6 +118,11 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
           )}
         </motion.div>
 
+        {/* Hours indicator */}
+        <motion.div className="mb-6 flex justify-center" {...stagger(0.4)}>
+          <HoursIndicator hours={resource.hours} />
+        </motion.div>
+
         {/* Action tiles */}
         {tiles.length > 0 && (
           <motion.div className="mb-6" {...stagger(0.6)}>
