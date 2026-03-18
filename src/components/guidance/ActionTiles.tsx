@@ -39,7 +39,7 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
       label: "Tap to message",
       href: `mailto:${resource.contact.email}`,
       external: true,
-      bg: "bg-sky-400/5 border border-sky-400/10",
+      bg: "bg-sky-400/10 border border-sky-400/15",
     });
   }
 
