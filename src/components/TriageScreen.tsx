@@ -87,7 +87,7 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
           What do you need<br />help with?
         </h1>
         <p className="text-sm text-muted-foreground mt-2">
-          Tap all that apply — we'll find the best resources for you.
+          Tap all that apply. We'll find the best resources for you.
         </p>
       </motion.div>
 

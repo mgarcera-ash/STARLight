@@ -62,7 +62,7 @@ export default function ResourceInfo({ resource }: { resource: Resource }) {
             className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3.5 text-base font-bold text-white hover:bg-green-700 transition-colors"
           >
             <Phone className="h-5 w-5" />
-            Call Now — {resource.contact.phone}
+            Call Now: {resource.contact.phone}
           </a>
         )}
         <a

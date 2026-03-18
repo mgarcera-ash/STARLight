@@ -26,7 +26,7 @@ export const followUpQuestions: FollowUpQuestion[] = [
     category: "Food",
     question: "How soon do you need food?",
     options: [
-      { label: "Right now — I'm hungry", subTag: "right-now" },
+      { label: "Right now, I'm hungry", subTag: "right-now" },
       { label: "This week", subTag: "this-week" },
       { label: "Ongoing assistance", subTag: "ongoing" },
     ],

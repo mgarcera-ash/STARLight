@@ -168,7 +168,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
       ? "We noticed some of those didn't fit."
       : "That's your plan.";
     const summaryBody = hasSkips
-      ? "That's okay — here are more options that might work better."
+      ? "That's okay. Here are more options that might work better."
       : "You can come back any time. We're not going anywhere.";
 
     return (
