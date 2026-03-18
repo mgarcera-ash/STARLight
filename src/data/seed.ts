@@ -193,6 +193,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm an immigrant and I need some legal help. Do you have someone who can talk to me?",
     createdAt: "2025-03-10",
   },
   {
