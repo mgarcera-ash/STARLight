@@ -264,6 +264,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I need to schedule a dental appointment for my child.",
     createdAt: "2025-03-16",
   },
   {
