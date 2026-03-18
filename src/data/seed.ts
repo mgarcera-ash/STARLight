@@ -229,6 +229,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm looking for work and could use help with my resume or finding a job.",
     createdAt: "2025-03-14",
   },
   {
