@@ -153,6 +153,11 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 1,
     status: "approved",
+    tips: [
+      "You don't need to be sober to call. They'll meet you where you are.",
+      "Ask about walk-in assessment hours — you can often get seen the same day without an appointment.",
+      "If you need MAT (medication-assisted treatment), say that upfront. It speeds up the process."
+    ],
     createdAt: "2025-03-05",
   },
   {
