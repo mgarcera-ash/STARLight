@@ -1,15 +1,13 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Navigation, Mail, ChevronRight, MapPin } from "lucide-react";
+import { Phone, Navigation, Mail, MapPin, ChevronRight } from "lucide-react";
 import { Resource } from "@/types";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 
 interface StepGuidance {
   action: string;
-  why: string;
+  body: string;
   connector: string;
-  prepPoints: string[];
   actionType: "call" | "directions" | "email";
   actionValue: string;
 }
@@ -26,14 +24,11 @@ function getMapsUrl(location: string) {
 }
 
 export default function GuidanceStep({ resource, guidance, stepNumber, delay }: GuidanceStepProps) {
-  const [showPrep, setShowPrep] = useState(false);
-
-  const actionIcon = {
+  const ActionIcon = {
     call: Phone,
     directions: Navigation,
     email: Mail,
   }[guidance.actionType];
-  const ActionIcon = actionIcon;
 
   const actionHref = {
     call: `tel:${guidance.actionValue}`,
@@ -44,7 +39,7 @@ export default function GuidanceStep({ resource, guidance, stepNumber, delay }: 
   const actionLabel = {
     call: `Call ${guidance.actionValue}`,
     directions: "Get directions",
-    email: `Email them`,
+    email: "Email them",
   }[guidance.actionType];
 
   const isExternal = guidance.actionType === "directions" || guidance.actionType === "email";
@@ -55,7 +50,6 @@ export default function GuidanceStep({ resource, guidance, stepNumber, delay }: 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay, ease: "easeOut" }}
     >
-      {/* Connector text for steps 2+ */}
       {guidance.connector && (
         <p className="text-sm text-muted-foreground mb-3 italic">
           {guidance.connector}
@@ -63,7 +57,6 @@ export default function GuidanceStep({ resource, guidance, stepNumber, delay }: 
       )}
 
       <div className="rounded-2xl border border-border bg-card p-5">
-        {/* Step label */}
         <div className="flex items-center gap-2 mb-3">
           <span className="flex items-center justify-center h-6 w-6 rounded-full bg-primary text-primary-foreground text-xs font-bold">
             {stepNumber}
@@ -73,15 +66,14 @@ export default function GuidanceStep({ resource, guidance, stepNumber, delay }: 
           </span>
         </div>
 
-        {/* Main instruction */}
-        <h3 className="text-base font-bold text-foreground leading-snug mb-1">
+        <h3 className="text-base font-bold text-foreground leading-snug mb-2">
           {guidance.action}
         </h3>
+
         <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-          {guidance.why}
+          {guidance.body}
         </p>
 
-        {/* Primary action button */}
         <a
           href={actionHref}
           target={isExternal ? "_blank" : undefined}
@@ -97,7 +89,6 @@ export default function GuidanceStep({ resource, guidance, stepNumber, delay }: 
           {actionLabel}
         </a>
 
-        {/* Secondary: directions if primary is call */}
         {guidance.actionType === "call" && (
           <div className="flex items-center gap-1.5 mt-3 text-xs text-muted-foreground">
             <MapPin className="h-3 w-3 shrink-0" />
@@ -112,39 +103,6 @@ export default function GuidanceStep({ resource, guidance, stepNumber, delay }: 
           </div>
         )}
 
-        {/* What to know expandable */}
-        {guidance.prepPoints.length > 0 && (
-          <div className="mt-4 border-t border-border pt-3">
-            <button
-              onClick={() => setShowPrep(!showPrep)}
-              className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors w-full"
-            >
-              <ChevronRight
-                className={cn(
-                  "h-3.5 w-3.5 transition-transform duration-200",
-                  showPrep && "rotate-90"
-                )}
-              />
-              What to know before you {guidance.actionType === "call" ? "call" : guidance.actionType === "email" ? "email" : "go"}
-            </button>
-
-            {showPrep && (
-              <motion.ul
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                className="mt-2 space-y-1.5 pl-5 overflow-hidden"
-              >
-                {guidance.prepPoints.map((point, i) => (
-                  <li key={i} className="text-xs text-muted-foreground leading-relaxed list-disc">
-                    {point}
-                  </li>
-                ))}
-              </motion.ul>
-            )}
-          </div>
-        )}
-
-        {/* Link to full detail */}
         <Link
           to={`/resource/${resource.id}`}
           className="flex items-center gap-1 mt-3 text-xs text-primary hover:underline font-medium"
