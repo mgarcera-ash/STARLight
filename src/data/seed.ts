@@ -334,6 +334,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 3,
     status: "approved",
+    callScript: "Say: Hi, I'm a renter and I have some questions about my rights. Can someone help?",
     createdAt: "2025-03-20",
   },
   {
