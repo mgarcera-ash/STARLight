@@ -19,7 +19,7 @@ interface GuidanceStepProps {
   showBack?: boolean;
 }
 
-export default function GuidanceStep({ resource, guidance, subTags = [], onSkip, onNext, nextLabel }: GuidanceStepProps) {
+export default function GuidanceStep({ resource, guidance, subTags = [], onSkip, onNext, onBack, nextLabel, showBack }: GuidanceStepProps) {
   const tips = generateContextTips(resource);
   const callScript = generateCallScript(resource, subTags);
   const hasCoords = !!resource.coordinates;
