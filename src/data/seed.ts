@@ -15,6 +15,11 @@ export const seedResources: Resource[] = [
     featured: true,
     urgency: 1,
     status: "approved",
+    tips: [
+      "Ask for the Emergency Housing unit, not general intake — they handle urgent cases faster.",
+      "If the main line puts you on hold, press 2 for the rental assistance department directly.",
+      "Bring any mail with your name on it. That counts as proof of address even without a lease."
+    ],
     createdAt: "2025-01-15",
   },
   {

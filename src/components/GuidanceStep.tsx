@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Phone, Navigation, Mail, MapPin, ChevronDown } from "lucide-react";
+import { Phone, Mail, MapPin, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Resource } from "@/types";
 import { StepGuidance, generateContextTips } from "@/data/guidanceCopy";
