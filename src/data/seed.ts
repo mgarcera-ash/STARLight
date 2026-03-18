@@ -282,6 +282,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm having trouble paying my utility bills. Can you help me apply for assistance?",
     createdAt: "2025-03-17",
   },
   {
