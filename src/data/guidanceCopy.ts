@@ -1,4 +1,5 @@
 import { Resource } from "@/types";
+import { parseHours, getOpenStatus } from "@/components/HoursIndicator";
 
 export interface StepGuidance {
   headline: string;
