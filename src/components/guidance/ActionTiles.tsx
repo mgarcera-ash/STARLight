@@ -17,7 +17,7 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
       icon: <Phone className="h-5 w-5 text-amber-500" />,
       label: "Tap to call",
       href: `tel:${resource.contact.phone}`,
-      bg: "bg-amber-500/5 border border-amber-500/10",
+      bg: "bg-amber-500/10 border border-amber-500/15",
     });
   }
 
