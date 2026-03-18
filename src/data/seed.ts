@@ -75,6 +75,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 1,
     status: "approved",
+    callScript: "Say: Hi, I have a legal issue and I can't afford a lawyer. Can someone help me?",
     createdAt: "2025-02-05",
   },
   {
