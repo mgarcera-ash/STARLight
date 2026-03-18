@@ -111,7 +111,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="w-full max-w-[300px] mx-auto px-8 pt-12 pb-20">
+      <div className="w-full max-w-md mx-auto px-6 pt-12 pb-20">
 
         {/* Intro */}
         <motion.div className="text-center mb-6" {...stagger(0)}>
