@@ -39,6 +39,7 @@ export const seedResources: Resource[] = [
     featured: true,
     urgency: 1,
     status: "approved",
+    callScript: "Say: Hi, I'd like to come get food. Do I need to bring anything?",
     createdAt: "2025-01-20",
   },
   {
