@@ -102,12 +102,8 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   const hasSkips = skippedSteps.size > 0;
 
   const handleBack = () => {
-    if (currentStep === 0) {
-      setShowConfirm(true);
-    } else {
-      setDirection(-1);
-      setCurrentStep((i) => i - 1);
-    }
+    setDirection(-1);
+    setCurrentStep((i) => i - 1);
   };
 
   const handleNext = () => {
