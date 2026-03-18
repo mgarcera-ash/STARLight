@@ -55,7 +55,7 @@ function generateLeadAndDetail(resource: Resource, subTags: string[]): { lead: s
   if (subTags.includes("tonight") && is247) {
     leadParts.push("They're open right now. You can call any time, day or night.");
   } else if (subTags.includes("tonight") && !is247) {
-    leadParts.push(`Their hours are ${resource.hours}. If they're closed right now, try first thing when they open.`);
+    leadParts.push("They might be closed right now — check the hours below.");
   } else if (subTags.includes("crisis") && is247) {
     leadParts.push("They're available right now, any time of day or night.");
   } else if (subTags.includes("crisis")) {
@@ -63,11 +63,11 @@ function generateLeadAndDetail(resource: Resource, subTags: string[]): { lead: s
   } else if (subTags.includes("right-now") && is247) {
     leadParts.push("They're open right now. You can reach them any time.");
   } else if (subTags.includes("right-now")) {
-    leadParts.push(`Their hours are ${resource.hours}. Worth calling now while they're still open.`);
+    leadParts.push("Worth calling now while they're still open.");
   } else if (is247) {
     leadParts.push("They're open 24/7, so you can reach them whenever you're ready.");
   } else {
-    leadParts.push(`Their hours are ${resource.hours}.`);
+    leadParts.push("Here's when they're available.");
   }
 
   // Detail: eligibility, who it's for, warmth (everything else)

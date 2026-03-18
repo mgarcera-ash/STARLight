@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Resource } from "@/types";
 import { StepGuidance, generateContextTips, generateCallScript } from "@/data/guidanceCopy";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import HoursIndicator from "@/components/HoursIndicator";
 
 const PEER_NAVIGATOR_PHONE = "(215) 555-0106";
 
