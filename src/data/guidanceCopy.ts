@@ -53,10 +53,14 @@ function generateLeadAndDetail(resource: Resource, subTags: string[]): { lead: s
   // Lead: action + immediate hours context (1-2 sentences max)
   leadParts.push(`${verb} ${resource.title}.`);
 
+  const realTimeOpen = getOpenStatus(parseHours(resource.hours)).isOpen;
+
   if (subTags.includes("tonight") && is247) {
     leadParts.push("They're open right now. You can call any time, day or night.");
   } else if (subTags.includes("tonight") && !is247) {
-    leadParts.push("They might be closed right now — check the hours below.");
+    leadParts.push(realTimeOpen
+      ? "They're still open right now — try calling before they close."
+      : "They're closed right now — try first thing when they open.");
   } else if (subTags.includes("crisis") && is247) {
     leadParts.push("They're available right now, any time of day or night.");
   } else if (subTags.includes("crisis")) {
@@ -64,7 +68,9 @@ function generateLeadAndDetail(resource: Resource, subTags: string[]): { lead: s
   } else if (subTags.includes("right-now") && is247) {
     leadParts.push("They're open right now. You can reach them any time.");
   } else if (subTags.includes("right-now")) {
-    leadParts.push("Worth calling now while they're still open.");
+    leadParts.push(realTimeOpen
+      ? "They're open right now — worth calling before they close."
+      : "They're closed right now — check below for when they open.");
   } else if (is247) {
     leadParts.push("They're open 24/7, so you can reach them whenever you're ready.");
   }
