@@ -28,6 +28,7 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
       label: "Visit website",
       href: resource.contact.website!,
       external: true,
+      bg: "bg-sky-400/5 border border-sky-400/10",
     });
   }
 
