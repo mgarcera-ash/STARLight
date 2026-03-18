@@ -1,3 +1,8 @@
+// HIDDEN: Bottom navigation hidden while focusing on Get Help flow.
+// Tabs: Browse (/browse), Search (/search), Submit (/submit), Review (/review)
+// Restore by uncommenting the full component below.
+
+/*
 import { Link, useLocation } from "react-router-dom";
 import { Compass, LayoutGrid, Search, PlusCircle, ClipboardCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -37,4 +42,9 @@ export default function BottomNav() {
       </div>
     </nav>
   );
+}
+*/
+
+export default function BottomNav() {
+  return null;
 }

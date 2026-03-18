@@ -48,6 +48,20 @@
     --star-gold: 34 85% 47%;
   }
 
+  .theme-navy {
+    --background: 222 97% 18%;
+    --foreground: 210 30% 98%;
+
+    --card: 222 70% 24%;
+    --card-foreground: 210 30% 95%;
+
+    --muted: 222 50% 28%;
+    --muted-foreground: 210 20% 70%;
+
+    --border: 222 50% 32%;
+    --input: 222 50% 28%;
+  }
+
   .dark {
     --background: 222 97% 8%;
     --foreground: 210 30% 95%;

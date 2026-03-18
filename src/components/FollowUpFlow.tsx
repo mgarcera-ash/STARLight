@@ -48,7 +48,7 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col px-4 pt-6 pb-8">
+    <div className="theme-navy min-h-screen bg-background flex flex-col px-4 pt-6 pb-8">
       {/* Progress */}
       <div className="flex items-center gap-3 mb-8">
         <motion.button
@@ -97,7 +97,7 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
               <motion.button
                 key={opt.subTag}
                 onClick={() => handleSelect(opt.subTag)}
-                className="w-full text-left px-5 py-4 rounded-2xl border-2 border-border bg-card text-foreground font-medium text-base transition-all hover:border-primary hover:bg-primary/5 active:scale-[0.98]"
+                className="w-full text-left px-5 py-4 rounded-2xl border-2 border-border bg-card text-foreground font-medium text-base transition-all hover:border-primary hover:bg-primary/10 active:scale-[0.98]"
                 whileTap={{ scale: 0.97 }}
               >
                 {opt.label}
