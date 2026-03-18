@@ -263,7 +263,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
   return (
     <div
       ref={containerRef}
-      className="flex-1 flex flex-col overflow-y-auto"
+      className="flex-1 flex flex-col overflow-y-auto pt-4"
       style={{
         scrollSnapType: unlocked ? "none" : "y mandatory",
       }}
