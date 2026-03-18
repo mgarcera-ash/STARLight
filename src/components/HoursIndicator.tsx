@@ -85,7 +85,7 @@ function parseTime(timeStr: string): { hours: number; minutes: number } | null {
   return { hours, minutes };
 }
 
-function getOpenStatus(parsed: ParsedHours): { isOpen: boolean; label: string } {
+export function getOpenStatus(parsed: ParsedHours): { isOpen: boolean; label: string } {
   if (parsed.is247) return { isOpen: true, label: "Open 24/7" };
 
   const now = new Date();
