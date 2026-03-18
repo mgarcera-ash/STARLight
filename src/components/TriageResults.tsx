@@ -180,30 +180,13 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     return (
       <div className="min-h-screen bg-background flex flex-col px-6 pt-12 pb-20">
         <div className="w-full max-w-md mx-auto">
-          <motion.p
-            className="text-lg font-semibold text-primary mb-3 text-center"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {summaryHeadline}
-          </motion.p>
-
-          <motion.p
-            className="text-xl font-bold text-foreground text-center leading-relaxed mb-8"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
-            {summaryBody}
-          </motion.p>
 
           {/* Step list */}
           <motion.div
             className="flex flex-col gap-3 mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 1.0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
           >
             {guidedResources.map((r, i) => {
               const wasSkipped = skippedSteps.has(i);
@@ -247,6 +230,24 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
               );
             })}
           </motion.div>
+
+          <motion.p
+            className="text-lg font-semibold text-primary mb-3 text-center"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            {summaryHeadline}
+          </motion.p>
+
+          <motion.p
+            className="text-xl font-bold text-foreground text-center leading-relaxed mb-8"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
+          >
+            {summaryBody}
+          </motion.p>
 
           {/* Actions */}
           <motion.div
