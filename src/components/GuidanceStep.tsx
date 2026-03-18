@@ -10,6 +10,7 @@ const PEER_NAVIGATOR_PHONE = "(215) 555-0106";
 interface GuidanceStepProps {
   resource: Resource;
   guidance: StepGuidance;
+  subTags?: string[];
   onSkip?: () => void;
 }
 
