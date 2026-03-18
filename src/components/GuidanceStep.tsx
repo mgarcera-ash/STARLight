@@ -92,11 +92,12 @@ function buildTiles(resource: Resource): Tile[] {
   return candidates.slice(0, 2);
 }
 
-export default function GuidanceStep({ resource, guidance, onSkip }: GuidanceStepProps) {
+export default function GuidanceStep({ resource, guidance, subTags = [], onSkip }: GuidanceStepProps) {
   const [showTips, setShowTips] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
+  const [showScript, setShowScript] = useState(false);
   const tips = generateContextTips(resource);
-  const callScript = generateCallScript(resource, guidance.actionType === "call" ? [] : []);
+  const callScript = generateCallScript(resource, subTags);
   const tiles = buildTiles(resource);
   const hasCoords = !!resource.coordinates;
 
