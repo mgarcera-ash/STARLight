@@ -136,6 +136,7 @@ interface HoursIndicatorProps {
 export default function HoursIndicator({ hours, className }: HoursIndicatorProps) {
   const parsed = useMemo(() => parseHours(hours), [hours]);
   const status = useMemo(() => getOpenStatus(parsed), [parsed]);
+  const [expanded, setExpanded] = useState(false);
 
   const now = new Date();
   const jsDay = now.getDay();
@@ -155,8 +156,11 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
 
   return (
     <div className={cn("flex flex-col gap-2.5", className)}>
-      {/* Status pill */}
-      <div className="flex items-center gap-2">
+      {/* Status pill — tappable */}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="flex items-center gap-2 group"
+      >
         <span
           className={cn(
             "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium",
@@ -173,7 +177,20 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
           />
           {status.label}
         </span>
-      </div>
+        <ChevronDown
+          className={cn(
+            "h-3 w-3 text-muted-foreground transition-transform",
+            expanded && "rotate-180"
+          )}
+        />
+      </button>
+
+      {/* Expanded detail */}
+      {expanded && (
+        <p className="text-xs text-muted-foreground leading-relaxed pl-1">
+          {hours}
+        </p>
+      )}
 
       {/* Weekly dots */}
       <div className="flex items-center gap-2">
