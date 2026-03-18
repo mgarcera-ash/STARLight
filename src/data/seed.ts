@@ -211,6 +211,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm a senior and I'd like to know about meals and activities you offer.",
     createdAt: "2025-03-12",
   },
   {
