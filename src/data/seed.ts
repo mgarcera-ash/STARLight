@@ -93,6 +93,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 3,
     status: "approved",
+    callScript: "Say: Hi, I'd like to sign my kid up for the after-school program. What do I need to do?",
     createdAt: "2025-02-10",
   },
   {
