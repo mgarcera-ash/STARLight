@@ -78,10 +78,10 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
         transition={{ duration: 0.4, delay: 0.1 }}
       >
         <h1 className="text-xl font-bold text-foreground mb-1">
-          Here's what we recommend
+          We found some places that can help
         </h1>
         <p className="text-sm text-muted-foreground mb-6">
-          Based on what you told us, these fit best.
+          These are picked for your situation. Tap any to learn more.
         </p>
       </motion.div>
 
@@ -96,7 +96,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           <div className="flex items-center gap-1.5 mb-2">
             <Star className="h-4 w-4 text-star-gold fill-star-gold" />
             <span className="text-xs font-bold text-star-gold uppercase tracking-wide">
-              Start here
+              This is your best first step
             </span>
           </div>
           <Link

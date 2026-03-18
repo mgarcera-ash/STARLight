@@ -3,6 +3,7 @@ import { Category } from "@/types";
 import SplashIntro from "@/components/SplashIntro";
 import TriageScreen from "@/components/TriageScreen";
 import FollowUpFlow from "@/components/FollowUpFlow";
+import TransitionMoment from "@/components/TransitionMoment";
 import TriageResults from "@/components/TriageResults";
 import { getQuestionsForCategories } from "@/data/followUpQuestions";
 
@@ -15,6 +16,8 @@ const Index = () => {
   const [selectedNeeds, setSelectedNeeds] = useState<Category[] | null>(null);
   const [followUpAnswers, setFollowUpAnswers] = useState<Record<string, string> | null>(null);
   const [showFollowUp, setShowFollowUp] = useState(false);
+  const [showTransition, setShowTransition] = useState(false);
+  const [pendingAnswers, setPendingAnswers] = useState<Record<string, string>>({});
 
   const handleSplashComplete = useCallback(() => {
     sessionStorage.setItem("starlight-splash-seen", "1");
@@ -27,14 +30,21 @@ const Index = () => {
     if (questions.length > 0) {
       setShowFollowUp(true);
     } else {
-      setFollowUpAnswers({});
+      setPendingAnswers({});
+      setShowTransition(true);
     }
   }, []);
 
   const handleFollowUpComplete = useCallback((answers: Record<string, string>) => {
-    setFollowUpAnswers(answers);
+    setPendingAnswers(answers);
     setShowFollowUp(false);
+    setShowTransition(true);
   }, []);
+
+  const handleTransitionComplete = useCallback(() => {
+    setFollowUpAnswers(pendingAnswers);
+    setShowTransition(false);
+  }, [pendingAnswers]);
 
   const handleFollowUpBack = useCallback(() => {
     setShowFollowUp(false);
@@ -45,6 +55,7 @@ const Index = () => {
     setSelectedNeeds(null);
     setFollowUpAnswers(null);
     setShowFollowUp(false);
+    setShowTransition(false);
   }, []);
 
   if (showSplash) {
@@ -57,6 +68,15 @@ const Index = () => {
         needs={selectedNeeds}
         onComplete={handleFollowUpComplete}
         onBack={handleFollowUpBack}
+      />
+    );
+  }
+
+  if (selectedNeeds && showTransition) {
+    return (
+      <TransitionMoment
+        answers={pendingAnswers}
+        onComplete={handleTransitionComplete}
       />
     );
   }
