@@ -86,8 +86,11 @@ export default {
           },
         },
         "soft-pulse": {
-          "0%, 100%": { transform: "scale(1)" },
-          "50%": { transform: "scale(1.02)" },
+          "0%, 100%": { transform: "scale(1)", boxShadow: "0 0 0 0 currentColor" },
+          "15%": { transform: "scale(1.04)" },
+          "30%": { transform: "scale(0.98)" },
+          "45%": { transform: "scale(1.02)" },
+          "60%": { transform: "scale(1)" },
         },
       },
       animation: {
