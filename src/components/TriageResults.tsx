@@ -262,10 +262,10 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
         <motion.div
           key={currentStep}
           custom={direction}
-          initial={{ opacity: 0, x: direction * 60 }}
+          initial={{ opacity: 0, x: direction * 30 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: direction * -60 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          exit={{ opacity: 0, x: direction * -30 }}
+          transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
           className="flex-1 flex flex-col"
         >
           <GuidanceStep resource={resource} guidance={guidance} />

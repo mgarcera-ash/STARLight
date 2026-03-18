@@ -25,6 +25,7 @@ export interface Resource {
   urgency: 1 | 2 | 3;
   status: "approved" | "pending" | "returned";
   returnComment?: string;
+  tips?: string[];
   createdAt: string;
 }
 
