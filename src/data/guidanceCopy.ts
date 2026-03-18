@@ -38,9 +38,9 @@ function generateBody(resource: Resource, subTags: string[]): string {
   const is247 = isOpen247(resource.hours);
   const elig = resource.eligibility.toLowerCase();
 
-  // Hours context — conversational
+  // Hours context
   if (subTags.includes("tonight") && is247) {
-    parts.push("They're open right now — you can call any time, day or night.");
+    parts.push("They're open right now. You can call any time, day or night.");
   } else if (subTags.includes("tonight") && !is247) {
     parts.push(`Their hours are ${resource.hours}. If they're closed right now, try first thing when they open.`);
   } else if (subTags.includes("crisis") && is247) {
@@ -48,27 +48,27 @@ function generateBody(resource: Resource, subTags: string[]): string {
   } else if (subTags.includes("crisis")) {
     parts.push("They specialize in crisis support and can help right away.");
   } else if (subTags.includes("right-now") && is247) {
-    parts.push("They're open right now — you can reach them any time.");
+    parts.push("They're open right now. You can reach them any time.");
   } else if (subTags.includes("right-now")) {
-    parts.push(`Their hours are ${resource.hours}. We have some time before they close — worth calling now.`);
+    parts.push(`Their hours are ${resource.hours}. Worth calling now while they're still open.`);
   } else if (is247) {
     parts.push("They're open 24/7, so you can reach them whenever you're ready.");
   } else {
     parts.push(`Their hours are ${resource.hours}.`);
   }
 
-  // Eligibility — woven in naturally
+  // Eligibility
   if (elig.includes("no documentation") || elig.includes("no eligibility") || elig.includes("open to all") || elig.includes("anyone")) {
-    parts.push("No documents or ID needed — just reach out.");
+    parts.push("No documents or ID needed. Just reach out.");
   } else {
     if (elig.includes("proof of income")) {
       parts.push("Bring proof of income if you have it, but call first to see what you need.");
     }
     if (elig.includes("income below") || elig.includes("income-eligible") || elig.includes("low-income")) {
-      parts.push("They'll ask about your income — just an estimate is fine.");
+      parts.push("They'll ask about your income. Just an estimate is fine.");
     }
     if (elig.includes("referral")) {
-      parts.push("You may need a referral — ask about that when you call.");
+      parts.push("You may need a referral. Ask about that when you call.");
     }
   }
 
@@ -82,10 +82,10 @@ function generateBody(resource: Resource, subTags: string[]): string {
 
   // Context-specific warmth
   if (subTags.includes("mental-health")) {
-    parts.push("Everything is confidential — you can speak freely.");
+    parts.push("Everything is confidential. You can speak freely.");
   }
   if (subTags.includes("substance-use")) {
-    parts.push("They help without judgment — just be honest about what you need.");
+    parts.push("They help without judgment. Just be honest about what you need.");
   }
   if (subTags.includes("immigration")) {
     parts.push("They help regardless of immigration status.");

@@ -17,9 +17,21 @@ interface TriageResultsProps {
 
 const MAX_GUIDED_STEPS = 3;
 
+const startOverMessages = [
+  "That's okay. Let's try again together.",
+  "No worries. We're here whenever you're ready.",
+  "Take your time. Let's start fresh.",
+];
+
+function getStartOverMessage() {
+  return startOverMessages[Math.floor(Math.random() * startOverMessages.length)];
+}
+
 export default function TriageResults({ needs, followUpAnswers, onBack }: TriageResultsProps) {
   const { approvedResources } = useResources();
   const [showAllOptions, setShowAllOptions] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmMessage] = useState(getStartOverMessage);
 
   const answerSubTags = useMemo(
     () => Object.values(followUpAnswers).filter(Boolean),
@@ -67,11 +79,57 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     };
   }, [approvedResources, needs, answerSubTags]);
 
+  // Confirmation screen
+  if (showConfirm) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8">
+        <motion.p
+          className="text-lg font-semibold text-primary mb-3"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          Are you sure?
+        </motion.p>
+
+        <motion.p
+          className="text-xl font-bold text-foreground text-center leading-relaxed max-w-[280px] mb-10"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          {confirmMessage}
+        </motion.p>
+
+        <motion.div
+          className="flex flex-col gap-3 w-full max-w-[280px]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 1.0 }}
+        >
+          <Button
+            onClick={onBack}
+            className="w-full rounded-xl"
+          >
+            Yes, start over
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => setShowConfirm(false)}
+            className="w-full rounded-xl text-muted-foreground"
+          >
+            Never mind, go back
+          </Button>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background px-4 pt-6 pb-24">
       {/* Back button */}
       <motion.button
-        onClick={onBack}
+        onClick={() => setShowConfirm(true)}
         className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4 hover:text-foreground transition-colors"
         initial={{ opacity: 0, x: -12 }}
         animate={{ opacity: 1, x: 0 }}
