@@ -73,13 +73,21 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     }
 
     best.sort((a, b) => {
+      const aOpen = getOpenStatus(parseHours(a.hours)).isOpen ? 0 : 1;
+      const bOpen = getOpenStatus(parseHours(b.hours)).isOpen ? 0 : 1;
+      if (aOpen !== bOpen) return aOpen - bOpen;
       const aCount = answerSubTags.filter((t) => a.subTags.includes(t)).length;
       const bCount = answerSubTags.filter((t) => b.subTags.includes(t)).length;
       if (bCount !== aCount) return bCount - aCount;
       return a.urgency - b.urgency;
     });
 
-    other.sort((a, b) => a.urgency - b.urgency);
+    other.sort((a, b) => {
+      const aOpen = getOpenStatus(parseHours(a.hours)).isOpen ? 0 : 1;
+      const bOpen = getOpenStatus(parseHours(b.hours)).isOpen ? 0 : 1;
+      if (aOpen !== bOpen) return aOpen - bOpen;
+      return a.urgency - b.urgency;
+    });
 
     const all = [...best, ...other];
     return {

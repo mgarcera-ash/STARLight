@@ -163,7 +163,7 @@ export function generateContextTips(resource: Resource): string[] {
   }
 
   if (resource.contact.phone) {
-    tips.push("Ask for the intake department specifically — the general line can sometimes send you in circles.");
+    tips.push("Ask for the intake department specifically. The general line can sometimes send you in circles.");
   }
   if (resource.contact.email && resource.contact.phone) {
     tips.push(`If the phone line is busy, try emailing ${resource.contact.email}. Some places respond faster that way.`);
