@@ -111,6 +111,7 @@ export const seedResources: Resource[] = [
     featured: true,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I could really use some help figuring out my next steps. Can I talk to a navigator?",
     createdAt: "2025-02-15",
   },
   {
