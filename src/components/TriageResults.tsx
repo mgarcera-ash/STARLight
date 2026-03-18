@@ -330,11 +330,11 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
       <div className="px-4 pt-4 pb-2 z-10">
         <motion.button
-          onClick={handleBack}
+          onClick={() => setShowConfirm(true)}
           className="text-muted-foreground hover:text-foreground transition-colors text-sm"
           whileTap={{ scale: 0.95 }}
         >
-          ← Back
+          Start over
         </motion.button>
       </div>
 
@@ -354,6 +354,8 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
             subTags={answerSubTags}
             onSkip={handleSkip}
             onNext={handleNext}
+            onBack={currentStep > 0 ? handleBack : undefined}
+            showBack={currentStep > 0}
             nextLabel={currentStep + 1 < total ? "Next step" : "See summary"}
           />
         </motion.div>
