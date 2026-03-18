@@ -171,6 +171,11 @@
   animation: splash-slide-up 0.6s ease-in forwards;
 }
 
+/* Scroll snap utilities */
+.snap-section {
+  scroll-snap-align: start;
+}
+
 /* Print-optimized flyer styles */
 @media print {
   .no-print {
