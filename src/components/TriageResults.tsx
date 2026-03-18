@@ -334,7 +334,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           className="text-muted-foreground hover:text-foreground transition-colors text-sm"
           whileTap={{ scale: 0.95 }}
         >
-          Start over
+          ← Start over
         </motion.button>
       </div>
 
