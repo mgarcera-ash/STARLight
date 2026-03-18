@@ -340,7 +340,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
       {/* Section 3: Call script (conditional) */}
       {callScript && (
-        <SnapSection sectionRef={setSectionRef(sections.indexOf("script"))}>
+        <SnapSection sectionRef={setSectionRef(sections.indexOf("script"))} visible={seenSections.has(sections.indexOf("script"))}>
           <motion.div {...reveal}>
             <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5 text-left">
               <div className="flex items-center gap-1.5 mb-2">
