@@ -369,6 +369,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I need some clothes (or supplies). Can I come in today?",
     createdAt: "2025-03-22",
   },
 ];
