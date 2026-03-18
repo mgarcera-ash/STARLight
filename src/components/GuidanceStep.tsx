@@ -1,6 +1,8 @@
-import { Phone, Navigation, Mail, MapPin } from "lucide-react";
+import { useState } from "react";
+import { Phone, Mail, MapPin, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Resource } from "@/types";
-import { StepGuidance } from "@/data/guidanceCopy";
+import { StepGuidance, generateContextTips } from "@/data/guidanceCopy";
 
 interface GuidanceStepProps {
   resource: Resource;
@@ -12,25 +14,11 @@ function getMapsUrl(location: string) {
 }
 
 export default function GuidanceStep({ resource, guidance }: GuidanceStepProps) {
-  const ActionIcon = {
-    call: Phone,
-    directions: Navigation,
-    email: Mail,
-  }[guidance.actionType];
+  const [showTips, setShowTips] = useState(false);
+  const tips = generateContextTips(resource);
 
-  const actionHref = {
-    call: `tel:${guidance.actionValue}`,
-    directions: getMapsUrl(resource.location),
-    email: `mailto:${guidance.actionValue}`,
-  }[guidance.actionType];
-
-  const actionLabel = {
-    call: guidance.actionValue,
-    directions: "Get directions",
-    email: guidance.actionValue,
-  }[guidance.actionType];
-
-  const isExternal = guidance.actionType === "directions" || guidance.actionType === "email";
+  const hasPhone = !!resource.contact.phone;
+  const hasLocation = resource.location && !resource.location.toLowerCase().includes("phone/text");
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
@@ -42,29 +30,85 @@ export default function GuidanceStep({ resource, guidance }: GuidanceStepProps) 
         {guidance.body}
       </p>
 
-      {/* Quiet action link */}
-      <a
-        href={actionHref}
-        target={isExternal ? "_blank" : undefined}
-        rel={isExternal ? "noopener noreferrer" : undefined}
-        className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
-      >
-        <ActionIcon className="h-4 w-4" />
-        <span className="underline underline-offset-2">{actionLabel}</span>
-      </a>
+      {/* Action squircle tiles */}
+      <div className="flex gap-3 w-full max-w-[300px] mb-6">
+        {hasPhone && (
+          <a
+            href={`tel:${resource.contact.phone}`}
+            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-1.5 hover:bg-muted/80 transition-colors active:scale-[0.97]"
+          >
+            <Phone className="h-5 w-5 text-primary" />
+            <span className="text-xs font-medium text-muted-foreground">Call</span>
+            <span className="text-sm font-semibold text-foreground">{resource.contact.phone}</span>
+          </a>
+        )}
 
-      {/* Location */}
-      <div className="flex items-center gap-1.5 mt-3 text-xs text-muted-foreground">
-        <MapPin className="h-3 w-3 shrink-0" />
-        <a
-          href={getMapsUrl(resource.location)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-foreground transition-colors underline underline-offset-2"
-        >
-          {resource.location}
-        </a>
+        {hasLocation && (
+          <a
+            href={getMapsUrl(resource.location)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-1.5 hover:bg-muted/80 transition-colors active:scale-[0.97]"
+          >
+            <MapPin className="h-5 w-5 text-primary" />
+            <span className="text-xs font-medium text-muted-foreground">Get directions</span>
+            <span className="text-sm font-semibold text-foreground leading-tight">
+              {resource.location.split(",")[0]}
+            </span>
+          </a>
+        )}
+
+        {!hasPhone && resource.contact.email && (
+          <a
+            href={`mailto:${resource.contact.email}`}
+            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-1.5 hover:bg-muted/80 transition-colors active:scale-[0.97]"
+          >
+            <Mail className="h-5 w-5 text-primary" />
+            <span className="text-xs font-medium text-muted-foreground">Email</span>
+            <span className="text-sm font-semibold text-foreground">{resource.contact.email}</span>
+          </a>
+        )}
       </div>
+
+      {/* "I've tried this before" nudge */}
+      {tips.length > 0 && (
+        <div className="w-full max-w-[300px]">
+          <button
+            onClick={() => setShowTips(!showTips)}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 mx-auto"
+          >
+            <ChevronDown
+              className={`h-3 w-3 transition-transform duration-200 ${showTips ? "rotate-180" : ""}`}
+            />
+            I've tried this place before
+          </button>
+
+          <AnimatePresence>
+            {showTips && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="mt-4 bg-muted/30 rounded-2xl p-4 text-left">
+                  <p className="text-xs font-medium text-primary mb-2">
+                    Here's what might help this time:
+                  </p>
+                  <ul className="space-y-2">
+                    {tips.map((tip, i) => (
+                      <li key={i} className="text-xs text-muted-foreground leading-relaxed">
+                        {tip}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 }

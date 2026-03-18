@@ -109,6 +109,46 @@ function generateBody(resource: Resource, subTags: string[]): string {
   return parts.join(" ");
 }
 
+export function generateContextTips(resource: Resource): string[] {
+  if (resource.tips && resource.tips.length > 0) return resource.tips;
+
+  const tips: string[] = [];
+  const h = resource.hours.toLowerCase();
+  const elig = resource.eligibility.toLowerCase();
+
+  // Hours-based tips
+  if (h.includes("mon") && h.includes("am")) {
+    const match = resource.hours.match(/(\d{1,2}:\d{2}\s*AM)/i);
+    if (match) {
+      tips.push(`Try calling right when they open at ${match[1]}. That's usually the best time to get through.`);
+    }
+  }
+  if (h.includes("24/7") || h.includes("24-hour")) {
+    tips.push("If you got a busy signal, try again in a few minutes. Off-peak hours (early morning or late evening) tend to be less busy.");
+  }
+
+  // Eligibility-based tips
+  if (elig.includes("proof of income")) {
+    tips.push("If you don't have income documents, ask about self-declaration. Many places accept a written statement.");
+  }
+  if (elig.includes("referral")) {
+    tips.push("Ask if they accept self-referrals. Sometimes you don't actually need one from another agency.");
+  }
+  if (elig.includes("income below") || elig.includes("income-eligible") || elig.includes("low-income")) {
+    tips.push("When they ask about income, an estimate is fine. You don't need exact paperwork on the first call.");
+  }
+
+  // Contact-based tips
+  if (resource.contact.phone) {
+    tips.push("Ask for the intake department specifically — the general line can sometimes send you in circles.");
+  }
+  if (resource.contact.email && resource.contact.phone) {
+    tips.push(`If the phone line is busy, try emailing ${resource.contact.email}. Some places respond faster that way.`);
+  }
+
+  return tips.slice(0, 3);
+}
+
 export function generateStepGuidance(
   resource: Resource,
   subTags: string[],
