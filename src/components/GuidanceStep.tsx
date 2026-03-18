@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { Phone, Globe, MapPin, ChevronDown, MessageCircle } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Phone, Globe, MapPin, MessageCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import { Resource } from "@/types";
 import { StepGuidance, generateContextTips, generateCallScript } from "@/data/guidanceCopy";
+import { ChevronRight } from "lucide-react";
 
-// Peer Navigator phone — hardcoded fallback for "Need help?" link
 const PEER_NAVIGATOR_PHONE = "(215) 555-0106";
 
 interface GuidanceStepProps {
@@ -12,6 +11,8 @@ interface GuidanceStepProps {
   guidance: StepGuidance;
   subTags?: string[];
   onSkip?: () => void;
+  onNext?: () => void;
+  nextLabel?: string;
 }
 
 function getMapsUrl(location: string, hasCoords: boolean, coords?: { lat: number; lng: number }) {
@@ -43,7 +44,6 @@ function buildTiles(resource: Resource): Tile[] {
 
   const candidates: Tile[] = [];
 
-  // Priority 1: Call
   if (hasPhone) {
     candidates.push({
       key: "call",
@@ -53,7 +53,6 @@ function buildTiles(resource: Resource): Tile[] {
     });
   }
 
-  // Priority 2: Directions (if physical, non-confidential location)
   if (hasLocation) {
     const hasCoords = !!resource.coordinates;
     candidates.push({
@@ -66,7 +65,6 @@ function buildTiles(resource: Resource): Tile[] {
     });
   }
 
-  // Priority 3: Website (preferred over email)
   if (hasWebsite) {
     candidates.push({
       key: "website",
@@ -77,7 +75,6 @@ function buildTiles(resource: Resource): Tile[] {
     });
   }
 
-  // Priority 4: Email — only if no phone AND no website (last resort)
   if (!hasPhone && !hasWebsite && hasEmail) {
     candidates.push({
       key: "email",
@@ -88,60 +85,61 @@ function buildTiles(resource: Resource): Tile[] {
     });
   }
 
-  // Max 2 tiles
   return candidates.slice(0, 2);
 }
 
-export default function GuidanceStep({ resource, guidance, subTags = [], onSkip }: GuidanceStepProps) {
-  const [showTips, setShowTips] = useState(false);
-  const [showDetail, setShowDetail] = useState(false);
-  const [showScript, setShowScript] = useState(false);
+const reveal = {
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-40px" },
+  transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+};
+
+export default function GuidanceStep({ resource, guidance, subTags = [], onSkip, onNext, nextLabel }: GuidanceStepProps) {
   const tips = generateContextTips(resource);
   const callScript = generateCallScript(resource, subTags);
   const tiles = buildTiles(resource);
   const hasCoords = !!resource.coordinates;
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
-      <p className="text-lg font-semibold text-primary mb-3">
+    <div className="flex-1 flex flex-col px-8 pt-6 pb-12 overflow-y-auto">
+      {/* Headline */}
+      <motion.p
+        className="text-lg font-semibold text-primary mb-3 text-center"
+        {...reveal}
+      >
         {guidance.headline}
-      </p>
+      </motion.p>
 
-      {/* Lead — always visible */}
-      <p className="text-xl font-bold text-foreground leading-relaxed max-w-[300px] mb-2">
+      {/* Lead */}
+      <motion.p
+        className="text-xl font-bold text-foreground leading-relaxed max-w-[300px] mx-auto text-center mb-2"
+        {...reveal}
+        transition={{ ...reveal.transition, delay: 0.1 }}
+      >
         {guidance.lead}
-      </p>
+      </motion.p>
 
-      {/* Detail — expandable */}
+      {/* Detail — always visible, muted */}
       {guidance.detail && (
-        <div className="w-full max-w-[300px] mb-8">
-          <AnimatePresence>
-            {showDetail && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                className="text-sm text-muted-foreground leading-relaxed overflow-hidden"
-              >
-                {guidance.detail}
-              </motion.p>
-            )}
-          </AnimatePresence>
-          <button
-            onClick={() => setShowDetail(!showDetail)}
-            className="text-xs text-primary/70 hover:text-primary transition-colors mt-1"
-          >
-            {showDetail ? "Less" : "Tell me more"}
-          </button>
-        </div>
+        <motion.p
+          className="text-sm text-muted-foreground leading-relaxed max-w-[300px] mx-auto text-center mb-8"
+          {...reveal}
+          transition={{ ...reveal.transition, delay: 0.2 }}
+        >
+          {guidance.detail}
+        </motion.p>
       )}
 
       {!guidance.detail && <div className="mb-8" />}
 
-      {/* Action tiles — max 2, side by side */}
+      {/* Action tiles */}
       {tiles.length > 0 && (
-        <div className="w-full max-w-[300px] flex gap-3 mb-6">
+        <motion.div
+          className="w-full max-w-[300px] mx-auto flex gap-3 mb-8"
+          {...reveal}
+          transition={{ ...reveal.transition, delay: 0.3 }}
+        >
           {tiles.map((tile) => (
             <a
               key={tile.key}
@@ -173,100 +171,87 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip 
               </div>
             </a>
           ))}
-        </div>
+        </motion.div>
       )}
 
-      {/* "What to say when you call" */}
+      {/* Call script — always visible */}
       {callScript && (
-        <div className="w-full max-w-[300px] mb-6">
-          <button
-            onClick={() => setShowScript(!showScript)}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 mx-auto"
-          >
-            <MessageCircle className={`h-3 w-3 transition-transform duration-200`} />
-            Not sure what to say?
-          </button>
-          <AnimatePresence>
-            {showScript && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                className="overflow-hidden"
-              >
-                <div className="mt-3 bg-primary/5 border border-primary/10 rounded-2xl p-4 text-left">
-                  <p className="text-xs font-medium text-primary mb-1.5">When they pick up:</p>
-                  <p className="text-sm text-foreground leading-relaxed italic">
-                    "{callScript.replace(/^Say:\s*/i, '')}"
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    That's it. They'll take it from there.
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
-
-
-      <a
-        href={`tel:${PEER_NAVIGATOR_PHONE}`}
-        className="text-xs text-muted-foreground hover:text-foreground transition-colors mb-4"
-      >
-        Need help with this step? Talk to someone.
-      </a>
-
-      {/* "This doesn't work for me" skip */}
-      {onSkip && (
-        <button
-          onClick={onSkip}
-          className="text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors mb-4"
+        <motion.div
+          className="w-full max-w-[300px] mx-auto mb-8"
+          {...reveal}
+          transition={{ ...reveal.transition, delay: 0.4 }}
         >
-          This doesn't work for me
-        </button>
+          <div className="bg-primary/5 border border-primary/10 rounded-2xl p-4 text-left">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <MessageCircle className="h-3 w-3 text-primary" />
+              <p className="text-xs font-medium text-primary">When they pick up:</p>
+            </div>
+            <p className="text-sm text-foreground leading-relaxed italic">
+              "{callScript.replace(/^Say:\s*/i, '')}"
+            </p>
+            <p className="text-xs text-muted-foreground mt-2">
+              That's it. They'll take it from there.
+            </p>
+          </div>
+        </motion.div>
       )}
 
-      {/* "I've tried this before" tips */}
+      {/* Tips — always visible */}
       {tips.length > 0 && (
-        <div className="w-full max-w-[300px]">
-          <button
-            onClick={() => setShowTips(!showTips)}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 mx-auto"
-          >
-            <ChevronDown
-              className={`h-3 w-3 transition-transform duration-200 ${showTips ? "rotate-180" : ""}`}
-            />
-            I've tried this place before
-          </button>
-
-          <AnimatePresence>
-            {showTips && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                className="overflow-hidden"
-              >
-                <div className="mt-4 bg-muted/30 rounded-2xl p-4 text-left">
-                  <p className="text-xs font-medium text-primary mb-2">
-                    Here's what might help this time:
-                  </p>
-                  <ul className="space-y-2">
-                    {tips.map((tip, i) => (
-                      <li key={i} className="text-xs text-muted-foreground leading-relaxed">
-                        {tip}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+        <motion.div
+          className="w-full max-w-[300px] mx-auto mb-8"
+          {...reveal}
+          transition={{ ...reveal.transition, delay: 0.5 }}
+        >
+          <div className="border-t border-border/40 pt-6">
+            <p className="text-xs font-medium text-primary mb-3">
+              Tried this place before? Here's what might help:
+            </p>
+            <ul className="space-y-2">
+              {tips.map((tip, i) => (
+                <li key={i} className="text-xs text-muted-foreground leading-relaxed">
+                  {tip}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </motion.div>
       )}
+
+      {/* Bottom section — help + skip + next */}
+      <motion.div
+        className="w-full max-w-[300px] mx-auto mt-auto pt-6 flex flex-col items-center gap-4"
+        {...reveal}
+        transition={{ ...reveal.transition, delay: 0.6 }}
+      >
+        <div className="border-t border-border/40 w-full pt-6 flex flex-col items-center gap-4">
+          <a
+            href={`tel:${PEER_NAVIGATOR_PHONE}`}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Need help with this step? Talk to someone.
+          </a>
+
+          {onSkip && (
+            <button
+              onClick={onSkip}
+              className="text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors"
+            >
+              This doesn't work for me
+            </button>
+          )}
+
+          {onNext && (
+            <button
+              onClick={onNext}
+              className="flex items-center justify-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors pt-2"
+            >
+              {nextLabel || "Next step"}
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      </motion.div>
     </div>
   );
 }
