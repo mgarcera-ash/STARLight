@@ -65,7 +65,7 @@ export default function ActionTiles({ resource, delay = 0.8 }: ActionTilesProps)
             href={tile.href}
             target={tile.external ? "_blank" : undefined}
             rel={tile.external ? "noopener noreferrer" : undefined}
-            className={`flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center ${tile.bg} hover:opacity-90 transition-opacity active:scale-[0.97] animate-[pulse_3s_ease-in-out_infinite]`}
+            className={`flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center ${tile.bg} hover:opacity-90 transition-opacity active:scale-[0.97] animate-soft-pulse`}
             style={{ minHeight: "100px" }}
           >
             <div className="relative z-10 flex flex-col items-center gap-2 p-4">
