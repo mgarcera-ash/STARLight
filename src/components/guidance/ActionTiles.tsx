@@ -15,7 +15,7 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
     candidates.push({
       key: "call",
       icon: <Phone className="h-5 w-5 text-amber-500" />,
-      label: "Call",
+      label: "Tap to call",
       href: `tel:${resource.contact.phone}`,
       bg: "bg-amber-500/5 border border-amber-500/10",
     });
