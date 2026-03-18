@@ -9,7 +9,7 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
   const hasWebsite = !!resource.contact.website;
   const hasEmail = !!resource.contact.email;
 
-  const candidates: Tile[] = [];
+  const candidates: (Tile & { bg: string })[] = [];
 
   if (hasPhone) {
     candidates.push({
