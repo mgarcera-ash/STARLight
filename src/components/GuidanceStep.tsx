@@ -125,7 +125,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
         {/* Action tiles */}
         {tiles.length > 0 && (
-          <motion.div className="mb-6" {...stagger(0.6)}>
+          <motion.div className="mb-6" {...stagger(0.8)}>
             <div className="flex gap-3">
               {tiles.map((tile) => (
                 <a
