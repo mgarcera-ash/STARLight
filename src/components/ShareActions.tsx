@@ -3,7 +3,7 @@ import { Share2, Copy, Printer } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 export default function ShareActions({ resource }: { resource: Resource }) {
-  const url = `${window.location.origin}/resource/${resource.id}`;
+  const url = new URL(`${import.meta.env.BASE_URL}resource/${resource.id}`, window.location.origin).toString();
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(url);

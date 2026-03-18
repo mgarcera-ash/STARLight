@@ -4,13 +4,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ResourceProvider } from "@/context/ResourceContext";
-import BottomNav from "@/components/BottomNav";
 import Index from "./pages/Index";
-import Browse from "./pages/Browse";
 import ResourceDetail from "./pages/ResourceDetail";
-import Search from "./pages/Search";
-import SubmitResource from "./pages/SubmitResource";
-import ReviewQueue from "./pages/ReviewQueue";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,15 +22,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/resource/:id" element={<ResourceDetail />} />
-              {/* HIDDEN: revisit later
-              <Route path="/browse" element={<Browse />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/submit" element={<SubmitResource />} />
-              <Route path="/review" element={<ReviewQueue />} />
-              */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-            <BottomNav />
           </div>
         </BrowserRouter>
       </ResourceProvider>

@@ -49,11 +49,11 @@ export function parseHours(hours: string): ParsedHours {
 
   for (const seg of segments) {
     // Match day range: "Mon–Fri", "Mon–Sun", "Mon-Sat"
-    const rangeMatch = seg.match(/(\w{3})\s*[–\-]\s*(\w{3})/i);
+    const rangeMatch = seg.match(/(\w{3})\s*[–-]\s*(\w{3})/i);
     // Match individual days: "Tue & Thu", "Tue"
     const individualMatch = seg.match(/\b(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\b/gi);
     // Match times
-    const timeMatch = seg.match(/(\d{1,2}:\d{2}\s*(?:AM|PM))\s*[–\-]\s*(\d{1,2}:\d{2}\s*(?:AM|PM))/i);
+    const timeMatch = seg.match(/(\d{1,2}:\d{2}\s*(?:AM|PM))\s*[–-]\s*(\d{1,2}:\d{2}\s*(?:AM|PM))/i);
 
     if (rangeMatch) {
       const days = parseDayRange(rangeMatch[1], rangeMatch[2]);
