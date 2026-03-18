@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Phone, Globe, MapPin, ChevronDown } from "lucide-react";
+import { Phone, Globe, MapPin, ChevronDown, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Resource } from "@/types";
-import { StepGuidance, generateContextTips } from "@/data/guidanceCopy";
+import { StepGuidance, generateContextTips, generateCallScript } from "@/data/guidanceCopy";
 
 // Peer Navigator phone — hardcoded fallback for "Need help?" link
 const PEER_NAVIGATOR_PHONE = "(215) 555-0106";
