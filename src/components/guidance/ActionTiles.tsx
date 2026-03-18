@@ -36,7 +36,7 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
     candidates.push({
       key: "email",
       icon: <Globe className="h-5 w-5 text-sky-400" />,
-      label: "Message",
+      label: "Tap to message",
       href: `mailto:${resource.contact.email}`,
       external: true,
       bg: "bg-sky-400/5 border border-sky-400/10",
