@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>STARLight</title>
+    <script type="text/javascript">
+      (function (location) {
+        const segments = location.pathname.split("/").filter(Boolean);
+        const isProjectPage = location.hostname.endsWith(".github.io") && segments.length > 0;
+        const repoSegmentCount = isProjectPage ? 1 : 0;
+        const basePath = segments.slice(0, repoSegmentCount).join("/");
+        const routePath = segments.slice(repoSegmentCount).join("/").replace(/&/g, "~and~");
+        const query = location.search ? `&${location.search.slice(1).replace(/&/g, "~and~")}` : "";
+        const repoPrefix = basePath ? `/${basePath}` : "";
+
+        location.replace(`${location.origin}${repoPrefix}/?/${routePath}${query}${location.hash}`);
+      })(window.location);
+    </script>
+  </head>
+  <body></body>
+</html>
