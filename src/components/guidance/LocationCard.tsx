@@ -15,7 +15,7 @@ export default function LocationCard({ location, hasCoords, delay = 1.5 }: Locat
         href={getMapsUrl(location, hasCoords)}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-3 rounded-2xl p-4 bg-muted/50 hover:bg-muted/80 transition-colors active:scale-[0.98]"
+        className="flex items-center gap-3 rounded-2xl p-4 bg-rose-500/5 border border-rose-500/10 hover:bg-rose-500/10 transition-colors active:scale-[0.98]"
       >
         <MapPin className="h-5 w-5 text-destructive shrink-0" />
         <div className="text-left">

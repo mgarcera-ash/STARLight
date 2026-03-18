@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 import { Resource } from "@/types";
 import { Tile, stagger } from "./types";
 
-function buildTiles(resource: Resource): Tile[] {
+function buildTiles(resource: Resource): (Tile & { bg: string })[] {
   const hasPhone = !!resource.contact.phone;
   const hasWebsite = !!resource.contact.website;
   const hasEmail = !!resource.contact.email;
 
-  const candidates: Tile[] = [];
+  const candidates: (Tile & { bg: string })[] = [];
 
   if (hasPhone) {
     candidates.push({
@@ -17,6 +17,7 @@ function buildTiles(resource: Resource): Tile[] {
       icon: <Phone className="h-5 w-5 text-amber-500" />,
       label: "Call",
       href: `tel:${resource.contact.phone}`,
+      bg: "bg-amber-500/5 border border-amber-500/10",
     });
   }
 
@@ -27,16 +28,18 @@ function buildTiles(resource: Resource): Tile[] {
       label: "Visit website",
       href: resource.contact.website!,
       external: true,
+      bg: "bg-sky-400/5 border border-sky-400/10",
     });
   }
 
   if (!hasPhone && !hasWebsite && hasEmail) {
     candidates.push({
       key: "email",
-      icon: <Globe className="h-5 w-5 text-primary" />,
+      icon: <Globe className="h-5 w-5 text-sky-400" />,
       label: "Message",
       href: `mailto:${resource.contact.email}`,
       external: true,
+      bg: "bg-sky-400/5 border border-sky-400/10",
     });
   }
 
@@ -62,7 +65,7 @@ export default function ActionTiles({ resource, delay = 0.8 }: ActionTilesProps)
             href={tile.href}
             target={tile.external ? "_blank" : undefined}
             rel={tile.external ? "noopener noreferrer" : undefined}
-            className="flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center bg-muted/50 hover:bg-muted/80 hover:opacity-90 transition-opacity active:scale-[0.97]"
+            className={`flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center ${tile.bg} hover:opacity-90 transition-opacity active:scale-[0.97]`}
             style={{ minHeight: "100px" }}
           >
             <div className="relative z-10 flex flex-col items-center gap-2 p-4">

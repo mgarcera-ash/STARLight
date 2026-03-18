@@ -155,8 +155,8 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
   }
 
   return (
-    <div className={cn("w-full rounded-2xl bg-muted/50 p-4 flex flex-col gap-3", className)}>
-      <p className="text-xs font-medium text-muted-foreground">Here's when they're available</p>
+    <div className={cn("w-full rounded-2xl bg-primary/5 border border-primary/10 p-4 flex flex-col gap-3", className)}>
+      <p className="text-xs font-medium text-primary">Here's when they're available</p>
       {/* Status pill — tappable */}
       <button
         onClick={() => setExpanded(!expanded)}
