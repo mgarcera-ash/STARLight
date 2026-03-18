@@ -185,6 +185,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
   const [unlocked, setUnlocked] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
+  const [seenSections, setSeenSections] = useState<Set<number>>(new Set([0]));
 
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
