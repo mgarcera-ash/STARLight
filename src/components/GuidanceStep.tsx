@@ -129,20 +129,46 @@ function DotIndicator({ count, active, visible }: { count: number; active: numbe
 
 /* ── Tap prompt ── */
 
-function TapPrompt({ visible }: { visible: boolean }) {
+function TapPrompt({ visible, onTap }: { visible: boolean; onTap: () => void }) {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
-          className="fixed bottom-16 left-1/2 -translate-x-1/2 z-20"
+        <motion.button
+          className="fixed inset-0 z-30 flex items-end justify-center pb-16 bg-transparent cursor-pointer"
+          onClick={onTap}
           initial={{ opacity: 0 }}
-          animate={{ opacity: [0.4, 0.7, 0.4] }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{
-            opacity: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-          }}
+          transition={{ duration: 0.3 }}
         >
-          <span className="text-xs text-muted-foreground select-none">Tap to continue</span>
+          <motion.span
+            className="text-xs text-muted-foreground select-none"
+            animate={{ opacity: [0.4, 0.7, 0.4] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Tap to continue
+          </motion.span>
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/* ── Scale pulse feedback ── */
+
+function TapPulse({ trigger }: { trigger: number }) {
+  return (
+    <AnimatePresence>
+      {trigger > 1 && (
+        <motion.div
+          key={trigger}
+          className="fixed inset-0 z-20 pointer-events-none flex items-center justify-center"
+          initial={{ opacity: 0.15, scale: 0.8 }}
+          animate={{ opacity: 0, scale: 1.2 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <div className="w-16 h-16 rounded-full bg-primary/20" />
         </motion.div>
       )}
     </AnimatePresence>
@@ -190,8 +216,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
   return (
     <div
-      className={`flex-1 flex flex-col ${unlocked ? "overflow-y-auto" : "overflow-hidden cursor-pointer"}`}
-      onClick={!unlocked ? handleTap : undefined}
+      className={`flex-1 flex flex-col ${unlocked ? "overflow-y-auto" : "overflow-hidden"}`}
     >
       <LayoutGroup>
         {/* Section: Intro */}
@@ -373,8 +398,11 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
       {/* Dot indicator */}
       <DotIndicator count={sectionCount} active={revealedCount - 1} visible={!unlocked} />
 
-      {/* Tap prompt */}
-      <TapPrompt visible={!unlocked} />
+      {/* Tap pulse feedback */}
+      <TapPulse trigger={revealedCount} />
+
+      {/* Tap prompt — full-screen click target */}
+      <TapPrompt visible={!unlocked} onTap={handleTap} />
     </div>
   );
 }
