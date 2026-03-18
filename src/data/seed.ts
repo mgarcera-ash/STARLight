@@ -152,6 +152,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm pregnant (or I have a young child) and I'd like to apply for WIC.",
     createdAt: "2025-03-01",
   },
   {
