@@ -109,7 +109,7 @@ function SnapSection({ children, sectionRef, className = "" }: {
   return (
     <div
       ref={sectionRef}
-      className={`snap-section min-h-[100dvh] flex items-center justify-center px-8 ${className}`}
+      className={`snap-section min-h-[60dvh] flex items-center justify-center px-8 py-10 ${className}`}
     >
       <div className="w-full max-w-[300px]">
         {children}
