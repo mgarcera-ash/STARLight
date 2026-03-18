@@ -171,6 +171,15 @@
   animation: splash-slide-up 0.6s ease-in forwards;
 }
 
+@keyframes splash-fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-splash-fade-out {
+  animation: splash-fade-out 0.6s ease-in forwards;
+}
+
 
 /* Print-optimized flyer styles */
 @media print {

@@ -297,7 +297,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
 
             <Button
               onClick={() => setShowConfirm(true)}
-              className="w-full rounded-xl bg-orange-500 hover:bg-orange-600 text-white border-0"
+              className="w-full rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground border-0"
             >
               Start over
             </Button>
