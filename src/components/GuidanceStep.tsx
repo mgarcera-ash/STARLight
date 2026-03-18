@@ -15,7 +15,7 @@ interface GuidanceStepProps {
   nextLabel?: string;
 }
 
-function getMapsUrl(location: string, hasCoords: boolean, coords?: { lat: number; lng: number }) {
+function getMapsUrl(location: string, hasCoords: boolean, _coords?: { lat: number; lng: number }) {
   const base = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
   return hasCoords ? `${base}&travelmode=transit` : base;
 }
