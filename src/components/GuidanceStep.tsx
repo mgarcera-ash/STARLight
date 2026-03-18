@@ -254,6 +254,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
   useEffect(() => {
     setUnlocked(false);
     setActiveSection(0);
+    setSeenSections(new Set([0]));
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
     }
