@@ -116,6 +116,11 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 1,
     status: "approved",
+    tips: [
+      "Ask specifically for 'emergency intake' — saying 'I need a bed tonight' gets you to the right person.",
+      "If they say they're full, ask about overflow partner shelters. They usually have a backup list.",
+      "Families with kids get priority. Make sure to mention everyone who will be with you."
+    ],
     createdAt: "2025-02-20",
   },
   {
