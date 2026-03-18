@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Phone, Navigation, Mail, MapPin, ChevronRight } from "lucide-react";
 import { Resource } from "@/types";
 import { cn } from "@/lib/utils";
@@ -16,14 +15,13 @@ interface GuidanceStepProps {
   resource: Resource;
   guidance: StepGuidance;
   stepNumber: number;
-  delay: number;
 }
 
 function getMapsUrl(location: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
 }
 
-export default function GuidanceStep({ resource, guidance, stepNumber, delay }: GuidanceStepProps) {
+export default function GuidanceStep({ resource, guidance, stepNumber }: GuidanceStepProps) {
   const ActionIcon = {
     call: Phone,
     directions: Navigation,
@@ -45,11 +43,7 @@ export default function GuidanceStep({ resource, guidance, stepNumber, delay }: 
   const isExternal = guidance.actionType === "directions" || guidance.actionType === "email";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
-    >
+    <div className="flex-1 flex flex-col">
       {guidance.connector && (
         <p className="text-sm text-muted-foreground mb-3 italic">
           {guidance.connector}
@@ -111,6 +105,6 @@ export default function GuidanceStep({ resource, guidance, stepNumber, delay }: 
           <ChevronRight className="h-3 w-3" />
         </Link>
       </div>
-    </motion.div>
+    </div>
   );
 }

@@ -7,7 +7,7 @@ import GuidanceStep from "@/components/GuidanceStep";
 import ResourceCard from "@/components/ResourceCard";
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 interface TriageResultsProps {
   needs: Category[];
@@ -29,6 +29,8 @@ function getStartOverMessage() {
 
 export default function TriageResults({ needs, followUpAnswers, onBack }: TriageResultsProps) {
   const { approvedResources } = useResources();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [direction, setDirection] = useState(1);
   const [showAllOptions, setShowAllOptions] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmMessage] = useState(getStartOverMessage);
@@ -79,6 +81,24 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     };
   }, [approvedResources, needs, answerSubTags]);
 
+  const total = guidedResources.length;
+  const isOnFinalPage = currentStep >= total;
+  const progress = (currentStep / total) * 100;
+
+  const handleBack = () => {
+    if (currentStep === 0) {
+      setShowConfirm(true);
+    } else {
+      setDirection(-1);
+      setCurrentStep((i) => i - 1);
+    }
+  };
+
+  const handleNext = () => {
+    setDirection(1);
+    setCurrentStep((i) => i + 1);
+  };
+
   // Confirmation screen
   if (showConfirm) {
     return (
@@ -125,117 +145,159 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     );
   }
 
-  return (
-    <div className="min-h-screen bg-background px-4 pt-6 pb-24">
-      {/* Back button */}
-      <motion.button
-        onClick={() => setShowConfirm(true)}
-        className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4 hover:text-foreground transition-colors"
-        initial={{ opacity: 0, x: -12 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4, delay: 0.3 }}
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Start over
-      </motion.button>
+  // Final summary page
+  if (isOnFinalPage) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8">
+        <motion.p
+          className="text-lg font-semibold text-primary mb-3"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          That's your plan.
+        </motion.p>
 
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="mb-8"
-      >
-        <h1 className="text-xl font-bold text-foreground mb-1">
-          Here's your plan.
-        </h1>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          Go through these steps one at a time. Start with the first one.
-        </p>
-      </motion.div>
+        <motion.p
+          className="text-xl font-bold text-foreground text-center leading-relaxed max-w-[280px] mb-10"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          You can come back any time. We're not going anywhere.
+        </motion.p>
 
-      {/* Guided steps */}
-      <div className="flex flex-col gap-5 mb-8">
-        {guidedResources.map((resource, i) => {
-          const guidance = generateStepGuidance(resource, answerSubTags, i);
-          return (
-            <GuidanceStep
-              key={resource.id}
-              resource={resource}
-              guidance={guidance}
-              stepNumber={i + 1}
-              delay={0.8 + i * 0.3}
-            />
-          );
-        })}
-      </div>
-
-      {/* Fallback: See all options */}
-      {remainingResources.length > 0 && (
         <motion.div
+          className="flex flex-col gap-3 w-full max-w-[300px]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.8 + guidedResources.length * 0.3 + 0.2 }}
+          transition={{ duration: 0.4, delay: 1.0 }}
         >
-          <div className="border-t border-border pt-6">
-            <p className="text-sm text-muted-foreground mb-3">
-              Didn't work out? There are more places that can help.
-            </p>
-            <Button
-              variant="outline"
-              className="w-full rounded-xl"
-              onClick={() => setShowAllOptions(!showAllOptions)}
-            >
-              <ChevronDown
-                className={`h-4 w-4 mr-1.5 transition-transform duration-200 ${showAllOptions ? "rotate-180" : ""}`}
-              />
-              {showAllOptions ? "Hide other options" : `See all options (${remainingResources.length} more)`}
-            </Button>
-          </div>
-
-          <AnimatePresence>
-            {showAllOptions && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
+          {remainingResources.length > 0 && (
+            <>
+              <Button
+                variant="outline"
+                className="w-full rounded-xl"
+                onClick={() => setShowAllOptions(!showAllOptions)}
               >
-                <div className="flex flex-col gap-3 mt-4">
-                  {remainingResources.map((r, i) => (
-                    <motion.div
-                      key={r.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: i * 0.1 }}
-                    >
-                      <ResourceCard resource={r} size="sm" />
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      )}
+                <ChevronDown
+                  className={`h-4 w-4 mr-1.5 transition-transform duration-200 ${showAllOptions ? "rotate-180" : ""}`}
+                />
+                {showAllOptions ? "Hide other options" : `See all options (${remainingResources.length} more)`}
+              </Button>
 
-      {/* Empty state */}
-      {guidedResources.length === 0 && (
-        <motion.div
-          className="text-center py-16"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-        >
-          <p className="text-muted-foreground">
-            No resources match your selection right now.
-          </p>
-          <Button onClick={onBack} variant="outline" className="mt-4">
-            Try different needs
+              <AnimatePresence>
+                {showAllOptions && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="flex flex-col gap-3 mt-2">
+                      {remainingResources.map((r, i) => (
+                        <motion.div
+                          key={r.id}
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: i * 0.1 }}
+                        >
+                          <ResourceCard resource={r} size="sm" />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </>
+          )}
+
+          <Button
+            variant="ghost"
+            onClick={() => setShowConfirm(true)}
+            className="w-full rounded-xl text-muted-foreground"
+          >
+            Start over
           </Button>
         </motion.div>
-      )}
+      </div>
+    );
+  }
+
+  // Empty state
+  if (total === 0) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8">
+        <motion.p
+          className="text-muted-foreground mb-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          No resources match your selection right now.
+        </motion.p>
+        <Button onClick={onBack} variant="outline">
+          Try different needs
+        </Button>
+      </div>
+    );
+  }
+
+  // Paginated guided steps
+  const resource = guidedResources[currentStep];
+  const guidance = generateStepGuidance(resource, answerSubTags, currentStep);
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col px-4 pt-6 pb-8">
+      {/* Progress bar */}
+      <div className="flex items-center gap-3 mb-8">
+        <motion.button
+          onClick={handleBack}
+          className="text-muted-foreground hover:text-foreground transition-colors text-sm"
+          whileTap={{ scale: 0.95 }}
+        >
+          ← Back
+        </motion.button>
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-primary rounded-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          />
+        </div>
+        <span className="text-xs text-muted-foreground font-medium tabular-nums">
+          {currentStep + 1} of {total}
+        </span>
+      </div>
+
+      {/* Step content */}
+      <AnimatePresence mode="wait" custom={direction}>
+        <motion.div
+          key={currentStep}
+          custom={direction}
+          initial={{ opacity: 0, x: direction * 60 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: direction * -60 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="flex-1 flex flex-col"
+        >
+          <GuidanceStep
+            resource={resource}
+            guidance={guidance}
+            stepNumber={currentStep + 1}
+          />
+
+          <button
+            onClick={handleNext}
+            className="mt-auto pt-8 flex items-center justify-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors self-center"
+          >
+            {currentStep + 1 < total ? "Next step" : "See summary"}
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
