@@ -398,8 +398,11 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
       {/* Dot indicator */}
       <DotIndicator count={sectionCount} active={revealedCount - 1} visible={!unlocked} />
 
-      {/* Tap prompt */}
-      <TapPrompt visible={!unlocked} />
+      {/* Tap pulse feedback */}
+      <TapPulse trigger={revealedCount} />
+
+      {/* Tap prompt — full-screen click target */}
+      <TapPrompt visible={!unlocked} onTap={handleTap} />
     </div>
   );
 }
