@@ -155,7 +155,7 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
   }
 
   return (
-    <div className={cn("flex flex-col gap-2.5", className)}>
+    <div className={cn("w-full rounded-2xl bg-muted/50 p-4 flex flex-col gap-3", className)}>
       {/* Status pill — tappable */}
       <button
         onClick={() => setExpanded(!expanded)}
@@ -193,16 +193,16 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
       )}
 
       {/* Weekly dots */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between w-full">
         {DAY_LABELS.map((label, i) => {
           const isToday = i === todayIdx;
           const isOpen = parsed.openDays[i];
           return (
-            <div key={i} className="flex flex-col items-center gap-1">
-              <span className="text-[10px] text-muted-foreground">{label}</span>
+            <div key={i} className="flex flex-col items-center gap-1.5 flex-1">
+              <span className="text-xs text-muted-foreground">{label}</span>
               <span
                 className={cn(
-                  "h-2.5 w-2.5 rounded-full transition-colors",
+                  "h-3.5 w-3.5 rounded-full transition-colors",
                   isOpen ? "bg-primary" : "bg-muted-foreground/20",
                   isToday && "ring-2 ring-primary/40 ring-offset-1 ring-offset-background"
                 )}
