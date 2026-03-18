@@ -216,8 +216,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
   return (
     <div
-      className={`flex-1 flex flex-col ${unlocked ? "overflow-y-auto" : "overflow-hidden cursor-pointer"}`}
-      onClick={!unlocked ? handleTap : undefined}
+      className={`flex-1 flex flex-col ${unlocked ? "overflow-y-auto" : "overflow-hidden"}`}
     >
       <LayoutGroup>
         {/* Section: Intro */}
