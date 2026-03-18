@@ -298,7 +298,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
       {/* Section 2: Action tiles (conditional) */}
       {tiles.length > 0 && (
-        <SnapSection sectionRef={setSectionRef(sections.indexOf("actions"))}>
+        <SnapSection sectionRef={setSectionRef(sections.indexOf("actions"))} visible={seenSections.has(sections.indexOf("actions"))}>
           <motion.div
             className="flex gap-3"
             {...reveal}
