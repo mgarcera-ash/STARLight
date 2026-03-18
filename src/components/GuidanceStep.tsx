@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Resource } from "@/types";
 import { StepGuidance, generateContextTips, generateCallScript } from "@/data/guidanceCopy";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import HoursIndicator from "@/components/HoursIndicator";
 
 const PEER_NAVIGATOR_PHONE = "(215) 555-0106";
 
@@ -22,14 +23,6 @@ function getMapsUrl(location: string, hasCoords: boolean) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}${hasCoords ? "&travelmode=transit" : ""}`;
 }
 
-function getStaticMapUrl(lat: number, lng: number, zoom = 15): string {
-  const n = Math.pow(2, zoom);
-  const tileX = Math.floor(((lng + 180) / 360) * n);
-  const tileY = Math.floor(
-    ((1 - Math.log(Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180)) / Math.PI) / 2) * n
-  );
-  return `https://tile.openstreetmap.org/${zoom}/${tileX}/${tileY}.png`;
-}
 
 function isConfidentialLocation(location: string): boolean {
   const l = location.toLowerCase();
@@ -117,9 +110,14 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
           )}
         </motion.div>
 
+        {/* Hours indicator */}
+        <motion.div className="mb-6 flex justify-center" {...stagger(0.4)}>
+          <HoursIndicator hours={resource.hours} />
+        </motion.div>
+
         {/* Action tiles */}
         {tiles.length > 0 && (
-          <motion.div className="mb-6" {...stagger(0.6)}>
+          <motion.div className="mb-6" {...stagger(0.8)}>
             <div className="flex gap-3">
               {tiles.map((tile) => (
                 <a
@@ -142,7 +140,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
         {/* Call script */}
         {callScript && (
-          <motion.div className="mb-6" {...stagger(1.0)}>
+          <motion.div className="mb-6" {...stagger(1.2)}>
             <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5 text-left">
               <div className="flex items-center gap-1.5 mb-2">
                 <MessageCircle className="h-3.5 w-3.5 text-primary" />
@@ -160,7 +158,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
         {/* How to get there */}
         {hasLocation && (
-          <motion.div className="mb-6" {...stagger(1.2)}>
+          <motion.div className="mb-6" {...stagger(1.5)}>
             <a
               href={getMapsUrl(resource.location, hasCoords)}
               target="_blank"
@@ -178,7 +176,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
         )}
 
         {/* Navigation section */}
-        <motion.div className="flex flex-col items-center gap-6" {...stagger(1.6)}>
+        <motion.div className="flex flex-col items-center gap-6" {...stagger(1.8)}>
 
           {/* Expandable tips */}
           {tips.length > 0 && (
