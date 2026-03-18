@@ -1,4 +1,4 @@
-import { ChevronRight, ChevronDown } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { stagger, PEER_NAVIGATOR_PHONE } from "./types";
@@ -7,11 +7,13 @@ interface GuidanceFooterProps {
   tips: string[];
   onSkip?: () => void;
   onNext?: () => void;
+  onBack?: () => void;
   nextLabel?: string;
+  showBack?: boolean;
   delay?: number;
 }
 
-export default function GuidanceFooter({ tips, onSkip, onNext, nextLabel, delay = 1.8 }: GuidanceFooterProps) {
+export default function GuidanceFooter({ tips, onSkip, onNext, onBack, nextLabel, showBack = false, delay = 1.8 }: GuidanceFooterProps) {
   return (
     <motion.div className="flex flex-col items-center gap-6" {...stagger(delay)}>
       {tips.length > 0 && (
@@ -50,14 +52,28 @@ export default function GuidanceFooter({ tips, onSkip, onNext, nextLabel, delay 
         </button>
       )}
 
-      {onNext && (
-        <button
-          onClick={onNext}
-          className="flex items-center justify-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors pt-2"
-        >
-          {nextLabel || "Next step"}
-          <ChevronRight className="h-4 w-4" />
-        </button>
+      {/* Navigation capsules */}
+      {(showBack || onNext) && (
+        <div className="flex items-center gap-3 pt-2">
+          {showBack && onBack && (
+            <button
+              onClick={onBack}
+              className="flex items-center gap-1 px-4 py-2 rounded-full border border-border/50 text-sm text-muted-foreground hover:text-foreground hover:border-border transition-colors active:scale-[0.97]"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Back
+            </button>
+          )}
+          {onNext && (
+            <button
+              onClick={onNext}
+              className="flex items-center gap-1 px-5 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors active:scale-[0.97]"
+            >
+              {nextLabel || "Next step"}
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       )}
     </motion.div>
   );
