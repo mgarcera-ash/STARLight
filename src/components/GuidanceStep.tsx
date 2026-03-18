@@ -101,19 +101,25 @@ const reveal = {
 
 /* ── Snap Section wrapper ── */
 
-function SnapSection({ children, sectionRef, className = "" }: {
+function SnapSection({ children, sectionRef, className = "", visible = true }: {
   children: React.ReactNode;
   sectionRef?: React.Ref<HTMLDivElement>;
   className?: string;
+  visible?: boolean;
 }) {
   return (
     <div
       ref={sectionRef}
       className={`snap-section min-h-[60dvh] flex items-center justify-center px-8 py-10 ${className}`}
     >
-      <div className="w-full max-w-[300px]">
+      <motion.div
+        className="w-full max-w-[300px]"
+        initial={{ opacity: 0, y: 20 }}
+        animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.5, ease }}
+      >
         {children}
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -179,6 +185,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
   const [unlocked, setUnlocked] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
+  const [seenSections, setSeenSections] = useState<Set<number>>(new Set([0]));
 
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -213,7 +220,15 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
         for (const entry of entries) {
           if (entry.isIntersecting) {
             const idx = sectionRefs.current.indexOf(entry.target as HTMLDivElement);
-            if (idx >= 0) setActiveSection(idx);
+            if (idx >= 0) {
+              setActiveSection(idx);
+              setSeenSections((prev) => {
+                if (prev.has(idx)) return prev;
+                const next = new Set(prev);
+                next.add(idx);
+                return next;
+              });
+            }
 
             // Unlock when last section is reached
             if (entry.target === lastSectionRef.current) {
@@ -239,6 +254,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
   useEffect(() => {
     setUnlocked(false);
     setActiveSection(0);
+    setSeenSections(new Set([0]));
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
     }
@@ -253,7 +269,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
       }}
     >
       {/* Section 1: Intro */}
-      <SnapSection sectionRef={setSectionRef(0)}>
+      <SnapSection sectionRef={setSectionRef(0)} visible={seenSections.has(0)}>
         <motion.p
           className="text-lg font-semibold text-primary mb-3 text-center"
           {...reveal}
@@ -282,7 +298,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
       {/* Section 2: Action tiles (conditional) */}
       {tiles.length > 0 && (
-        <SnapSection sectionRef={setSectionRef(sections.indexOf("actions"))}>
+        <SnapSection sectionRef={setSectionRef(sections.indexOf("actions"))} visible={seenSections.has(sections.indexOf("actions"))}>
           <motion.div
             className="flex gap-3"
             {...reveal}
@@ -324,7 +340,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
       {/* Section 3: Call script (conditional) */}
       {callScript && (
-        <SnapSection sectionRef={setSectionRef(sections.indexOf("script"))}>
+        <SnapSection sectionRef={setSectionRef(sections.indexOf("script"))} visible={seenSections.has(sections.indexOf("script"))}>
           <motion.div {...reveal}>
             <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5 text-left">
               <div className="flex items-center gap-1.5 mb-2">
@@ -343,7 +359,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
       )}
 
       {/* Section 4: Tips + Navigation (always last) */}
-      <SnapSection sectionRef={setSectionRef(sectionCount - 1)}>
+      <SnapSection sectionRef={setSectionRef(sectionCount - 1)} visible={seenSections.has(sectionCount - 1)}>
         <div className="flex flex-col items-center gap-6">
           {/* Tips */}
           {tips.length > 0 && (
