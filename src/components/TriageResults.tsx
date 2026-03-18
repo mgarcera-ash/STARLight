@@ -8,7 +8,8 @@ import ResourceCard from "@/components/ResourceCard";
 import { parseHours, getOpenStatus } from "@/components/HoursIndicator";
 
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TriageResultsProps {
   needs: Category[];
@@ -171,78 +172,136 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
       ? "That's okay. Here are more options that might work better."
       : "You can come back any time. We're not going anywhere.";
 
+    const goToStep = (step: number) => {
+      setDirection(-1);
+      setCurrentStep(step);
+    };
+
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8">
-        <motion.p
-          className="text-lg font-semibold text-primary mb-3"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {summaryHeadline}
-        </motion.p>
-
-        <motion.p
-          className="text-xl font-bold text-foreground text-center leading-relaxed max-w-[280px] mb-10"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          {summaryBody}
-        </motion.p>
-
-        <motion.div
-          className="flex flex-col gap-3 w-full max-w-[300px]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 1.0 }}
-        >
-          {remainingResources.length > 0 && (
-            <>
-              <Button
-                className="w-full rounded-xl bg-violet-600 hover:bg-violet-700 text-white border-0"
-                onClick={() => setShowAllOptions(!showAllOptions)}
-              >
-                <ChevronDown
-                  className={`h-4 w-4 mr-1.5 transition-transform duration-200 ${showAllOptions ? "rotate-180" : ""}`}
-                />
-                {showAllOptions ? "Hide other options" : `See all options (${remainingResources.length} more)`}
-              </Button>
-
-              <AnimatePresence>
-                {showAllOptions && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="flex flex-col gap-3 mt-2">
-                      {remainingResources.map((r, i) => (
-                        <motion.div
-                          key={r.id}
-                          initial={{ opacity: 0, y: 12 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: i * 0.1 }}
-                        >
-                          <ResourceCard resource={r} size="sm" />
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </>
-          )}
-
-          <Button
-            onClick={() => setShowConfirm(true)}
-            className="w-full rounded-xl bg-orange-500 hover:bg-orange-600 text-white border-0"
+      <div className="min-h-screen bg-background flex flex-col px-6 pt-12 pb-20">
+        <div className="w-full max-w-md mx-auto">
+          <motion.p
+            className="text-lg font-semibold text-primary mb-3 text-center"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Start over
-          </Button>
-        </motion.div>
+            {summaryHeadline}
+          </motion.p>
+
+          <motion.p
+            className="text-xl font-bold text-foreground text-center leading-relaxed mb-8"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            {summaryBody}
+          </motion.p>
+
+          {/* Step list */}
+          <motion.div
+            className="flex flex-col gap-3 mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 1.0 }}
+          >
+            {guidedResources.map((r, i) => {
+              const wasSkipped = skippedSteps.has(i);
+              const status = getOpenStatus(parseHours(r.hours));
+              return (
+                <button
+                  key={r.id}
+                  onClick={() => goToStep(i)}
+                  className={cn(
+                    "w-full rounded-2xl p-4 text-left flex items-center gap-3 transition-colors active:scale-[0.98]",
+                    wasSkipped
+                      ? "bg-muted/30 border border-border/30"
+                      : "bg-muted/50 border border-border/50 hover:bg-muted/80"
+                  )}
+                >
+                  <span className={cn(
+                    "flex items-center justify-center h-7 w-7 rounded-full text-xs font-bold shrink-0",
+                    wasSkipped
+                      ? "bg-muted-foreground/20 text-muted-foreground"
+                      : "bg-primary/15 text-primary"
+                  )}>
+                    {i + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className={cn(
+                      "text-sm font-medium truncate",
+                      wasSkipped ? "text-muted-foreground line-through" : "text-foreground"
+                    )}>
+                      {r.title}
+                    </p>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className={cn(
+                        "h-1.5 w-1.5 rounded-full shrink-0",
+                        status.isOpen ? "bg-emerald-500" : "bg-destructive"
+                      )} />
+                      <span className="text-xs text-muted-foreground">{status.label}</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                </button>
+              );
+            })}
+          </motion.div>
+
+          {/* Actions */}
+          <motion.div
+            className="flex flex-col gap-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 1.4 }}
+          >
+            {remainingResources.length > 0 && (
+              <>
+                <Button
+                  className="w-full rounded-xl bg-violet-600 hover:bg-violet-700 text-white border-0"
+                  onClick={() => setShowAllOptions(!showAllOptions)}
+                >
+                  <ChevronDown
+                    className={`h-4 w-4 mr-1.5 transition-transform duration-200 ${showAllOptions ? "rotate-180" : ""}`}
+                  />
+                  {showAllOptions ? "Hide other options" : `See all options (${remainingResources.length} more)`}
+                </Button>
+
+                <AnimatePresence>
+                  {showAllOptions && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="flex flex-col gap-3 mt-2">
+                        {remainingResources.map((r, i) => (
+                          <motion.div
+                            key={r.id}
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: i * 0.1 }}
+                          >
+                            <ResourceCard resource={r} size="sm" />
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </>
+            )}
+
+            <Button
+              onClick={() => setShowConfirm(true)}
+              className="w-full rounded-xl bg-orange-500 hover:bg-orange-600 text-white border-0"
+            >
+              Start over
+            </Button>
+          </motion.div>
+        </div>
       </div>
     );
   }
