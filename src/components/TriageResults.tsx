@@ -96,7 +96,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           <div className="flex items-center gap-1.5 mb-2">
             <Star className="h-4 w-4 text-star-gold fill-star-gold" />
             <span className="text-xs font-bold text-star-gold uppercase tracking-wide">
-              Start here
+              This is your best first step
             </span>
           </div>
           <Link
