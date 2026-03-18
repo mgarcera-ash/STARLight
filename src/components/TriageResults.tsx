@@ -259,8 +259,8 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   const guidance = generateStepGuidance(resource, answerSubTags, currentStep);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <div className="px-4 pt-6">
+    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
+      <div className="px-4 pt-4 pb-2 z-10">
         <motion.button
           onClick={handleBack}
           className="text-muted-foreground hover:text-foreground transition-colors text-sm"
@@ -278,7 +278,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: direction * -30 }}
           transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
-          className="flex-1 flex flex-col"
+          className="flex-1 flex flex-col overflow-hidden"
         >
           <GuidanceStep
             resource={resource}
