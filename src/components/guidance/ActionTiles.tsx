@@ -23,7 +23,7 @@ function buildTiles(resource: Resource): Tile[] {
   if (hasWebsite) {
     candidates.push({
       key: "website",
-      icon: <Globe className="h-5 w-5 text-primary" />,
+      icon: <Globe className="h-5 w-5 text-sky-400" />,
       label: "Visit website",
       href: resource.contact.website!,
       external: true,
