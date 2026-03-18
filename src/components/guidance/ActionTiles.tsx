@@ -14,7 +14,7 @@ function buildTiles(resource: Resource): Tile[] {
   if (hasPhone) {
     candidates.push({
       key: "call",
-      icon: <Phone className="h-5 w-5 text-primary" />,
+      icon: <Phone className="h-5 w-5 text-amber-500" />,
       label: "Call",
       href: `tel:${resource.contact.phone}`,
     });
