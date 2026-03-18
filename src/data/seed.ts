@@ -57,6 +57,7 @@ export const seedResources: Resource[] = [
     featured: true,
     urgency: 1,
     status: "approved",
+    callScript: "Say: Hi, I need to see a doctor but I don't have insurance. Can I make an appointment?",
     createdAt: "2025-02-01",
   },
   {
