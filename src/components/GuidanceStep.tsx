@@ -42,7 +42,6 @@ function buildTiles(resource: Resource): Tile[] {
   const hasPhone = !!resource.contact.phone;
   const hasWebsite = !!resource.contact.website;
   const hasEmail = !!resource.contact.email;
-  const hasLocation = !!resource.location && !isConfidentialLocation(resource.location);
 
   const candidates: Tile[] = [];
 
@@ -52,17 +51,6 @@ function buildTiles(resource: Resource): Tile[] {
       icon: <Phone className="h-5 w-5 text-primary" />,
       label: "Call",
       href: `tel:${resource.contact.phone}`,
-    });
-  }
-
-  if (hasLocation) {
-    candidates.push({
-      key: "directions",
-      icon: <MapPin className="h-5 w-5 text-primary" />,
-      label: "How to get there",
-      href: getMapsUrl(resource.location, !!resource.coordinates),
-      external: true,
-      isMap: true,
     });
   }
 
@@ -108,6 +96,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
   const callScript = generateCallScript(resource, subTags);
   const tiles = useMemo(() => buildTiles(resource), [resource]);
   const hasCoords = !!resource.coordinates;
+  const hasLocation = !!resource.location && !isConfidentialLocation(resource.location);
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -138,25 +127,9 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
                   href={tile.href}
                   target={tile.external ? "_blank" : undefined}
                   rel={tile.external ? "noopener noreferrer" : undefined}
-                  className={`flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center hover:opacity-90 transition-opacity active:scale-[0.97] ${
-                    tile.isMap ? "" : "bg-muted/50 hover:bg-muted/80"
-                  }`}
-                  style={
-                    tile.isMap && hasCoords
-                      ? {
-                          backgroundImage: `url(${getStaticMapUrl(resource.coordinates!.lat, resource.coordinates!.lng)})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          minHeight: "100px",
-                        }
-                      : { minHeight: "100px" }
-                  }
+                  className="flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center bg-muted/50 hover:bg-muted/80 hover:opacity-90 transition-opacity active:scale-[0.97]"
+                  style={{ minHeight: "100px" }}
                 >
-                  {tile.isMap && (
-                    hasCoords
-                      ? <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px]" />
-                      : <div className="absolute inset-0 bg-muted/50" />
-                  )}
                   <div className="relative z-10 flex flex-col items-center gap-2 p-4">
                     {tile.icon}
                     <span className="text-sm font-medium text-foreground">{tile.label}</span>
@@ -185,8 +158,27 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
           </motion.div>
         )}
 
+        {/* How to get there */}
+        {hasLocation && (
+          <motion.div className="mb-6" {...stagger(1.2)}>
+            <a
+              href={getMapsUrl(resource.location, hasCoords)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 rounded-2xl p-4 bg-muted/50 hover:bg-muted/80 transition-colors active:scale-[0.98]"
+            >
+              <MapPin className="h-5 w-5 text-destructive shrink-0" />
+              <div className="text-left">
+                <p className="text-sm font-medium text-foreground">How to get there</p>
+                <p className="text-xs text-muted-foreground">{resource.location}</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground ml-auto shrink-0" />
+            </a>
+          </motion.div>
+        )}
+
         {/* Navigation section */}
-        <motion.div className="flex flex-col items-center gap-6" {...stagger(1.4)}>
+        <motion.div className="flex flex-col items-center gap-6" {...stagger(1.6)}>
 
           {/* Expandable tips */}
           {tips.length > 0 && (
