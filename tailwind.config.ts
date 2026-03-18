@@ -86,11 +86,11 @@ export default {
           },
         },
         "soft-pulse": {
-          "0%, 100%": { transform: "scale(1)", opacity: "0.85" },
+          "0%, 100%": { transform: "scale(1)", opacity: "0.7" },
           "15%": { transform: "scale(1.04)", opacity: "1" },
-          "30%": { transform: "scale(0.98)", opacity: "0.9" },
+          "30%": { transform: "scale(0.98)", opacity: "0.8" },
           "45%": { transform: "scale(1.02)", opacity: "1" },
-          "60%": { transform: "scale(1)", opacity: "0.85" },
+          "60%": { transform: "scale(1)", opacity: "0.7" },
         },
       },
       animation: {
