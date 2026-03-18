@@ -90,7 +90,7 @@ function buildTiles(resource: Resource): Tile[] {
 
 /* ── animation ── */
 
-const ease = [0.25, 0.1, 0.25, 1];
+const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
 const reveal = {
   initial: { opacity: 0, y: 24 } as const,
