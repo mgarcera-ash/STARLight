@@ -1,27 +1,17 @@
-import { Phone, Navigation, Mail, MapPin, ChevronRight } from "lucide-react";
+import { Phone, Navigation, Mail, MapPin } from "lucide-react";
 import { Resource } from "@/types";
-import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
-
-interface StepGuidance {
-  action: string;
-  body: string;
-  connector: string;
-  actionType: "call" | "directions" | "email";
-  actionValue: string;
-}
+import { StepGuidance } from "@/data/guidanceCopy";
 
 interface GuidanceStepProps {
   resource: Resource;
   guidance: StepGuidance;
-  stepNumber: number;
 }
 
 function getMapsUrl(location: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
 }
 
-export default function GuidanceStep({ resource, guidance, stepNumber }: GuidanceStepProps) {
+export default function GuidanceStep({ resource, guidance }: GuidanceStepProps) {
   const ActionIcon = {
     call: Phone,
     directions: Navigation,
@@ -35,75 +25,45 @@ export default function GuidanceStep({ resource, guidance, stepNumber }: Guidanc
   }[guidance.actionType];
 
   const actionLabel = {
-    call: `Call ${guidance.actionValue}`,
+    call: guidance.actionValue,
     directions: "Get directions",
-    email: "Email them",
+    email: guidance.actionValue,
   }[guidance.actionType];
 
   const isExternal = guidance.actionType === "directions" || guidance.actionType === "email";
 
   return (
-    <div className="flex-1 flex flex-col">
-      {guidance.connector && (
-        <p className="text-sm text-muted-foreground mb-3 italic">
-          {guidance.connector}
-        </p>
-      )}
+    <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
+      <p className="text-lg font-semibold text-primary mb-3">
+        {guidance.headline}
+      </p>
 
-      <div className="rounded-2xl border border-border bg-card p-5">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="flex items-center justify-center h-6 w-6 rounded-full bg-primary text-primary-foreground text-xs font-bold">
-            {stepNumber}
-          </span>
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-            Step {stepNumber}
-          </span>
-        </div>
+      <p className="text-xl font-bold text-foreground leading-relaxed max-w-[300px] mb-8">
+        {guidance.body}
+      </p>
 
-        <h3 className="text-base font-bold text-foreground leading-snug mb-2">
-          {guidance.action}
-        </h3>
+      {/* Quiet action link */}
+      <a
+        href={actionHref}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+      >
+        <ActionIcon className="h-4 w-4" />
+        <span className="underline underline-offset-2">{actionLabel}</span>
+      </a>
 
-        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-          {guidance.body}
-        </p>
-
+      {/* Location */}
+      <div className="flex items-center gap-1.5 mt-3 text-xs text-muted-foreground">
+        <MapPin className="h-3 w-3 shrink-0" />
         <a
-          href={actionHref}
-          target={isExternal ? "_blank" : undefined}
-          rel={isExternal ? "noopener noreferrer" : undefined}
-          className={cn(
-            "flex items-center justify-center gap-2 w-full rounded-xl px-4 py-3.5 text-sm font-semibold transition-colors",
-            guidance.actionType === "call"
-              ? "bg-green-600 text-white hover:bg-green-700"
-              : "bg-primary text-primary-foreground hover:bg-primary/90"
-          )}
+          href={getMapsUrl(resource.location)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-foreground transition-colors underline underline-offset-2"
         >
-          <ActionIcon className="h-4 w-4" />
-          {actionLabel}
+          {resource.location}
         </a>
-
-        {guidance.actionType === "call" && (
-          <div className="flex items-center gap-1.5 mt-3 text-xs text-muted-foreground">
-            <MapPin className="h-3 w-3 shrink-0" />
-            <a
-              href={getMapsUrl(resource.location)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors underline underline-offset-2"
-            >
-              {resource.location}
-            </a>
-          </div>
-        )}
-
-        <Link
-          to={`/resource/${resource.id}`}
-          className="flex items-center gap-1 mt-3 text-xs text-primary hover:underline font-medium"
-        >
-          Learn more about {resource.title}
-          <ChevronRight className="h-3 w-3" />
-        </Link>
       </div>
     </div>
   );

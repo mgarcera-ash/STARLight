@@ -83,7 +83,6 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
 
   const total = guidedResources.length;
   const isOnFinalPage = currentStep >= total;
-  const progress = (currentStep / total) * 100;
 
   const handleBack = () => {
     if (currentStep === 0) {
@@ -127,10 +126,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 1.0 }}
         >
-          <Button
-            onClick={onBack}
-            className="w-full rounded-xl"
-          >
+          <Button onClick={onBack} className="w-full rounded-xl">
             Yes, start over
           </Button>
           <Button
@@ -244,14 +240,14 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     );
   }
 
-  // Paginated guided steps
+  // Paginated guided steps — companion voice layout
   const resource = guidedResources[currentStep];
   const guidance = generateStepGuidance(resource, answerSubTags, currentStep);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col px-4 pt-6 pb-8">
-      {/* Progress bar */}
-      <div className="flex items-center gap-3 mb-8">
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Back button only — no progress bar */}
+      <div className="px-4 pt-6">
         <motion.button
           onClick={handleBack}
           className="text-muted-foreground hover:text-foreground transition-colors text-sm"
@@ -259,20 +255,9 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
         >
           ← Back
         </motion.button>
-        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-primary rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          />
-        </div>
-        <span className="text-xs text-muted-foreground font-medium tabular-nums">
-          {currentStep + 1} of {total}
-        </span>
       </div>
 
-      {/* Step content */}
+      {/* Step content — vertically centered */}
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={currentStep}
@@ -283,15 +268,11 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="flex-1 flex flex-col"
         >
-          <GuidanceStep
-            resource={resource}
-            guidance={guidance}
-            stepNumber={currentStep + 1}
-          />
+          <GuidanceStep resource={resource} guidance={guidance} />
 
           <button
             onClick={handleNext}
-            className="mt-auto pt-8 flex items-center justify-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors self-center"
+            className="pb-8 pt-4 flex items-center justify-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors self-center"
           >
             {currentStep + 1 < total ? "Next step" : "See summary"}
             <ChevronRight className="h-4 w-4" />

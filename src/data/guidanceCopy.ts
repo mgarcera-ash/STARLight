@@ -1,9 +1,8 @@
 import { Resource } from "@/types";
 
-interface StepGuidance {
-  action: string;
+export interface StepGuidance {
+  headline: string;
   body: string;
-  connector: string;
   actionType: "call" | "directions" | "email";
   actionValue: string;
 }
@@ -13,12 +12,6 @@ const urgentTags = ["crisis", "tonight", "right-now"];
 function isOpen247(hours: string): boolean {
   const h = hours.toLowerCase();
   return h.includes("24/7") || h.includes("24-hour") || h.includes("24 hour");
-}
-
-function getActionVerb(resource: Resource): "Call" | "Go to" | "Email" {
-  if (resource.contact.phone) return "Call";
-  if (resource.contact.email) return "Email";
-  return "Go to";
 }
 
 function getActionType(resource: Resource): StepGuidance["actionType"] {
@@ -33,10 +26,29 @@ function getActionValue(resource: Resource): string {
   return resource.location;
 }
 
+function getActionVerb(resource: Resource): string {
+  if (resource.contact.phone) return "Call";
+  if (resource.contact.email) return "Email";
+  return "Go to";
+}
+
+function generateHeadline(stepIndex: number, subTags: string[]): string {
+  if (stepIndex === 0) return "Here's your first step.";
+  const hasUrgent = subTags.some((t) => urgentTags.includes(t));
+  if (stepIndex === 1 && hasUrgent) return "If they can't help right now, try this.";
+  if (stepIndex === 1) return "If that doesn't work out, try this next.";
+  if (stepIndex === 2) return "One more option.";
+  return "You can also try this.";
+}
+
 function generateBody(resource: Resource, subTags: string[]): string {
   const parts: string[] = [];
   const is247 = isOpen247(resource.hours);
   const elig = resource.eligibility.toLowerCase();
+  const verb = getActionVerb(resource);
+
+  // Opening sentence: weave in the resource name naturally
+  parts.push(`${verb} ${resource.title}.`);
 
   // Hours context
   if (subTags.includes("tonight") && is247) {
@@ -97,28 +109,16 @@ function generateBody(resource: Resource, subTags: string[]): string {
   return parts.join(" ");
 }
 
-function generateConnector(stepIndex: number, subTags: string[]): string {
-  if (stepIndex === 0) return "";
-  const hasUrgent = subTags.some((t) => urgentTags.includes(t));
-
-  if (stepIndex === 1 && hasUrgent) return "If they can't help right now, try this";
-  if (stepIndex === 1) return "If that doesn't work out, try this next";
-  if (stepIndex === 2) return "Another option that could help";
-  return "You can also try";
-}
-
 export function generateStepGuidance(
   resource: Resource,
   subTags: string[],
   stepIndex: number
 ): StepGuidance {
-  const verb = getActionVerb(resource);
   const matchingTags = subTags.filter((t) => resource.subTags.includes(t));
 
   return {
-    action: `${verb} ${resource.title}`,
+    headline: generateHeadline(stepIndex, subTags),
     body: generateBody(resource, matchingTags.length > 0 ? matchingTags : subTags),
-    connector: generateConnector(stepIndex, subTags),
     actionType: getActionType(resource),
     actionValue: getActionValue(resource),
   };
