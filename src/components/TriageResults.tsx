@@ -5,6 +5,7 @@ import { useResources } from "@/context/ResourceContext";
 import { generateStepGuidance } from "@/data/guidanceCopy";
 import GuidanceStep from "@/components/GuidanceStep";
 import ResourceCard from "@/components/ResourceCard";
+import { parseHours, getOpenStatus } from "@/components/HoursIndicator";
 
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
@@ -47,7 +48,12 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     );
 
     if (answerSubTags.length === 0) {
-      const sorted = [...matched].sort((a, b) => a.urgency - b.urgency);
+      const sorted = [...matched].sort((a, b) => {
+        const aOpen = getOpenStatus(parseHours(a.hours)).isOpen ? 0 : 1;
+        const bOpen = getOpenStatus(parseHours(b.hours)).isOpen ? 0 : 1;
+        if (aOpen !== bOpen) return aOpen - bOpen;
+        return a.urgency - b.urgency;
+      });
       return {
         guidedResources: sorted.slice(0, MAX_GUIDED_STEPS),
         remainingResources: sorted.slice(MAX_GUIDED_STEPS),
@@ -67,13 +73,21 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     }
 
     best.sort((a, b) => {
+      const aOpen = getOpenStatus(parseHours(a.hours)).isOpen ? 0 : 1;
+      const bOpen = getOpenStatus(parseHours(b.hours)).isOpen ? 0 : 1;
+      if (aOpen !== bOpen) return aOpen - bOpen;
       const aCount = answerSubTags.filter((t) => a.subTags.includes(t)).length;
       const bCount = answerSubTags.filter((t) => b.subTags.includes(t)).length;
       if (bCount !== aCount) return bCount - aCount;
       return a.urgency - b.urgency;
     });
 
-    other.sort((a, b) => a.urgency - b.urgency);
+    other.sort((a, b) => {
+      const aOpen = getOpenStatus(parseHours(a.hours)).isOpen ? 0 : 1;
+      const bOpen = getOpenStatus(parseHours(b.hours)).isOpen ? 0 : 1;
+      if (aOpen !== bOpen) return aOpen - bOpen;
+      return a.urgency - b.urgency;
+    });
 
     const all = [...best, ...other];
     return {
@@ -154,7 +168,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
       ? "We noticed some of those didn't fit."
       : "That's your plan.";
     const summaryBody = hasSkips
-      ? "That's okay — here are more options that might work better."
+      ? "That's okay. Here are more options that might work better."
       : "You can come back any time. We're not going anywhere.";
 
     return (
