@@ -246,6 +246,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 1,
     status: "approved",
+    callScript: "Say: I'm not safe at home right now. Can you help me?",
     createdAt: "2025-03-15",
   },
   {
