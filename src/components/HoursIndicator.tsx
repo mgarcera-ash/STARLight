@@ -27,7 +27,7 @@ function parseDayRange(start: string, end: string): number[] {
   return days;
 }
 
-function parseHours(hours: string): ParsedHours {
+export function parseHours(hours: string): ParsedHours {
   const h = hours.toLowerCase();
   const openDays = Array(7).fill(false) as boolean[];
 
