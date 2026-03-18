@@ -1,15 +1,13 @@
 import { Resource } from "@/types";
 
 interface StepGuidance {
-  action: string;       // "Call Emergency Shelter Network"
-  why: string;          // "They're open 24/7 and can help you find a bed tonight."
-  connector: string;    // (step 2+) "If they can't help tonight"
-  prepPoints: string[]; // ["No documents needed", "Families with children are prioritized"]
+  action: string;
+  body: string;
+  connector: string;
   actionType: "call" | "directions" | "email";
-  actionValue: string;  // phone number, address, or email
+  actionValue: string;
 }
 
-// Priority order for urgency-matching sub-tags
 const urgentTags = ["crisis", "tonight", "right-now"];
 
 function isOpen247(hours: string): boolean {
@@ -35,109 +33,78 @@ function getActionValue(resource: Resource): string {
   return resource.location;
 }
 
-function generateWhy(resource: Resource, subTags: string[]): string {
+function generateBody(resource: Resource, subTags: string[]): string {
+  const parts: string[] = [];
   const is247 = isOpen247(resource.hours);
-  const hasUrgent = subTags.some((t) => urgentTags.includes(t));
-
-  if (subTags.includes("tonight") && is247) {
-    return "They're open right now and can help you find a place tonight.";
-  }
-  if (subTags.includes("tonight") && !is247) {
-    return `They can help with shelter. Their hours are ${resource.hours}.`;
-  }
-  if (subTags.includes("crisis") && is247) {
-    return "They're available right now, any time of day or night.";
-  }
-  if (subTags.includes("crisis")) {
-    return "They specialize in crisis support and can help right away.";
-  }
-  if (subTags.includes("right-now") && is247) {
-    return "They're open right now and can help you today.";
-  }
-  if (subTags.includes("right-now")) {
-    return `They can help you soon. Their hours are ${resource.hours}.`;
-  }
-  if (subTags.includes("mental-health")) {
-    return "They offer confidential support and counseling.";
-  }
-  if (subTags.includes("substance-use")) {
-    return "They offer treatment and support without judgment.";
-  }
-  if (subTags.includes("immigration")) {
-    return "They help regardless of immigration status.";
-  }
-  if (subTags.includes("family")) {
-    return "They work with families and understand what you're going through.";
-  }
-  if (is247) {
-    return "They're open 24/7.";
-  }
-  if (hasUrgent) {
-    return `They can help. Their hours are ${resource.hours}.`;
-  }
-  return `Their hours are ${resource.hours}.`;
-}
-
-function generateConnector(stepIndex: number, resource: Resource, subTags: string[]): string {
-  if (stepIndex === 0) return "";
-
-  const hasUrgent = subTags.some((t) => urgentTags.includes(t));
-
-  // Check if the previous step's category differs
-  if (stepIndex === 1 && hasUrgent) {
-    return "If they can't help right now, try this";
-  }
-  if (stepIndex === 1) {
-    return "If that doesn't work out, try this next";
-  }
-  if (stepIndex === 2) {
-    return "Another option that could help";
-  }
-  return "You can also try";
-}
-
-function extractPrepPoints(resource: Resource): string[] {
-  const points: string[] = [];
   const elig = resource.eligibility.toLowerCase();
 
-  // No docs needed
-  if (elig.includes("no documentation") || elig.includes("no eligibility") || elig.includes("open to all")) {
-    points.push("No documents or ID needed");
+  // Hours context — conversational
+  if (subTags.includes("tonight") && is247) {
+    parts.push("They're open right now — you can call any time, day or night.");
+  } else if (subTags.includes("tonight") && !is247) {
+    parts.push(`Their hours are ${resource.hours}. If they're closed right now, try first thing when they open.`);
+  } else if (subTags.includes("crisis") && is247) {
+    parts.push("They're available right now, any time of day or night.");
+  } else if (subTags.includes("crisis")) {
+    parts.push("They specialize in crisis support and can help right away.");
+  } else if (subTags.includes("right-now") && is247) {
+    parts.push("They're open right now — you can reach them any time.");
+  } else if (subTags.includes("right-now")) {
+    parts.push(`Their hours are ${resource.hours}. We have some time before they close — worth calling now.`);
+  } else if (is247) {
+    parts.push("They're open 24/7, so you can reach them whenever you're ready.");
   } else {
-    // Extract key requirements
+    parts.push(`Their hours are ${resource.hours}.`);
+  }
+
+  // Eligibility — woven in naturally
+  if (elig.includes("no documentation") || elig.includes("no eligibility") || elig.includes("open to all") || elig.includes("anyone")) {
+    parts.push("No documents or ID needed — just reach out.");
+  } else {
     if (elig.includes("proof of income")) {
-      points.push("Bring proof of income if you have it");
+      parts.push("Bring proof of income if you have it, but call first to see what you need.");
     }
     if (elig.includes("income below") || elig.includes("income-eligible") || elig.includes("low-income")) {
-      points.push("They'll ask about your income — just an estimate is fine");
+      parts.push("They'll ask about your income — just an estimate is fine.");
     }
     if (elig.includes("referral")) {
-      points.push("You may need a referral — ask when you call");
+      parts.push("You may need a referral — ask about that when you call.");
     }
   }
 
   // Who it's for
   if (elig.includes("families with children")) {
-    points.push("Families with children are prioritized");
-  }
-  if (elig.includes("anyone")) {
-    points.push("Open to everyone — no requirements");
+    parts.push("Families with children are prioritized, so let them know if you have kids with you.");
   }
   if (elig.includes("18+") || elig.includes("adults")) {
-    points.push("For adults 18 and older");
+    parts.push("This is for adults 18 and older.");
   }
 
-  // Hours context
-  if (isOpen247(resource.hours)) {
-    points.push("Open 24/7 — you can reach them any time");
+  // Context-specific warmth
+  if (subTags.includes("mental-health")) {
+    parts.push("Everything is confidential — you can speak freely.");
+  }
+  if (subTags.includes("substance-use")) {
+    parts.push("They help without judgment — just be honest about what you need.");
+  }
+  if (subTags.includes("immigration")) {
+    parts.push("They help regardless of immigration status.");
+  }
+  if (subTags.includes("family")) {
+    parts.push("They work with families and understand what you're going through.");
   }
 
-  // Fallback
-  if (points.length === 0) {
-    points.push(resource.eligibility);
-  }
+  return parts.join(" ");
+}
 
-  return points;
+function generateConnector(stepIndex: number, subTags: string[]): string {
+  if (stepIndex === 0) return "";
+  const hasUrgent = subTags.some((t) => urgentTags.includes(t));
+
+  if (stepIndex === 1 && hasUrgent) return "If they can't help right now, try this";
+  if (stepIndex === 1) return "If that doesn't work out, try this next";
+  if (stepIndex === 2) return "Another option that could help";
+  return "You can also try";
 }
 
 export function generateStepGuidance(
@@ -150,9 +117,8 @@ export function generateStepGuidance(
 
   return {
     action: `${verb} ${resource.title}`,
-    why: generateWhy(resource, matchingTags.length > 0 ? matchingTags : subTags),
-    connector: generateConnector(stepIndex, resource, subTags),
-    prepPoints: extractPrepPoints(resource),
+    body: generateBody(resource, matchingTags.length > 0 ? matchingTags : subTags),
+    connector: generateConnector(stepIndex, subTags),
     actionType: getActionType(resource),
     actionValue: getActionValue(resource),
   };
