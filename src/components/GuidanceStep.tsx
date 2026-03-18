@@ -110,13 +110,14 @@ function SnapSection({ children, sectionRef, className = "", visible = true }: {
   return (
     <div
       ref={sectionRef}
-      className={`snap-section px-8 py-4 ${className}`}
+      className={`snap-section px-8 py-6 ${className}`}
+      style={{ scrollSnapStop: "always" }}
     >
       <motion.div
         className="w-full max-w-[300px] mx-auto"
-        initial={{ opacity: 0, y: 16 }}
-        animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-        transition={{ duration: 0.45, ease }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+        transition={{ duration: 0.4, ease }}
       >
         {children}
       </motion.div>
