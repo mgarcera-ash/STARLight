@@ -23,14 +23,6 @@ function getMapsUrl(location: string, hasCoords: boolean) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}${hasCoords ? "&travelmode=transit" : ""}`;
 }
 
-function getStaticMapUrl(lat: number, lng: number, zoom = 15): string {
-  const n = Math.pow(2, zoom);
-  const tileX = Math.floor(((lng + 180) / 360) * n);
-  const tileY = Math.floor(
-    ((1 - Math.log(Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180)) / Math.PI) / 2) * n
-  );
-  return `https://tile.openstreetmap.org/${zoom}/${tileX}/${tileY}.png`;
-}
 
 function isConfidentialLocation(location: string): boolean {
   const l = location.toLowerCase();
