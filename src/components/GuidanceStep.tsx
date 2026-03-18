@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Phone, Globe, MapPin, ChevronDown } from "lucide-react";
+import { Phone, Globe, MapPin, ChevronDown, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Resource } from "@/types";
-import { StepGuidance, generateContextTips } from "@/data/guidanceCopy";
+import { StepGuidance, generateContextTips, generateCallScript } from "@/data/guidanceCopy";
 
 // Peer Navigator phone — hardcoded fallback for "Need help?" link
 const PEER_NAVIGATOR_PHONE = "(215) 555-0106";
@@ -10,6 +10,7 @@ const PEER_NAVIGATOR_PHONE = "(215) 555-0106";
 interface GuidanceStepProps {
   resource: Resource;
   guidance: StepGuidance;
+  subTags?: string[];
   onSkip?: () => void;
 }
 
@@ -91,10 +92,12 @@ function buildTiles(resource: Resource): Tile[] {
   return candidates.slice(0, 2);
 }
 
-export default function GuidanceStep({ resource, guidance, onSkip }: GuidanceStepProps) {
+export default function GuidanceStep({ resource, guidance, subTags = [], onSkip }: GuidanceStepProps) {
   const [showTips, setShowTips] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
+  const [showScript, setShowScript] = useState(false);
   const tips = generateContextTips(resource);
+  const callScript = generateCallScript(resource, subTags);
   const tiles = buildTiles(resource);
   const hasCoords = !!resource.coordinates;
 
@@ -173,7 +176,41 @@ export default function GuidanceStep({ resource, guidance, onSkip }: GuidanceSte
         </div>
       )}
 
-      {/* "Need help with this step?" — Peer Navigator link */}
+      {/* "What to say when you call" */}
+      {callScript && (
+        <div className="w-full max-w-[300px] mb-6">
+          <button
+            onClick={() => setShowScript(!showScript)}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 mx-auto"
+          >
+            <MessageCircle className={`h-3 w-3 transition-transform duration-200`} />
+            Not sure what to say?
+          </button>
+          <AnimatePresence>
+            {showScript && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="mt-3 bg-primary/5 border border-primary/10 rounded-2xl p-4 text-left">
+                  <p className="text-xs font-medium text-primary mb-1.5">When they pick up:</p>
+                  <p className="text-sm text-foreground leading-relaxed italic">
+                    "{callScript.replace(/^Say:\s*/i, '')}"
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    That's it. They'll take it from there.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
+
       <a
         href={`tel:${PEER_NAVIGATOR_PHONE}`}
         className="text-xs text-muted-foreground hover:text-foreground transition-colors mb-4"

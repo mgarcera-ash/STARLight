@@ -111,6 +111,25 @@ function generateLeadAndDetail(resource: Resource, subTags: string[]): { lead: s
   };
 }
 
+export function generateCallScript(resource: Resource, subTags: string[]): string | null {
+  if (!resource.contact.phone) return null;
+  if (resource.callScript) return resource.callScript;
+
+  // Generate a sensible fallback based on category/tags
+  const cat = resource.categories[0];
+  if (subTags.includes("tonight") || subTags.includes("crisis")) {
+    return `Say: Hi, I need help right now. Can someone talk to me?`;
+  }
+  switch (cat) {
+    case "Housing": return "Say: Hi, I need help with housing. What are my options?";
+    case "Food": return "Say: Hi, I'd like to get food. What do I need to bring?";
+    case "Healthcare": return "Say: Hi, I need to see someone but I don't have insurance. Can you help?";
+    case "Legal": return "Say: Hi, I have a legal question and I can't afford a lawyer. Can someone help me?";
+    case "Community": return "Say: Hi, I heard you have programs that might help me. Can you tell me more?";
+    default: return "Say: Hi, I was told you might be able to help me. Can I talk to someone?";
+  }
+}
+
 export function generateContextTips(resource: Resource): string[] {
   if (resource.tips && resource.tips.length > 0) return resource.tips;
 

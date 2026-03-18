@@ -21,6 +21,7 @@ export const seedResources: Resource[] = [
       "If the main line puts you on hold, press 2 for the rental assistance department directly.",
       "Bring any mail with your name on it. That counts as proof of address even without a lease."
     ],
+    callScript: "Say: Hi, I need help with housing. Can I talk to someone about rental assistance?",
     createdAt: "2025-01-15",
   },
   {
@@ -38,6 +39,7 @@ export const seedResources: Resource[] = [
     featured: true,
     urgency: 1,
     status: "approved",
+    callScript: "Say: Hi, I'd like to come get food. Do I need to bring anything?",
     createdAt: "2025-01-20",
   },
   {
@@ -55,6 +57,7 @@ export const seedResources: Resource[] = [
     featured: true,
     urgency: 1,
     status: "approved",
+    callScript: "Say: Hi, I need to see a doctor but I don't have insurance. Can I make an appointment?",
     createdAt: "2025-02-01",
   },
   {
@@ -72,6 +75,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 1,
     status: "approved",
+    callScript: "Say: Hi, I have a legal issue and I can't afford a lawyer. Can someone help me?",
     createdAt: "2025-02-05",
   },
   {
@@ -89,6 +93,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 3,
     status: "approved",
+    callScript: "Say: Hi, I'd like to sign my kid up for the after-school program. What do I need to do?",
     createdAt: "2025-02-10",
   },
   {
@@ -106,6 +111,7 @@ export const seedResources: Resource[] = [
     featured: true,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I could really use some help figuring out my next steps. Can I talk to a navigator?",
     createdAt: "2025-02-15",
   },
   {
@@ -128,6 +134,7 @@ export const seedResources: Resource[] = [
       "If they say they're full, ask about overflow partner shelters. They usually have a backup list.",
       "Families with kids get priority. Make sure to mention everyone who will be with you."
     ],
+    callScript: "Say: I need a bed tonight. Is there anything available?",
     createdAt: "2025-02-20",
   },
   {
@@ -145,6 +152,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm pregnant (or I have a young child) and I'd like to apply for WIC.",
     createdAt: "2025-03-01",
   },
   {
@@ -167,6 +175,7 @@ export const seedResources: Resource[] = [
       "Ask about walk-in assessment hours — you can often get seen the same day without an appointment.",
       "If you need MAT (medication-assisted treatment), say that upfront. It speeds up the process."
     ],
+    callScript: "Say: I need help with substance use. Can I come in for an assessment?",
     createdAt: "2025-03-05",
   },
   {
@@ -184,6 +193,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm an immigrant and I need some legal help. Do you have someone who can talk to me?",
     createdAt: "2025-03-10",
   },
   {
@@ -201,6 +211,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm a senior and I'd like to know about meals and activities you offer.",
     createdAt: "2025-03-12",
   },
   {
@@ -218,6 +229,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm looking for work and could use help with my resume or finding a job.",
     createdAt: "2025-03-14",
   },
   {
@@ -234,6 +246,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 1,
     status: "approved",
+    callScript: "Say: I'm not safe at home right now. Can you help me?",
     createdAt: "2025-03-15",
   },
   {
@@ -251,6 +264,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I need to schedule a dental appointment for my child.",
     createdAt: "2025-03-16",
   },
   {
@@ -268,6 +282,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I'm having trouble paying my utility bills. Can you help me apply for assistance?",
     createdAt: "2025-03-17",
   },
   {
@@ -301,6 +316,7 @@ export const seedResources: Resource[] = [
     featured: true,
     urgency: 1,
     status: "approved",
+    callScript: "Say: I'm going through a really hard time right now and I need someone to talk to.",
     createdAt: "2025-03-19",
   },
   {
@@ -318,6 +334,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 3,
     status: "approved",
+    callScript: "Say: Hi, I'm a renter and I have some questions about my rights. Can someone help?",
     createdAt: "2025-03-20",
   },
   {
@@ -352,6 +369,7 @@ export const seedResources: Resource[] = [
     featured: false,
     urgency: 2,
     status: "approved",
+    callScript: "Say: Hi, I need some clothes (or supplies). Can I come in today?",
     createdAt: "2025-03-22",
   },
 ];

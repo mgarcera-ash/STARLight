@@ -27,6 +27,7 @@ export interface Resource {
   status: "approved" | "pending" | "returned";
   returnComment?: string;
   tips?: string[];
+  callScript?: string;
   createdAt: string;
 }
 
