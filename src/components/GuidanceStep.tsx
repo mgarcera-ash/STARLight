@@ -57,7 +57,9 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
           tips={tips}
           onSkip={onSkip}
           onNext={onNext}
+          onBack={onBack}
           nextLabel={nextLabel}
+          showBack={showBack}
         />
       </div>
     </div>
