@@ -7,7 +7,7 @@ import GuidanceStep from "@/components/GuidanceStep";
 import ResourceCard from "@/components/ResourceCard";
 
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 interface TriageResultsProps {
   needs: Category[];
@@ -280,15 +280,14 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
           className="flex-1 flex flex-col"
         >
-          <GuidanceStep resource={resource} guidance={guidance} subTags={answerSubTags} onSkip={handleSkip} />
-
-          <button
-            onClick={handleNext}
-            className="pb-8 pt-4 flex items-center justify-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors self-center"
-          >
-            {currentStep + 1 < total ? "Next step" : "See summary"}
-            <ChevronRight className="h-4 w-4" />
-          </button>
+          <GuidanceStep
+            resource={resource}
+            guidance={guidance}
+            subTags={answerSubTags}
+            onSkip={handleSkip}
+            onNext={handleNext}
+            nextLabel={currentStep + 1 < total ? "Next step" : "See summary"}
+          />
         </motion.div>
       </AnimatePresence>
     </div>
