@@ -17,7 +17,7 @@ export default function GuidanceFooter({ tips, onSkip, onNext, nextLabel, delay 
       {tips.length > 0 && (
         <Collapsible className="w-full">
           <CollapsibleTrigger className="flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors group">
-            Tried this place before?
+            Tried this place before but didn't get far?
             <ChevronDown className="h-3 w-3 transition-transform group-data-[state=open]:rotate-180" />
           </CollapsibleTrigger>
           <CollapsibleContent>
