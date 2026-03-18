@@ -1,12 +1,13 @@
-import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Category } from "@/types";
 import { useResources } from "@/context/ResourceContext";
+import { generateStepGuidance } from "@/data/guidanceCopy";
+import GuidanceStep from "@/components/GuidanceStep";
 import ResourceCard from "@/components/ResourceCard";
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Star } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, ChevronDown } from "lucide-react";
 
 interface TriageResultsProps {
   needs: Category[];
@@ -14,22 +15,28 @@ interface TriageResultsProps {
   onBack: () => void;
 }
 
+const MAX_GUIDED_STEPS = 3;
+
 export default function TriageResults({ needs, followUpAnswers, onBack }: TriageResultsProps) {
   const { approvedResources } = useResources();
+  const [showAllOptions, setShowAllOptions] = useState(false);
 
   const answerSubTags = useMemo(
     () => Object.values(followUpAnswers).filter(Boolean),
     [followUpAnswers]
   );
 
-  const { bestMatches, otherMatches } = useMemo(() => {
+  const { guidedResources, remainingResources } = useMemo(() => {
     const matched = approvedResources.filter((r) =>
       r.categories.some((c) => needs.includes(c))
     );
 
     if (answerSubTags.length === 0) {
-      const sorted = matched.sort((a, b) => a.urgency - b.urgency);
-      return { bestMatches: sorted, otherMatches: [] };
+      const sorted = [...matched].sort((a, b) => a.urgency - b.urgency);
+      return {
+        guidedResources: sorted.slice(0, MAX_GUIDED_STEPS),
+        remainingResources: sorted.slice(MAX_GUIDED_STEPS),
+      };
     }
 
     const best: typeof matched = [];
@@ -53,14 +60,16 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
 
     other.sort((a, b) => a.urgency - b.urgency);
 
-    return { bestMatches: best, otherMatches: other };
+    const all = [...best, ...other];
+    return {
+      guidedResources: all.slice(0, MAX_GUIDED_STEPS),
+      remainingResources: all.slice(MAX_GUIDED_STEPS),
+    };
   }, [approvedResources, needs, answerSubTags]);
-
-  const priorityResource = bestMatches[0];
-  const remainingBest = bestMatches.slice(1);
 
   return (
     <div className="min-h-screen bg-background px-4 pt-6 pb-24">
+      {/* Back button */}
       <motion.button
         onClick={onBack}
         className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4 hover:text-foreground transition-colors"
@@ -72,95 +81,89 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
         Start over
       </motion.button>
 
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}
+        className="mb-8"
       >
         <h1 className="text-xl font-bold text-foreground mb-1">
-          We found some places that can help
+          Here's your plan.
         </h1>
-        <p className="text-sm text-muted-foreground mb-6">
-          These are picked for your situation. Tap any to learn more.
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Go through these steps one at a time. Start with the first one.
         </p>
       </motion.div>
 
-      {/* Priority resource */}
-      {priorityResource && (
+      {/* Guided steps */}
+      <div className="flex flex-col gap-5 mb-8">
+        {guidedResources.map((resource, i) => {
+          const guidance = generateStepGuidance(resource, answerSubTags, i);
+          return (
+            <GuidanceStep
+              key={resource.id}
+              resource={resource}
+              guidance={guidance}
+              stepNumber={i + 1}
+              delay={0.8 + i * 0.3}
+            />
+          );
+        })}
+      </div>
+
+      {/* Fallback: See all options */}
+      {remainingResources.length > 0 && (
         <motion.div
-          className="mb-6"
-          initial={{ opacity: 0, y: 24, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.9, ease: "easeOut" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.8 + guidedResources.length * 0.3 + 0.2 }}
         >
-          <div className="flex items-center gap-1.5 mb-2">
-            <Star className="h-4 w-4 text-star-gold fill-star-gold" />
-            <span className="text-xs font-bold text-star-gold uppercase tracking-wide">
-              This is your best first step
-            </span>
+          <div className="border-t border-border pt-6">
+            <p className="text-sm text-muted-foreground mb-3">
+              Didn't work out? There are more places that can help.
+            </p>
+            <Button
+              variant="outline"
+              className="w-full rounded-xl"
+              onClick={() => setShowAllOptions(!showAllOptions)}
+            >
+              <ChevronDown
+                className={`h-4 w-4 mr-1.5 transition-transform duration-200 ${showAllOptions ? "rotate-180" : ""}`}
+              />
+              {showAllOptions ? "Hide other options" : `See all options (${remainingResources.length} more)`}
+            </Button>
           </div>
-          <Link
-            to={`/resource/${priorityResource.id}`}
-            className="block rounded-2xl border-2 border-primary/40 bg-primary/5 shadow-lg overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1"
-          >
-            <ResourceCard resource={priorityResource} size="lg" />
-          </Link>
+
+          <AnimatePresence>
+            {showAllOptions && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
+                <div className="flex flex-col gap-3 mt-4">
+                  {remainingResources.map((r, i) => (
+                    <motion.div
+                      key={r.id}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: i * 0.1 }}
+                    >
+                      <ResourceCard resource={r} size="sm" />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
 
-      {/* Remaining best matches */}
-      {remainingBest.length > 0 && (
-        <div className="mb-6">
-          <motion.h2
-            className="text-sm font-bold text-muted-foreground uppercase tracking-wide mb-3"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 1.3 }}
-          >
-            Also a good fit
-          </motion.h2>
-          <div className="flex flex-col gap-3">
-            {remainingBest.map((r, i) => (
-              <motion.div
-                key={r.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 1.4 + i * 0.15, ease: "easeOut" }}
-              >
-                <ResourceCard resource={r} size="sm" />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Other category matches */}
-      {otherMatches.length > 0 && (
-        <div>
-          <motion.h2
-            className="text-sm font-bold text-muted-foreground uppercase tracking-wide mb-3"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 1.4 + remainingBest.length * 0.15 + 0.2 }}
-          >
-            Other options
-          </motion.h2>
-          <div className="flex flex-col gap-3">
-            {otherMatches.map((r, i) => (
-              <motion.div
-                key={r.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 1.5 + remainingBest.length * 0.15 + i * 0.15, ease: "easeOut" }}
-              >
-                <ResourceCard resource={r} size="sm" />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {bestMatches.length === 0 && otherMatches.length === 0 && (
+      {/* Empty state */}
+      {guidedResources.length === 0 && (
         <motion.div
           className="text-center py-16"
           initial={{ opacity: 0 }}
