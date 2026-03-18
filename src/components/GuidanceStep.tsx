@@ -96,6 +96,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
   const callScript = generateCallScript(resource, subTags);
   const tiles = useMemo(() => buildTiles(resource), [resource]);
   const hasCoords = !!resource.coordinates;
+  const hasLocation = !!resource.location && !isConfidentialLocation(resource.location);
 
   return (
     <div className="flex-1 overflow-y-auto">
