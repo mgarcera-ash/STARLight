@@ -88,11 +88,13 @@ function buildTiles(resource: Resource): Tile[] {
   return candidates.slice(0, 2);
 }
 
+const ease = [0.25, 0.1, 0.25, 1] as const;
+
 const reveal = {
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-40px" },
-  transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+  initial: { opacity: 0, y: 20 } as const,
+  whileInView: { opacity: 1, y: 0 } as const,
+  viewport: { once: true, margin: "-40px" as const },
+  transition: { duration: 0.5, ease },
 };
 
 export default function GuidanceStep({ resource, guidance, subTags = [], onSkip, onNext, nextLabel }: GuidanceStepProps) {
