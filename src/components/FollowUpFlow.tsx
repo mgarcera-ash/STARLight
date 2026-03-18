@@ -48,7 +48,7 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
   }
 
   return (
-    <div className="theme-navy min-h-screen bg-background flex flex-col px-4 pt-6 pb-8">
+    <div className="min-h-screen bg-background flex flex-col px-4 pt-6 pb-8">
       {/* Progress */}
       <div className="flex items-center gap-3 mb-8">
         <motion.button

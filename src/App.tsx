@@ -22,18 +22,20 @@ const App = () => (
       <Sonner />
       <ResourceProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/resource/:id" element={<ResourceDetail />} />
-            {/* HIDDEN: revisit later
-            <Route path="/browse" element={<Browse />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/submit" element={<SubmitResource />} />
-            <Route path="/review" element={<ReviewQueue />} />
-            */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <BottomNav />
+          <div className="theme-navy">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/resource/:id" element={<ResourceDetail />} />
+              {/* HIDDEN: revisit later
+              <Route path="/browse" element={<Browse />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/submit" element={<SubmitResource />} />
+              <Route path="/review" element={<ReviewQueue />} />
+              */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <BottomNav />
+          </div>
         </BrowserRouter>
       </ResourceProvider>
     </TooltipProvider>

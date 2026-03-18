@@ -72,7 +72,7 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
   };
 
   return (
-    <div className="theme-navy min-h-screen flex flex-col bg-background px-5 pt-12 pb-24">
+    <div className="min-h-screen flex flex-col bg-background px-5 pt-12 pb-24">
       {/* Header */}
       <motion.div
         className="mb-8 text-center"
