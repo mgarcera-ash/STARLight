@@ -35,11 +35,10 @@ export default function GuidanceStep({ resource, guidance }: GuidanceStepProps) 
         {hasPhone && (
           <a
             href={`tel:${resource.contact.phone}`}
-            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-1.5 hover:bg-muted/80 transition-colors active:scale-[0.97]"
+            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-muted/80 transition-colors active:scale-[0.97]"
           >
             <Phone className="h-5 w-5 text-primary" />
-            <span className="text-xs font-medium text-muted-foreground">Call</span>
-            <span className="text-sm font-semibold text-foreground">{resource.contact.phone}</span>
+            <span className="text-sm font-medium text-foreground">Call</span>
           </a>
         )}
 
@@ -48,24 +47,20 @@ export default function GuidanceStep({ resource, guidance }: GuidanceStepProps) 
             href={getMapsUrl(resource.location)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-1.5 hover:bg-muted/80 transition-colors active:scale-[0.97]"
+            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-muted/80 transition-colors active:scale-[0.97]"
           >
             <MapPin className="h-5 w-5 text-primary" />
-            <span className="text-xs font-medium text-muted-foreground">Get directions</span>
-            <span className="text-sm font-semibold text-foreground leading-tight">
-              {resource.location.split(",")[0]}
-            </span>
+            <span className="text-sm font-medium text-foreground">Directions</span>
           </a>
         )}
 
-        {!hasPhone && resource.contact.email && (
+        {resource.contact.email && (
           <a
             href={`mailto:${resource.contact.email}`}
-            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-1.5 hover:bg-muted/80 transition-colors active:scale-[0.97]"
+            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-muted/80 transition-colors active:scale-[0.97]"
           >
             <Mail className="h-5 w-5 text-primary" />
-            <span className="text-xs font-medium text-muted-foreground">Email</span>
-            <span className="text-sm font-semibold text-foreground">{resource.contact.email}</span>
+            <span className="text-sm font-medium text-foreground">Email</span>
           </a>
         )}
       </div>
