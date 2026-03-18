@@ -66,8 +66,6 @@ function generateLeadAndDetail(resource: Resource, subTags: string[]): { lead: s
     leadParts.push("Worth calling now while they're still open.");
   } else if (is247) {
     leadParts.push("They're open 24/7, so you can reach them whenever you're ready.");
-  } else {
-    leadParts.push("Here's when they're available.");
   }
 
   // Detail: eligibility, who it's for, warmth (everything else)
