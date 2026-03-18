@@ -35,7 +35,7 @@ export default function ResourceDetail() {
   const HeroIcon = hero.icon;
 
   return (
-    <div className="pb-24">
+    <div className="min-h-screen bg-background pb-24">
       {/* Hero */}
       <div className={cn("no-print bg-gradient-to-br px-4 pt-6 pb-8 relative overflow-hidden", hero.gradient)}>
         <HeroIcon
