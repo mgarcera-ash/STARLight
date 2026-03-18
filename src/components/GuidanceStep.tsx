@@ -269,7 +269,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
       }}
     >
       {/* Section 1: Intro */}
-      <SnapSection sectionRef={setSectionRef(0)}>
+      <SnapSection sectionRef={setSectionRef(0)} visible={seenSections.has(0)}>
         <motion.p
           className="text-lg font-semibold text-primary mb-3 text-center"
           {...reveal}
