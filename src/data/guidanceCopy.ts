@@ -59,8 +59,8 @@ function generateLeadAndDetail(resource: Resource, subTags: string[]): { lead: s
     leadParts.push("They're open right now. You can call any time, day or night.");
   } else if (subTags.includes("tonight") && !is247) {
     leadParts.push(realTimeOpen
-      ? "They're still open right now — try calling before they close."
-      : "They're closed right now — try first thing when they open.");
+      ? "They're still open right now. Try calling before they close."
+      : "They're closed right now. Try first thing when they open.");
   } else if (subTags.includes("crisis") && is247) {
     leadParts.push("They're available right now, any time of day or night.");
   } else if (subTags.includes("crisis")) {
@@ -69,8 +69,8 @@ function generateLeadAndDetail(resource: Resource, subTags: string[]): { lead: s
     leadParts.push("They're open right now. You can reach them any time.");
   } else if (subTags.includes("right-now")) {
     leadParts.push(realTimeOpen
-      ? "They're open right now — worth calling before they close."
-      : "They're closed right now — check below for when they open.");
+      ? "They're open right now. Worth calling before they close."
+      : "They're closed right now. Check below for when they open.");
   } else if (is247) {
     leadParts.push("They're open 24/7, so you can reach them whenever you're ready.");
   }
