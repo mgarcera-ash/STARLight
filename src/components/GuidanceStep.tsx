@@ -220,7 +220,15 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
         for (const entry of entries) {
           if (entry.isIntersecting) {
             const idx = sectionRefs.current.indexOf(entry.target as HTMLDivElement);
-            if (idx >= 0) setActiveSection(idx);
+            if (idx >= 0) {
+              setActiveSection(idx);
+              setSeenSections((prev) => {
+                if (prev.has(idx)) return prev;
+                const next = new Set(prev);
+                next.add(idx);
+                return next;
+              });
+            }
 
             // Unlock when last section is reached
             if (entry.target === lastSectionRef.current) {
