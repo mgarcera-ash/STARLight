@@ -99,32 +99,6 @@ const reveal = {
   transition: { duration: 0.6, ease },
 };
 
-/* ── Snap Section wrapper ── */
-
-function SnapSection({ children, sectionRef, className = "", visible = true }: {
-  children: React.ReactNode;
-  sectionRef?: React.Ref<HTMLDivElement>;
-  className?: string;
-  visible?: boolean;
-}) {
-  return (
-    <div
-      ref={sectionRef}
-      className={`snap-section px-8 py-6 ${className}`}
-      style={{ scrollSnapStop: "always" }}
-    >
-      <motion.div
-        className="w-full max-w-[300px] mx-auto"
-        initial={{ opacity: 0, y: 12 }}
-        animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-        transition={{ duration: 0.4, ease }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-}
-
 /* ── Dot Indicator ── */
 
 function DotIndicator({ count, active, visible }: { count: number; active: number; visible: boolean }) {
@@ -184,127 +158,103 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
   const tiles = buildTiles(resource);
   const hasCoords = !!resource.coordinates;
 
-  const [unlocked, setUnlocked] = useState(false);
-  const [activeSection, setActiveSection] = useState(0);
-  const [seenSections, setSeenSections] = useState<Set<number>>(new Set([0]));
-
   const containerRef = useRef<HTMLDivElement>(null);
-  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const lastSectionRef = useRef<HTMLDivElement | null>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Build sections list dynamically
   const sections = useMemo(() => {
     const s: string[] = ["intro"];
     if (tiles.length > 0) s.push("actions");
     if (callScript) s.push("script");
-    s.push("navigation"); // always last: tips + skip + next
+    s.push("navigation");
     return s;
   }, [tiles.length, callScript]);
 
   const sectionCount = sections.length;
 
-  // Ref setter callback
-  const setSectionRef = useCallback((index: number) => (el: HTMLDivElement | null) => {
-    sectionRefs.current[index] = el;
-    if (index === sectionCount - 1) {
-      lastSectionRef.current = el;
-    }
-  }, [sectionCount]);
+  const [revealedCount, setRevealedCount] = useState(1);
+  const unlocked = revealedCount >= sectionCount;
 
-  // IntersectionObserver for active section tracking + unlock
+  // Sentinel observer — reveals next section when user scrolls to bottom of current content
   useEffect(() => {
+    const sentinel = sentinelRef.current;
     const container = containerRef.current;
-    if (!container) return;
+    if (!sentinel || !container || unlocked) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            const idx = sectionRefs.current.indexOf(entry.target as HTMLDivElement);
-            if (idx >= 0) {
-              setActiveSection(idx);
-              setSeenSections((prev) => {
-                if (prev.has(idx)) return prev;
-                const next = new Set(prev);
-                next.add(idx);
-                return next;
-              });
-            }
-
-            // Unlock when last section is reached
-            if (entry.target === lastSectionRef.current) {
-              setUnlocked(true);
-            }
+            setRevealedCount((prev) => Math.min(prev + 1, sectionCount));
           }
         }
       },
       {
         root: container,
-        threshold: 0.5,
-        rootMargin: "0px 0px -20% 0px",
+        threshold: 0.1,
       }
     );
 
-    sectionRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-
+    observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [sectionCount]);
+  }, [revealedCount, sectionCount, unlocked]);
 
-  // Reset state when resource changes
+  // Reset when resource changes
   useEffect(() => {
-    setUnlocked(false);
-    setActiveSection(0);
-    setSeenSections(new Set([0]));
+    setRevealedCount(1);
     if (containerRef.current) {
       containerRef.current.scrollTop = 0;
     }
   }, [resource.id]);
 
+  const fadeIn = {
+    initial: { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5, ease },
+  };
+
   return (
     <div
       ref={containerRef}
-      className="flex-1 flex flex-col overflow-y-auto pt-4"
-      style={{
-        scrollSnapType: unlocked ? "none" : "y mandatory",
-      }}
+      className="flex-1 flex flex-col overflow-y-auto"
     >
-      {/* Section 1: Intro */}
-      <SnapSection sectionRef={setSectionRef(0)} visible={seenSections.has(0)}>
-        <motion.p
-          className="text-lg font-semibold text-primary mb-3 text-center"
-          {...reveal}
-        >
-          {guidance.headline}
-        </motion.p>
-
-        <motion.p
-          className="text-xl font-bold text-foreground leading-relaxed text-center mb-2"
-          {...reveal}
-          transition={{ ...reveal.transition, delay: 0.15 }}
-        >
-          {guidance.lead}
-        </motion.p>
-
-        {guidance.detail && (
+      {/* Section: Intro — starts centered on full viewport */}
+      <div
+        className="flex items-center justify-center px-8"
+        style={{ minHeight: unlocked ? "auto" : "100dvh", paddingTop: unlocked ? "2rem" : undefined, paddingBottom: unlocked ? "1rem" : undefined }}
+      >
+        <div className="w-full max-w-[300px] mx-auto text-center">
           <motion.p
-            className="text-sm text-muted-foreground leading-relaxed text-center"
+            className="text-lg font-semibold text-primary mb-3"
             {...reveal}
-            transition={{ ...reveal.transition, delay: 0.3 }}
           >
-            {guidance.detail}
+            {guidance.headline}
           </motion.p>
-        )}
-      </SnapSection>
 
-      {/* Section 2: Action tiles (conditional) */}
-      {tiles.length > 0 && (
-        <SnapSection sectionRef={setSectionRef(sections.indexOf("actions"))} visible={seenSections.has(sections.indexOf("actions"))}>
-          <motion.div
-            className="flex gap-3"
+          <motion.p
+            className="text-xl font-bold text-foreground leading-relaxed mb-2"
             {...reveal}
+            transition={{ ...reveal.transition, delay: 0.15 }}
           >
+            {guidance.lead}
+          </motion.p>
+
+          {guidance.detail && (
+            <motion.p
+              className="text-sm text-muted-foreground leading-relaxed"
+              {...reveal}
+              transition={{ ...reveal.transition, delay: 0.3 }}
+            >
+              {guidance.detail}
+            </motion.p>
+          )}
+        </div>
+      </div>
+
+      {/* Section: Action tiles */}
+      {sections.includes("actions") && revealedCount > sections.indexOf("actions") && (
+        <motion.div className="px-8 py-4 w-full max-w-[300px] mx-auto" {...fadeIn}>
+          <div className="flex gap-3">
             {tiles.map((tile) => (
               <a
                 key={tile.key}
@@ -336,94 +286,95 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
                 </div>
               </a>
             ))}
-          </motion.div>
-        </SnapSection>
+          </div>
+        </motion.div>
       )}
 
-      {/* Section 3: Call script (conditional) */}
-      {callScript && (
-        <SnapSection sectionRef={setSectionRef(sections.indexOf("script"))} visible={seenSections.has(sections.indexOf("script"))}>
-          <motion.div {...reveal}>
-            <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5 text-left">
-              <div className="flex items-center gap-1.5 mb-2">
-                <MessageCircle className="h-3.5 w-3.5 text-primary" />
-                <p className="text-xs font-medium text-primary">When they pick up:</p>
-              </div>
-              <p className="text-base text-foreground leading-relaxed italic">
-                "{callScript.replace(/^Say:\s*/i, '')}"
-              </p>
-              <p className="text-xs text-muted-foreground mt-3">
-                That's it. They'll take it from there.
-              </p>
+      {/* Section: Call script */}
+      {sections.includes("script") && revealedCount > sections.indexOf("script") && (
+        <motion.div className="px-8 py-4 w-full max-w-[300px] mx-auto" {...fadeIn}>
+          <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5 text-left">
+            <div className="flex items-center gap-1.5 mb-2">
+              <MessageCircle className="h-3.5 w-3.5 text-primary" />
+              <p className="text-xs font-medium text-primary">When they pick up:</p>
             </div>
-          </motion.div>
-        </SnapSection>
+            <p className="text-base text-foreground leading-relaxed italic">
+              "{callScript!.replace(/^Say:\s*/i, '')}"
+            </p>
+            <p className="text-xs text-muted-foreground mt-3">
+              That's it. They'll take it from there.
+            </p>
+          </div>
+        </motion.div>
       )}
 
-      {/* Section 4: Tips + Navigation (always last) */}
-      <SnapSection sectionRef={setSectionRef(sectionCount - 1)} visible={seenSections.has(sectionCount - 1)}>
-        <div className="flex flex-col items-center gap-6">
-          {/* Tips */}
-          {tips.length > 0 && (
-            <motion.div className="w-full" {...reveal}>
-              <p className="text-xs font-medium text-primary mb-3">
-                Tried this place before? Here's what might help:
-              </p>
-              <ul className="space-y-2">
-                {tips.map((tip, i) => (
-                  <li key={i} className="text-xs text-muted-foreground leading-relaxed">
-                    {tip}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          )}
+      {/* Section: Navigation (tips + skip + next) — always last */}
+      {revealedCount >= sectionCount && (
+        <motion.div className="px-8 py-4 w-full max-w-[300px] mx-auto" {...fadeIn}>
+          <div className="flex flex-col items-center gap-6">
+            {tips.length > 0 && (
+              <div className="w-full">
+                <p className="text-xs font-medium text-primary mb-3">
+                  Tried this place before? Here's what might help:
+                </p>
+                <ul className="space-y-2">
+                  {tips.map((tip, i) => (
+                    <li key={i} className="text-xs text-muted-foreground leading-relaxed">
+                      {tip}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-          {/* Divider */}
-          <div className="border-t border-border/40 w-full" />
+            <div className="border-t border-border/40 w-full" />
 
-          {/* Peer navigator */}
-          <motion.a
-            href={`tel:${PEER_NAVIGATOR_PHONE}`}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            {...reveal}
-            transition={{ ...reveal.transition, delay: 0.1 }}
-          >
-            Need help with this step? Talk to someone.
-          </motion.a>
-
-          {/* Skip */}
-          {onSkip && (
-            <motion.button
-              onClick={onSkip}
-              className="text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors"
-              {...reveal}
-              transition={{ ...reveal.transition, delay: 0.2 }}
+            <a
+              href={`tel:${PEER_NAVIGATOR_PHONE}`}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              This doesn't work for me
-            </motion.button>
-          )}
+              Need help with this step? Talk to someone.
+            </a>
 
-          {/* Next */}
-          {onNext && (
-            <motion.button
-              onClick={onNext}
-              className="flex items-center justify-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors pt-2"
-              {...reveal}
-              transition={{ ...reveal.transition, delay: 0.3 }}
-            >
-              {nextLabel || "Next step"}
-              <ChevronRight className="h-4 w-4" />
-            </motion.button>
-          )}
-        </div>
-      </SnapSection>
+            {onSkip && (
+              <button
+                onClick={onSkip}
+                className="text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors"
+              >
+                This doesn't work for me
+              </button>
+            )}
+
+            {onNext && (
+              <button
+                onClick={onNext}
+                className="flex items-center justify-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors pt-2"
+              >
+                {nextLabel || "Next step"}
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Sentinel — triggers next reveal when scrolled into view */}
+      {!unlocked && (
+        <div
+          ref={sentinelRef}
+          className="w-full"
+          style={{ height: "1px", marginBottom: "60dvh" }}
+        />
+      )}
+
+      {/* Bottom spacer for final content */}
+      {unlocked && <div className="pb-20" />}
 
       {/* Dot indicator */}
-      <DotIndicator count={sectionCount} active={activeSection} visible={!unlocked} />
+      <DotIndicator count={sectionCount} active={revealedCount - 1} visible={!unlocked} />
 
       {/* Scroll hint */}
-      <ScrollHint visible={!unlocked && activeSection < sectionCount - 1} />
+      <ScrollHint visible={!unlocked} />
     </div>
   );
 }
