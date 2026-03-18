@@ -1,0 +1,77 @@
+import { useMemo } from "react";
+import { Phone, Globe } from "lucide-react";
+import { motion } from "framer-motion";
+import { Resource } from "@/types";
+import { Tile, stagger } from "./types";
+
+function buildTiles(resource: Resource): Tile[] {
+  const hasPhone = !!resource.contact.phone;
+  const hasWebsite = !!resource.contact.website;
+  const hasEmail = !!resource.contact.email;
+
+  const candidates: Tile[] = [];
+
+  if (hasPhone) {
+    candidates.push({
+      key: "call",
+      icon: <Phone className="h-5 w-5 text-primary" />,
+      label: "Call",
+      href: `tel:${resource.contact.phone}`,
+    });
+  }
+
+  if (hasWebsite) {
+    candidates.push({
+      key: "website",
+      icon: <Globe className="h-5 w-5 text-primary" />,
+      label: "Visit website",
+      href: resource.contact.website!,
+      external: true,
+    });
+  }
+
+  if (!hasPhone && !hasWebsite && hasEmail) {
+    candidates.push({
+      key: "email",
+      icon: <Globe className="h-5 w-5 text-primary" />,
+      label: "Message",
+      href: `mailto:${resource.contact.email}`,
+      external: true,
+    });
+  }
+
+  return candidates.slice(0, 2);
+}
+
+interface ActionTilesProps {
+  resource: Resource;
+  delay?: number;
+}
+
+export default function ActionTiles({ resource, delay = 0.8 }: ActionTilesProps) {
+  const tiles = useMemo(() => buildTiles(resource), [resource]);
+
+  if (tiles.length === 0) return null;
+
+  return (
+    <motion.div className="mb-6" {...stagger(delay)}>
+      <div className="flex gap-3">
+        {tiles.map((tile) => (
+          <a
+            key={tile.key}
+            href={tile.href}
+            target={tile.external ? "_blank" : undefined}
+            rel={tile.external ? "noopener noreferrer" : undefined}
+            className="flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center bg-muted/50 hover:bg-muted/80 hover:opacity-90 transition-opacity active:scale-[0.97]"
+            style={{ minHeight: "100px" }}
+          >
+            <div className="relative z-10 flex flex-col items-center gap-2 p-4">
+              {tile.icon}
+              <span className="text-sm font-medium text-foreground">{tile.label}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
