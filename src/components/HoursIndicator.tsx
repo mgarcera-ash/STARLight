@@ -27,7 +27,7 @@ function parseDayRange(start: string, end: string): number[] {
   return days;
 }
 
-function parseHours(hours: string): ParsedHours {
+export function parseHours(hours: string): ParsedHours {
   const h = hours.toLowerCase();
   const openDays = Array(7).fill(false) as boolean[];
 
@@ -85,7 +85,7 @@ function parseTime(timeStr: string): { hours: number; minutes: number } | null {
   return { hours, minutes };
 }
 
-function getOpenStatus(parsed: ParsedHours): { isOpen: boolean; label: string } {
+export function getOpenStatus(parsed: ParsedHours): { isOpen: boolean; label: string } {
   if (parsed.is247) return { isOpen: true, label: "Open 24/7" };
 
   const now = new Date();
@@ -154,9 +154,19 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
     );
   }
 
+  const isOpen = status.isOpen;
+
   return (
-    <div className={cn("w-full rounded-2xl bg-primary/5 border border-primary/10 p-4 flex flex-col gap-3", className)}>
-      <p className="text-xs font-medium text-primary">Here's when they're available</p>
+    <div className={cn(
+      "w-full rounded-2xl p-4 flex flex-col gap-3 border",
+      isOpen
+        ? "bg-primary/5 border-primary/10"
+        : "bg-destructive/5 border-destructive/10",
+      className
+    )}>
+      <p className={cn("text-xs font-medium", isOpen ? "text-primary" : "text-destructive")}>
+        {isOpen ? "Here's when they're available" : "They're closed right now"}
+      </p>
       {/* Status pill — tappable */}
       <button
         onClick={() => setExpanded(!expanded)}
