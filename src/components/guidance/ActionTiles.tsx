@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Resource } from "@/types";
 import { Tile, stagger } from "./types";
 
-function buildTiles(resource: Resource): Tile[] {
+function buildTiles(resource: Resource): (Tile & { bg: string })[] {
   const hasPhone = !!resource.contact.phone;
   const hasWebsite = !!resource.contact.website;
   const hasEmail = !!resource.contact.email;
