@@ -1,4 +1,3 @@
-import { Tables } from "@/integrations/supabase/types";
 import { Category, Resource } from "@/types";
 
 const VALID_CATEGORIES: Category[] = [
@@ -12,7 +11,51 @@ const VALID_CATEGORIES: Category[] = [
 
 const VALID_STATUSES: Resource["status"][] = ["approved", "pending", "returned"];
 
-export type ResourceRow = Tables<"resources">;
+export const RESOURCE_SELECT_FIELDS = `
+  id,
+  title,
+  description,
+  categories,
+  tags,
+  sub_tags,
+  eligibility,
+  hours,
+  contact_phone,
+  contact_email,
+  contact_website,
+  location,
+  coordinates,
+  featured,
+  urgency,
+  status,
+  return_comment,
+  tips,
+  call_script,
+  created_at
+`;
+
+export interface ResourceRow {
+  id: string;
+  title: string;
+  description: string;
+  categories: string[] | null;
+  tags: string[] | null;
+  sub_tags: string[] | null;
+  eligibility: string | null;
+  hours: string | null;
+  contact_phone: string | null;
+  contact_email: string | null;
+  contact_website: string | null;
+  location: string | null;
+  coordinates: unknown;
+  featured: boolean | null;
+  urgency: number | null;
+  status: string | null;
+  return_comment: string | null;
+  tips: string[] | null;
+  call_script: string | null;
+  created_at: string;
+}
 
 function isCategory(value: string): value is Category {
   return VALID_CATEGORIES.includes(value as Category);
@@ -96,7 +139,7 @@ export function normalizeResourceRow(row: ResourceRow): Resource {
     id: row.id,
     title: row.title,
     description: row.description,
-    categories: row.categories,
+    categories: row.categories ?? [],
     tags: row.tags ?? [],
     subTags: row.sub_tags ?? [],
     eligibility: row.eligibility ?? "",

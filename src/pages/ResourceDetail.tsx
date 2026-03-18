@@ -16,8 +16,16 @@ const categoryHero: Record<string, { icon: React.ElementType; gradient: string }
 
 export default function ResourceDetail() {
   const { id } = useParams<{ id: string }>();
-  const { getResource } = useResources();
+  const { getResource, isLoading } = useResources();
   const resource = id ? getResource(id) : undefined;
+
+  if (isLoading && !resource) {
+    return (
+      <div className="flex min-h-screen items-center justify-center px-6 text-center">
+        <p className="text-sm text-muted-foreground">Loading resource details...</p>
+      </div>
+    );
+  }
 
   if (!resource) {
     return (
@@ -36,7 +44,6 @@ export default function ResourceDetail() {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      {/* Hero */}
       <div className={cn("no-print bg-gradient-to-br px-4 pt-6 pb-8 relative overflow-hidden", hero.gradient)}>
         <HeroIcon
           className="absolute right-[-20px] bottom-[-10px] h-40 w-40 text-primary-foreground/10"
@@ -50,7 +57,6 @@ export default function ResourceDetail() {
         </h1>
       </div>
 
-      {/* Action-first content */}
       <div className="px-4 pt-5 print-flyer">
         <ResourceInfo resource={resource} />
         <div className="mt-8">

@@ -1,18 +1,74 @@
-import React, { createContext, useContext, useMemo, useState, useCallback } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import { Resource } from "@/types";
 import { seedResources } from "@/data/seed";
-import { normalizeResource } from "@/lib/resources";
+import { RESOURCE_SELECT_FIELDS, ResourceRow, normalizeResource, normalizeResourceRows } from "@/lib/resources";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+
+const fallbackResources = seedResources.map(normalizeResource);
 
 interface ResourceContextValue {
   resources: Resource[];
   approvedResources: Resource[];
+  isLoading: boolean;
+  source: "seed" | "supabase";
   getResource: (id: string) => Resource | undefined;
 }
 
 const ResourceContext = createContext<ResourceContextValue | null>(null);
 
 export function ResourceProvider({ children }: { children: React.ReactNode }) {
-  const [resources] = useState<Resource[]>(() => seedResources.map(normalizeResource));
+  const [resources, setResources] = useState<Resource[]>(fallbackResources);
+  const [isLoading, setIsLoading] = useState(isSupabaseConfigured);
+  const [source, setSource] = useState<"seed" | "supabase">("seed");
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadResources() {
+      if (!supabase) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("resources")
+          .select(RESOURCE_SELECT_FIELDS)
+          .eq("status", "approved")
+          .order("featured", { ascending: false })
+          .order("urgency", { ascending: true })
+          .order("title", { ascending: true });
+
+        if (error) {
+          throw error;
+        }
+
+        if (!isActive) {
+          return;
+        }
+
+        setResources(normalizeResourceRows(data as ResourceRow[]));
+        setSource("supabase");
+      } catch (error) {
+        console.warn("Falling back to seed resources because Supabase is unavailable.", error);
+        if (!isActive) {
+          return;
+        }
+        setResources(fallbackResources);
+        setSource("seed");
+      } finally {
+        if (isActive) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    void loadResources();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const approvedResources = useMemo(
     () => resources.filter((resource) => resource.status === "approved"),
@@ -29,6 +85,8 @@ export function ResourceProvider({ children }: { children: React.ReactNode }) {
       value={{
         resources,
         approvedResources,
+        isLoading,
+        source,
         getResource,
       }}
     >

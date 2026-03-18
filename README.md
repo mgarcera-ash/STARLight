@@ -1,6 +1,6 @@
 # STARLight
 
-STARLight is a Vite + React app for STAR resource triage, browsing, and follow-up guidance.
+STARLight is a Vite + React prototype for STAR resource triage and approved-resource lookup.
 
 ## Local development
 
@@ -17,14 +17,19 @@ npm run build
 
 ## GitHub Pages deployment
 
-This project deploys through GitHub Actions instead of Lovable hosting.
+This project deploys through GitHub Actions.
 
 1. Open `Settings -> Pages` in the GitHub repository.
 2. Set `Source` to `GitHub Actions`.
 3. Push to `main`, or run the `Deploy to GitHub Pages` workflow from the `Actions` tab.
 
-The workflow builds the app, uploads `dist`, and publishes it to GitHub Pages. During the Actions build, Vite automatically derives the correct project-page base path from the repository name, so asset URLs resolve without hardcoding the repo slug in source code.
+## Supabase prototype setup
 
-## Supabase
+This repo now treats Supabase as a fresh integration pass.
 
-The repo already includes `supabase/config.toml`, so the next migration step can be connecting the frontend to a real Supabase project and moving the current local resource state behind that backend.
+1. Copy `.env.example` to `.env`.
+2. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
+3. Run the SQL in `supabase/migrations/20260318_create_resources.sql`.
+4. Add approved resources directly in the Supabase dashboard.
+
+The app will try to read approved resources from Supabase first. If the database is not ready yet, it falls back to the local seed data so the prototype stays usable.
