@@ -359,7 +359,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
       )}
 
       {/* Section 4: Tips + Navigation (always last) */}
-      <SnapSection sectionRef={setSectionRef(sectionCount - 1)}>
+      <SnapSection sectionRef={setSectionRef(sectionCount - 1)} visible={seenSections.has(sectionCount - 1)}>
         <div className="flex flex-col items-center gap-6">
           {/* Tips */}
           {tips.length > 0 && (
