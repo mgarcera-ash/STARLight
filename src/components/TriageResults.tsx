@@ -280,7 +280,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
           className="flex-1 flex flex-col"
         >
-          <GuidanceStep resource={resource} guidance={guidance} onSkip={handleSkip} />
+          <GuidanceStep resource={resource} guidance={guidance} subTags={answerSubTags} onSkip={handleSkip} />
 
           <button
             onClick={handleNext}
