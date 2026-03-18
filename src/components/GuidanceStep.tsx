@@ -166,7 +166,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
         {/* How to get there */}
         {hasLocation && (
-          <motion.div className="mb-6" {...stagger(1.2)}>
+          <motion.div className="mb-6" {...stagger(1.5)}>
             <a
               href={getMapsUrl(resource.location, hasCoords)}
               target="_blank"
