@@ -2,7 +2,8 @@ import { Resource } from "@/types";
 
 export interface StepGuidance {
   headline: string;
-  body: string;
+  lead: string;
+  detail: string;
   actionType: "call" | "directions" | "email";
   actionValue: string;
 }
@@ -41,72 +42,73 @@ function generateHeadline(stepIndex: number, subTags: string[]): string {
   return "You can also try this.";
 }
 
-function generateBody(resource: Resource, subTags: string[]): string {
-  const parts: string[] = [];
+function generateLeadAndDetail(resource: Resource, subTags: string[]): { lead: string; detail: string } {
+  const leadParts: string[] = [];
+  const detailParts: string[] = [];
   const is247 = isOpen247(resource.hours);
   const elig = resource.eligibility.toLowerCase();
   const verb = getActionVerb(resource);
 
-  // Opening sentence: weave in the resource name naturally
-  parts.push(`${verb} ${resource.title}.`);
+  // Lead: action + immediate hours context (1-2 sentences max)
+  leadParts.push(`${verb} ${resource.title}.`);
 
-  // Hours context
   if (subTags.includes("tonight") && is247) {
-    parts.push("They're open right now. You can call any time, day or night.");
+    leadParts.push("They're open right now. You can call any time, day or night.");
   } else if (subTags.includes("tonight") && !is247) {
-    parts.push(`Their hours are ${resource.hours}. If they're closed right now, try first thing when they open.`);
+    leadParts.push(`Their hours are ${resource.hours}. If they're closed right now, try first thing when they open.`);
   } else if (subTags.includes("crisis") && is247) {
-    parts.push("They're available right now, any time of day or night.");
+    leadParts.push("They're available right now, any time of day or night.");
   } else if (subTags.includes("crisis")) {
-    parts.push("They specialize in crisis support and can help right away.");
+    leadParts.push("They specialize in crisis support and can help right away.");
   } else if (subTags.includes("right-now") && is247) {
-    parts.push("They're open right now. You can reach them any time.");
+    leadParts.push("They're open right now. You can reach them any time.");
   } else if (subTags.includes("right-now")) {
-    parts.push(`Their hours are ${resource.hours}. Worth calling now while they're still open.`);
+    leadParts.push(`Their hours are ${resource.hours}. Worth calling now while they're still open.`);
   } else if (is247) {
-    parts.push("They're open 24/7, so you can reach them whenever you're ready.");
+    leadParts.push("They're open 24/7, so you can reach them whenever you're ready.");
   } else {
-    parts.push(`Their hours are ${resource.hours}.`);
+    leadParts.push(`Their hours are ${resource.hours}.`);
   }
 
-  // Eligibility
+  // Detail: eligibility, who it's for, warmth (everything else)
   if (elig.includes("no documentation") || elig.includes("no eligibility") || elig.includes("open to all") || elig.includes("anyone")) {
-    parts.push("No documents or ID needed. Just reach out.");
+    detailParts.push("No documents or ID needed. Just reach out.");
   } else {
     if (elig.includes("proof of income")) {
-      parts.push("Bring proof of income if you have it, but call first to see what you need.");
+      detailParts.push("Bring proof of income if you have it, but call first to see what you need.");
     }
     if (elig.includes("income below") || elig.includes("income-eligible") || elig.includes("low-income")) {
-      parts.push("They'll ask about your income. Just an estimate is fine.");
+      detailParts.push("They'll ask about your income. Just an estimate is fine.");
     }
     if (elig.includes("referral")) {
-      parts.push("You may need a referral. Ask about that when you call.");
+      detailParts.push("You may need a referral. Ask about that when you call.");
     }
   }
 
-  // Who it's for
   if (elig.includes("families with children")) {
-    parts.push("Families with children are prioritized, so let them know if you have kids with you.");
+    detailParts.push("Families with children are prioritized, so let them know if you have kids with you.");
   }
   if (elig.includes("18+") || elig.includes("adults")) {
-    parts.push("This is for adults 18 and older.");
+    detailParts.push("This is for adults 18 and older.");
   }
 
-  // Context-specific warmth
   if (subTags.includes("mental-health")) {
-    parts.push("Everything is confidential. You can speak freely.");
+    detailParts.push("Everything is confidential. You can speak freely.");
   }
   if (subTags.includes("substance-use")) {
-    parts.push("They help without judgment. Just be honest about what you need.");
+    detailParts.push("They help without judgment. Just be honest about what you need.");
   }
   if (subTags.includes("immigration")) {
-    parts.push("They help regardless of immigration status.");
+    detailParts.push("They help regardless of immigration status.");
   }
   if (subTags.includes("family")) {
-    parts.push("They work with families and understand what you're going through.");
+    detailParts.push("They work with families and understand what you're going through.");
   }
 
-  return parts.join(" ");
+  return {
+    lead: leadParts.join(" "),
+    detail: detailParts.join(" "),
+  };
 }
 
 export function generateContextTips(resource: Resource): string[] {
@@ -116,7 +118,6 @@ export function generateContextTips(resource: Resource): string[] {
   const h = resource.hours.toLowerCase();
   const elig = resource.eligibility.toLowerCase();
 
-  // Hours-based tips
   if (h.includes("mon") && h.includes("am")) {
     const match = resource.hours.match(/(\d{1,2}:\d{2}\s*AM)/i);
     if (match) {
@@ -127,7 +128,6 @@ export function generateContextTips(resource: Resource): string[] {
     tips.push("If you got a busy signal, try again in a few minutes. Off-peak hours (early morning or late evening) tend to be less busy.");
   }
 
-  // Eligibility-based tips
   if (elig.includes("proof of income")) {
     tips.push("If you don't have income documents, ask about self-declaration. Many places accept a written statement.");
   }
@@ -138,7 +138,6 @@ export function generateContextTips(resource: Resource): string[] {
     tips.push("When they ask about income, an estimate is fine. You don't need exact paperwork on the first call.");
   }
 
-  // Contact-based tips
   if (resource.contact.phone) {
     tips.push("Ask for the intake department specifically — the general line can sometimes send you in circles.");
   }
@@ -155,10 +154,13 @@ export function generateStepGuidance(
   stepIndex: number
 ): StepGuidance {
   const matchingTags = subTags.filter((t) => resource.subTags.includes(t));
+  const effectiveTags = matchingTags.length > 0 ? matchingTags : subTags;
+  const { lead, detail } = generateLeadAndDetail(resource, effectiveTags);
 
   return {
     headline: generateHeadline(stepIndex, subTags),
-    body: generateBody(resource, matchingTags.length > 0 ? matchingTags : subTags),
+    lead,
+    detail,
     actionType: getActionType(resource),
     actionValue: getActionValue(resource),
   };
