@@ -29,9 +29,9 @@ function getActionValue(resource: Resource): string {
 }
 
 function getActionVerb(resource: Resource): string {
-  if (resource.contact.phone) return "Call";
-  if (resource.contact.email) return "Email";
-  return "Go to";
+  if (resource.contact.phone) return "Call the";
+  if (resource.contact.email) return "Email the";
+  return "Go to the";
 }
 
 function generateHeadline(stepIndex: number, subTags: string[]): string {

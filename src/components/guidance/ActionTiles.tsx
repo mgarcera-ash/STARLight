@@ -15,7 +15,7 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
     candidates.push({
       key: "call",
       icon: <Phone className="h-5 w-5 text-amber-500" />,
-      label: "Call",
+      label: "Tap to call",
       href: `tel:${resource.contact.phone}`,
       bg: "bg-amber-500/5 border border-amber-500/10",
     });
@@ -25,7 +25,7 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
     candidates.push({
       key: "website",
       icon: <Globe className="h-5 w-5 text-sky-400" />,
-      label: "Visit website",
+      label: "Tap to visit website",
       href: resource.contact.website!,
       external: true,
       bg: "bg-sky-400/5 border border-sky-400/10",
@@ -36,7 +36,7 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
     candidates.push({
       key: "email",
       icon: <Globe className="h-5 w-5 text-sky-400" />,
-      label: "Message",
+      label: "Tap to message",
       href: `mailto:${resource.contact.email}`,
       external: true,
       bg: "bg-sky-400/5 border border-sky-400/10",
