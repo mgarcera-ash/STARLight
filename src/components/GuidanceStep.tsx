@@ -95,9 +95,9 @@ const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
 function stagger(delay: number) {
   return {
-    initial: { opacity: 0, y: 16 },
+    initial: { opacity: 0, y: 12 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5, ease, delay },
+    transition: { duration: 0.7, ease, delay },
   };
 }
 
@@ -111,7 +111,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="w-full max-w-[300px] mx-auto px-8 pt-12 pb-20">
+      <div className="w-full max-w-md mx-auto px-6 pt-12 pb-20">
 
         {/* Intro */}
         <motion.div className="text-center mb-6" {...stagger(0)}>
@@ -130,7 +130,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
         {/* Action tiles */}
         {tiles.length > 0 && (
-          <motion.div className="mb-6" {...stagger(0.15)}>
+          <motion.div className="mb-6" {...stagger(0.6)}>
             <div className="flex gap-3">
               {tiles.map((tile) => (
                 <a
@@ -169,7 +169,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
         {/* Call script */}
         {callScript && (
-          <motion.div className="mb-6" {...stagger(0.4)}>
+          <motion.div className="mb-6" {...stagger(1.0)}>
             <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5 text-left">
               <div className="flex items-center gap-1.5 mb-2">
                 <MessageCircle className="h-3.5 w-3.5 text-primary" />
@@ -186,7 +186,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
         )}
 
         {/* Navigation section */}
-        <motion.div className="flex flex-col items-center gap-6" {...stagger(0.6)}>
+        <motion.div className="flex flex-col items-center gap-6" {...stagger(1.4)}>
 
           {/* Expandable tips */}
           {tips.length > 0 && (
