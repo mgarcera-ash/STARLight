@@ -96,7 +96,7 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "soft-pulse": "soft-pulse 2.5s ease-in-out infinite",
+        "soft-pulse": "soft-pulse 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite",
       },
     },
   },
