@@ -100,7 +100,7 @@ export const seedResources: Resource[] = [
     subTags: ["social"],
     eligibility: "Active community members; referral from staff",
     hours: "Mon–Fri 10:00 AM – 4:00 PM",
-    contact: { email: "navigators@starlight.org" },
+    contact: { phone: "(215) 555-0106", email: "navigators@starlight.org" },
     location: "100 STAR Center, Philadelphia, PA 19104",
     coordinates: { lat: 39.9530, lng: -75.1980 },
     featured: true,

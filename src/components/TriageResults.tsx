@@ -34,6 +34,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   const [showAllOptions, setShowAllOptions] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmMessage] = useState(getStartOverMessage);
+  const [skippedSteps, setSkippedSteps] = useState<Set<number>>(new Set());
 
   const answerSubTags = useMemo(
     () => Object.values(followUpAnswers).filter(Boolean),
@@ -83,6 +84,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
 
   const total = guidedResources.length;
   const isOnFinalPage = currentStep >= total;
+  const hasSkips = skippedSteps.size > 0;
 
   const handleBack = () => {
     if (currentStep === 0) {
@@ -96,6 +98,11 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   const handleNext = () => {
     setDirection(1);
     setCurrentStep((i) => i + 1);
+  };
+
+  const handleSkip = () => {
+    setSkippedSteps((prev) => new Set(prev).add(currentStep));
+    handleNext();
   };
 
   // Confirmation screen
@@ -143,6 +150,13 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
 
   // Final summary page
   if (isOnFinalPage) {
+    const summaryHeadline = hasSkips
+      ? "We noticed some of those didn't fit."
+      : "That's your plan.";
+    const summaryBody = hasSkips
+      ? "That's okay — here are more options that might work better."
+      : "You can come back any time. We're not going anywhere.";
+
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8">
         <motion.p
@@ -151,7 +165,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          That's your plan.
+          {summaryHeadline}
         </motion.p>
 
         <motion.p
@@ -160,7 +174,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          You can come back any time. We're not going anywhere.
+          {summaryBody}
         </motion.p>
 
         <motion.div
@@ -240,13 +254,12 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     );
   }
 
-  // Paginated guided steps — companion voice layout
+  // Paginated guided steps
   const resource = guidedResources[currentStep];
   const guidance = generateStepGuidance(resource, answerSubTags, currentStep);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Back button only — no progress bar */}
       <div className="px-4 pt-6">
         <motion.button
           onClick={handleBack}
@@ -257,7 +270,6 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
         </motion.button>
       </div>
 
-      {/* Step content — vertically centered */}
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={currentStep}
@@ -268,7 +280,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
           className="flex-1 flex flex-col"
         >
-          <GuidanceStep resource={resource} guidance={guidance} />
+          <GuidanceStep resource={resource} guidance={guidance} onSkip={handleSkip} />
 
           <button
             onClick={handleNext}
