@@ -22,7 +22,7 @@ export default function SplashIntro({ onComplete }: { onComplete: () => void }) 
       className={cn(
         "fixed inset-0 z-[100] flex items-center justify-center",
         "bg-[hsl(222,97%,18%)]",
-        phase === "exit" && "animate-splash-slide-up"
+        phase === "exit" && "animate-splash-fade-out"
       )}
     >
       <h1
