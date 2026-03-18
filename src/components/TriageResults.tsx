@@ -7,7 +7,7 @@ import GuidanceStep from "@/components/GuidanceStep";
 import ResourceCard from "@/components/ResourceCard";
 
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 interface TriageResultsProps {
   needs: Category[];
