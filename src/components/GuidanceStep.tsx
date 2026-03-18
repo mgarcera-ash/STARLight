@@ -158,8 +158,27 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
           </motion.div>
         )}
 
+        {/* How to get there */}
+        {hasLocation && (
+          <motion.div className="mb-6" {...stagger(1.2)}>
+            <a
+              href={getMapsUrl(resource.location, hasCoords)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 rounded-2xl p-4 bg-muted/50 hover:bg-muted/80 transition-colors active:scale-[0.98]"
+            >
+              <MapPin className="h-5 w-5 text-destructive shrink-0" />
+              <div className="text-left">
+                <p className="text-sm font-medium text-foreground">How to get there</p>
+                <p className="text-xs text-muted-foreground">{resource.location}</p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground ml-auto shrink-0" />
+            </a>
+          </motion.div>
+        )}
+
         {/* Navigation section */}
-        <motion.div className="flex flex-col items-center gap-6" {...stagger(1.4)}>
+        <motion.div className="flex flex-col items-center gap-6" {...stagger(1.6)}>
 
           {/* Expandable tips */}
           {tips.length > 0 && (
