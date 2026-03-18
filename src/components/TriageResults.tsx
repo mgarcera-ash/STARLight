@@ -200,8 +200,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           {remainingResources.length > 0 && (
             <>
               <Button
-                variant="outline"
-                className="w-full rounded-xl"
+                className="w-full rounded-xl bg-violet-600 hover:bg-violet-700 text-white border-0"
                 onClick={() => setShowAllOptions(!showAllOptions)}
               >
                 <ChevronDown
@@ -238,9 +237,8 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           )}
 
           <Button
-            variant="ghost"
             onClick={() => setShowConfirm(true)}
-            className="w-full rounded-xl text-muted-foreground"
+            className="w-full rounded-xl bg-orange-500 hover:bg-orange-600 text-white border-0"
           >
             Start over
           </Button>
