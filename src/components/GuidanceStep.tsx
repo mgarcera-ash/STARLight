@@ -42,7 +42,6 @@ function buildTiles(resource: Resource): Tile[] {
   const hasPhone = !!resource.contact.phone;
   const hasWebsite = !!resource.contact.website;
   const hasEmail = !!resource.contact.email;
-  const hasLocation = !!resource.location && !isConfidentialLocation(resource.location);
 
   const candidates: Tile[] = [];
 
@@ -52,17 +51,6 @@ function buildTiles(resource: Resource): Tile[] {
       icon: <Phone className="h-5 w-5 text-primary" />,
       label: "Call",
       href: `tel:${resource.contact.phone}`,
-    });
-  }
-
-  if (hasLocation) {
-    candidates.push({
-      key: "directions",
-      icon: <MapPin className="h-5 w-5 text-primary" />,
-      label: "How to get there",
-      href: getMapsUrl(resource.location, !!resource.coordinates),
-      external: true,
-      isMap: true,
     });
   }
 
