@@ -14,7 +14,9 @@ interface GuidanceStepProps {
   subTags?: string[];
   onSkip?: () => void;
   onNext?: () => void;
+  onBack?: () => void;
   nextLabel?: string;
+  showBack?: boolean;
 }
 
 export default function GuidanceStep({ resource, guidance, subTags = [], onSkip, onNext, nextLabel }: GuidanceStepProps) {
