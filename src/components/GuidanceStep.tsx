@@ -148,7 +148,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
 
         {/* Call script */}
         {callScript && (
-          <motion.div className="mb-6" {...stagger(1.0)}>
+          <motion.div className="mb-6" {...stagger(1.2)}>
             <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5 text-left">
               <div className="flex items-center gap-1.5 mb-2">
                 <MessageCircle className="h-3.5 w-3.5 text-primary" />
