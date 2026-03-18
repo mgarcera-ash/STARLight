@@ -127,25 +127,9 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
                   href={tile.href}
                   target={tile.external ? "_blank" : undefined}
                   rel={tile.external ? "noopener noreferrer" : undefined}
-                  className={`flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center hover:opacity-90 transition-opacity active:scale-[0.97] ${
-                    tile.isMap ? "" : "bg-muted/50 hover:bg-muted/80"
-                  }`}
-                  style={
-                    tile.isMap && hasCoords
-                      ? {
-                          backgroundImage: `url(${getStaticMapUrl(resource.coordinates!.lat, resource.coordinates!.lng)})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          minHeight: "100px",
-                        }
-                      : { minHeight: "100px" }
-                  }
+                  className="flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center bg-muted/50 hover:bg-muted/80 hover:opacity-90 transition-opacity active:scale-[0.97]"
+                  style={{ minHeight: "100px" }}
                 >
-                  {tile.isMap && (
-                    hasCoords
-                      ? <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px]" />
-                      : <div className="absolute inset-0 bg-muted/50" />
-                  )}
                   <div className="relative z-10 flex flex-col items-center gap-2 p-4">
                     {tile.icon}
                     <span className="text-sm font-medium text-foreground">{tile.label}</span>
