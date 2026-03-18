@@ -134,6 +134,7 @@ export const seedResources: Resource[] = [
       "If they say they're full, ask about overflow partner shelters. They usually have a backup list.",
       "Families with kids get priority. Make sure to mention everyone who will be with you."
     ],
+    callScript: "Say: I need a bed tonight. Is there anything available?",
     createdAt: "2025-02-20",
   },
   {
