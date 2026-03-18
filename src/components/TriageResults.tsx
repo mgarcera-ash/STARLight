@@ -8,7 +8,8 @@ import ResourceCard from "@/components/ResourceCard";
 import { parseHours, getOpenStatus } from "@/components/HoursIndicator";
 
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TriageResultsProps {
   needs: Category[];
