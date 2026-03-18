@@ -186,7 +186,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
         )}
 
         {/* Navigation section */}
-        <motion.div className="flex flex-col items-center gap-6" {...stagger(0.6)}>
+        <motion.div className="flex flex-col items-center gap-6" {...stagger(1.4)}>
 
           {/* Expandable tips */}
           {tips.length > 0 && (
