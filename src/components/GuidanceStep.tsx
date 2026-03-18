@@ -30,35 +30,24 @@ export default function GuidanceStep({ resource, guidance }: GuidanceStepProps) 
   const hasEmail = !!resource.contact.email;
   const hasLocation = resource.location && !resource.location.toLowerCase().includes("phone/text");
   const hasCoords = !!resource.coordinates;
+  const hasWebsite = !!resource.contact.website;
 
-  // Build ordered tiles: call/email on left, directions always on right
-  const leftTiles: React.ReactNode[] = [];
+  // Build tile list: contact actions first, directions always last
+  type Tile = { key: string; icon: React.ReactNode; label: string; href: string; external?: boolean; isMap?: boolean };
+  const tiles: Tile[] = [];
 
   if (hasPhone) {
-    leftTiles.push(
-      <a
-        key="call"
-        href={`tel:${resource.contact.phone}`}
-        className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-muted/80 transition-colors active:scale-[0.97]"
-      >
-        <Phone className="h-5 w-5 text-primary" />
-        <span className="text-sm font-medium text-foreground">Call</span>
-      </a>
-    );
+    tiles.push({ key: "call", icon: <Phone className="h-5 w-5 text-primary" />, label: "Call", href: `tel:${resource.contact.phone}` });
+  }
+  if (hasEmail) {
+    tiles.push({ key: "email", icon: <Mail className="h-5 w-5 text-primary" />, label: "Email", href: `mailto:${resource.contact.email}`, external: true });
+  }
+  if (hasLocation) {
+    tiles.push({ key: "directions", icon: <MapPin className="h-5 w-5 text-primary" />, label: "Directions", href: getMapsUrl(resource.location), external: true, isMap: true });
   }
 
-  if (hasEmail) {
-    leftTiles.push(
-      <a
-        key="email"
-        href={`mailto:${resource.contact.email}`}
-        className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-muted/80 transition-colors active:scale-[0.97]"
-      >
-        <Mail className="h-5 w-5 text-primary" />
-        <span className="text-sm font-medium text-foreground">Email</span>
-      </a>
-    );
-  }
+  // Use 2-column grid: 1 tile = single centered, 2 = side by side, 3 = 2x2 with last spanning or bottom row
+  const useGrid = tiles.length >= 3;
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
@@ -70,49 +59,43 @@ export default function GuidanceStep({ resource, guidance }: GuidanceStepProps) 
         {guidance.body}
       </p>
 
-      {/* Action squircle tiles — directions always right */}
-      <div className="flex gap-3 w-full max-w-[300px] mb-6">
-        {leftTiles}
-
-        {hasLocation && (
+      {/* Action squircle tiles */}
+      <div
+        className={`w-full max-w-[300px] mb-6 ${
+          useGrid ? "grid grid-cols-2 gap-3" : "flex gap-3"
+        }`}
+      >
+        {tiles.map((tile) => (
           <a
-            href={getMapsUrl(resource.location)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-end hover:opacity-90 transition-opacity active:scale-[0.97]"
+            key={tile.key}
+            href={tile.href}
+            target={tile.external ? "_blank" : undefined}
+            rel={tile.external ? "noopener noreferrer" : undefined}
+            className={`rounded-2xl overflow-hidden relative flex flex-col items-center justify-center hover:opacity-90 transition-opacity active:scale-[0.97] ${
+              useGrid ? "" : "flex-1"
+            } ${tile.isMap ? "" : "bg-muted/50 hover:bg-muted/80"}`}
             style={
-              hasCoords
+              tile.isMap && hasCoords
                 ? {
                     backgroundImage: `url(${getStaticMapUrl(resource.coordinates!.lat, resource.coordinates!.lng)})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     minHeight: "80px",
                   }
-                : undefined
+                : { minHeight: "80px" }
             }
           >
-            {/* Overlay for readability */}
-            {hasCoords ? (
-              <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px]" />
-            ) : (
-              <div className="absolute inset-0 bg-muted/50" />
+            {tile.isMap && (
+              hasCoords
+                ? <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px]" />
+                : <div className="absolute inset-0 bg-muted/50" />
             )}
             <div className="relative z-10 flex flex-col items-center gap-2 p-4">
-              <MapPin className="h-5 w-5 text-primary" />
-              <span className="text-sm font-medium text-foreground">Directions</span>
+              {tile.icon}
+              <span className="text-sm font-medium text-foreground">{tile.label}</span>
             </div>
           </a>
-        )}
-
-        {resource.contact.email && (
-          <a
-            href={`mailto:${resource.contact.email}`}
-            className="flex-1 bg-muted/50 rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-muted/80 transition-colors active:scale-[0.97]"
-          >
-            <Mail className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium text-foreground">Email</span>
-          </a>
-        )}
+        ))}
       </div>
 
       {/* "I've tried this before" nudge */}
