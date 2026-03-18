@@ -44,7 +44,6 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
       }
     }
 
-    // Sort best by match count (desc) then urgency
     best.sort((a, b) => {
       const aCount = answerSubTags.filter((t) => a.subTags.includes(t)).length;
       const bCount = answerSubTags.filter((t) => b.subTags.includes(t)).length;
@@ -61,7 +60,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   const remainingBest = bestMatches.slice(1);
 
   return (
-    <div className="min-h-screen bg-background px-4 pt-6 pb-24">
+    <div className="theme-navy min-h-screen bg-background px-4 pt-6 pb-24">
       <motion.button
         onClick={onBack}
         className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4 hover:text-foreground transition-colors"

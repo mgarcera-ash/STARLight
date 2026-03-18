@@ -72,7 +72,7 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background px-5 pt-12 pb-24">
+    <div className="theme-navy min-h-screen flex flex-col bg-background px-5 pt-12 pb-24">
       {/* Header */}
       <motion.div
         className="mb-8 text-center"
@@ -80,8 +80,8 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <p className="text-sm font-medium text-primary tracking-wide uppercase mb-2">
-          STARlight
+        <p className="text-sm font-medium tracking-wide uppercase mb-2">
+          <span className="gradient-star-text">STARlight</span>
         </p>
         <h1 className="text-2xl font-bold text-foreground leading-tight">
           What do you need<br />help with?
