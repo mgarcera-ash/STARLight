@@ -17,6 +17,32 @@ interface ResourceContextValue {
 
 const ResourceContext = createContext<ResourceContextValue | null>(null);
 
+function formatUnknownError(error: unknown) {
+  if (error instanceof Error) return error.message;
+
+  if (error && typeof error === "object") {
+    const message = Reflect.get(error, "message");
+    const details = Reflect.get(error, "details");
+    const hint = Reflect.get(error, "hint");
+    const code = Reflect.get(error, "code");
+
+    const parts = [message, details, hint, code]
+      .filter((value): value is string => typeof value === "string" && value.trim().length > 0);
+
+    if (parts.length > 0) {
+      return parts.join(" | ");
+    }
+
+    try {
+      return JSON.stringify(error);
+    } catch {
+      return String(error);
+    }
+  }
+
+  return String(error);
+}
+
 function renderDebugBadge(source: "seed" | "supabase", count: number) {
   if (typeof document === "undefined") return;
 
@@ -91,7 +117,7 @@ export function ResourceProvider({ children }: { children: React.ReactNode }) {
         }
         setResources([]);
         setSource("supabase");
-        setErrorMessage(error instanceof Error ? error.message : String(error));
+        setErrorMessage(formatUnknownError(error));
       } finally {
         if (isActive) {
           setIsLoading(false);
