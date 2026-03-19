@@ -30,7 +30,7 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
       onComplete(updated);
     } else {
       setDirection(1);
-      setCurrentIndex((i) => i + 1);
+      setCurrentIndex((index) => index + 1);
     }
   };
 
@@ -54,7 +54,7 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
           <motion.button
             onClick={currentIndex === 0 ? onBack : () => {
               setDirection(-1);
-              setCurrentIndex((i) => i - 1);
+              setCurrentIndex((index) => index - 1);
             }}
             className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             whileTap={{ scale: 0.95 }}
@@ -105,11 +105,6 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
                   whileTap={{ scale: 0.97 }}
                 >
                   <div className="text-base font-medium text-foreground">{opt.label}</div>
-                  {opt.description && (
-                    <div className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                      {opt.description}
-                    </div>
-                  )}
                 </motion.button>
               ))}
             </div>
