@@ -16,10 +16,39 @@ interface ResourceContextValue {
 
 const ResourceContext = createContext<ResourceContextValue | null>(null);
 
+function renderDebugBadge(source: "seed" | "supabase", count: number) {
+  if (typeof document === "undefined") return;
+
+  let badge = document.getElementById("starlight-debug-source");
+
+  if (!badge) {
+    badge = document.createElement("div");
+    badge.id = "starlight-debug-source";
+    badge.style.position = "fixed";
+    badge.style.right = "12px";
+    badge.style.bottom = "12px";
+    badge.style.zIndex = "9999";
+    badge.style.padding = "6px 10px";
+    badge.style.borderRadius = "999px";
+    badge.style.background = "rgba(15, 23, 42, 0.92)";
+    badge.style.color = "#fff";
+    badge.style.fontSize = "12px";
+    badge.style.fontFamily = "monospace";
+    badge.style.boxShadow = "0 8px 24px rgba(15, 23, 42, 0.2)";
+    document.body.appendChild(badge);
+  }
+
+  badge.textContent = `data: ${source} (${count})`;
+}
+
 export function ResourceProvider({ children }: { children: React.ReactNode }) {
   const [resources, setResources] = useState<Resource[]>(isSupabaseConfigured ? [] : fallbackResources);
   const [isLoading, setIsLoading] = useState(isSupabaseConfigured);
   const [source, setSource] = useState<"seed" | "supabase">(isSupabaseConfigured ? "supabase" : "seed");
+
+  useEffect(() => {
+    renderDebugBadge(source, resources.length);
+  }, [resources.length, source]);
 
   useEffect(() => {
     let isActive = true;
