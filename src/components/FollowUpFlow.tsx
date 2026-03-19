@@ -85,15 +85,9 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
             className="flex flex-1 flex-col"
           >
             <div className="mb-6 rounded-3xl border border-border/70 bg-card/70 p-5 shadow-sm">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
-                Let&apos;s narrow this down together
-              </p>
-              <h1 className="mb-3 text-2xl font-bold leading-tight text-foreground">
+              <h1 className="text-2xl font-bold leading-tight text-foreground">
                 {question.question}
               </h1>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                {question.supportText ?? "Tap what fits best. You can always change later."}
-              </p>
             </div>
 
             <div className="flex flex-col gap-3">

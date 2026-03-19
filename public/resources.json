@@ -34,7 +34,23 @@
       "Mention same-day need if applicable."
     ],
     "call_script": "Say: Hi, I need help finding shelter for tonight. Can someone help me with intake?",
-    "created_at": "2026-03-19T00:26:00.343743+00:00"
+    "created_at": "2026-03-19T00:26:00.343743+00:00",
+    "domain": "housing",
+    "resource_type": "housing_resource",
+    "population_tags": [],
+    "accessibility_tags": [],
+    "service_tags": [
+      "demo",
+      "housing",
+      "shelter",
+      "short-term",
+      "tonight"
+    ],
+    "availability_type": "scheduled",
+    "beds": null,
+    "intake_type": null,
+    "source_dataset": null,
+    "source_record_id": null
   },
   {
     "id": "1a444eef-6a7b-47b8-9cd1-a30685eb7596",
@@ -71,7 +87,768 @@
       "Mention same-day need if applicable."
     ],
     "call_script": "Say: Hi, I need help finding shelter for tonight. Can someone help me with intake?",
-    "created_at": "2026-03-19T00:32:58.676002+00:00"
+    "created_at": "2026-03-19T00:32:58.676002+00:00",
+    "domain": "housing",
+    "resource_type": "housing_resource",
+    "population_tags": [],
+    "accessibility_tags": [],
+    "service_tags": [
+      "demo",
+      "housing",
+      "shelter",
+      "short-term",
+      "tonight"
+    ],
+    "availability_type": "scheduled",
+    "beds": null,
+    "intake_type": null,
+    "source_dataset": null,
+    "source_record_id": null
+  },
+  {
+    "id": "deb83ab2-31da-4c78-9a99-d51bf4fb7b62",
+    "title": "A Little Bit of Heaven",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: Overnight. Capacity: 50 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "Overnight | Opens at 4pm and discharges at 8:30am",
+    "contact_phone": "(773) 660-8625",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "11321 S Wentworth Ave, Chicago, IL 60628-4114, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "No elevator",
+      "4 floors",
+      "1st floor dining",
+      "2nd, 3d and 4th shelter (bunk beds)",
+      "Opens at 4pm and discharges at 8:30am"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [],
+    "service_tags": [
+      "bunk_beds",
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults"
+    ],
+    "availability_type": "overnight",
+    "beds": 50,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-007-a-little-bit-of-heaven"
+  },
+  {
+    "id": "b28f46f6-2a01-43a5-999c-934847bc855c",
+    "title": "A Safe Haven Foundation",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr. Capacity: 72 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "24hr",
+    "contact_phone": "(312) 758-0291 (PM) or / (773) 435-8300",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "2750 W Roosevelt Rd, Chicago, IL 60608-1048, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [],
+    "service_tags": [
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 72,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-001-a-safe-haven-foundation"
+  },
+  {
+    "id": "052930b8-0e90-4d0f-a6f5-70419887583b",
+    "title": "Breakthrough Urban Ministries",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr, has a day center. Capacity: 30 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term",
+      "wheelchair",
+      "ground-floor"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "24hr, has a day center",
+    "contact_phone": null,
+    "contact_email": null,
+    "contact_website": null,
+    "location": "402 N St Louis Ave, Chicago, IL 60624-1332, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "Has elevator",
+      "Wheelchair accessible",
+      "Shelter on 1st floor",
+      "Dorm style single beds",
+      "Kitchen/restroom/shower on shelter floor"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [
+      "elevator",
+      "ground_floor",
+      "wheelchair_accessible"
+    ],
+    "service_tags": [
+      "accessible",
+      "day_center",
+      "dorm_style",
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults",
+      "single_beds"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 30,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-011-breakthrough-urban-ministries"
+  },
+  {
+    "id": "18de2435-7701-4ea9-b133-c1c174534a84",
+    "title": "Brighstar YWLA",
+    "description": "Men's single-adult emergency shelter in Chicago. Capacity: 212 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "",
+    "contact_phone": "(312) 402-6612",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "2641 S Calumet Ave, Chicago, IL 60616-2901, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [],
+    "service_tags": [
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults"
+    ],
+    "availability_type": null,
+    "beds": 212,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-015-brighstar-ywla"
+  },
+  {
+    "id": "8b4a7510-abb8-44bf-a167-1c68f2875e00",
+    "title": "Cornerstone Community Outreach Naomi",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr. Capacity: 28 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term",
+      "ground-floor"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "24hr",
+    "contact_phone": "(773) 506-6396 x 17 / (773) 907-3480",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "5352 N Kenmore Ave, Chicago, IL 60640-2463, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "No elevator",
+      "Not wheelchair accessible",
+      "Shelter overnight 2nd floor",
+      "During day 1st floor",
+      "Dining 1st floor",
+      "Open dorm single bed"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [
+      "ground_floor"
+    ],
+    "service_tags": [
+      "dorm_style",
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults",
+      "single_beds"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 28,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-002-cornerstone-community-outreach-naomi"
+  },
+  {
+    "id": "512aee91-90fb-4250-8c7c-49d1f4fb1f3e",
+    "title": "Fransciscan Outreach Association Annex",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: Overnight. Capacity: 70 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "Overnight | Opens at 6PM and discharges at 6AM",
+    "contact_phone": "(773) 533-4595",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "200 S Sacramento Blvd, Chicago, IL 60612-2716, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "Single cot",
+      "Walk ins allowed",
+      "Opens at 6PM and discharges at 6AM"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [],
+    "service_tags": [
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults",
+      "walk_in"
+    ],
+    "availability_type": "overnight",
+    "beds": 70,
+    "intake_type": "walk_in",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-003-fransciscan-outreach-association-annex"
+  },
+  {
+    "id": "37f23fde-8446-41b7-8b42-2aa54a89bb22",
+    "title": "Freedom Center; Harbor Light",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: Overnight. Capacity: 100 beds. Seasonally open or by DFSS request; closed.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term"
+    ],
+    "eligibility": "Seasonal or DFSS-request placement may apply.",
+    "hours": "Overnight | 6:30pm-8:30am M-F",
+    "contact_phone": "(312) 667-2204",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "825 N Christiana Ave, Chicago, IL 60651-4110, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "Seasonally open or by DFSS request; closed",
+      "6:30pm-8:30am M-F",
+      "Weekends 24/7"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [],
+    "service_tags": [
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults"
+    ],
+    "availability_type": "overnight",
+    "beds": 100,
+    "intake_type": "referral",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-013-freedom-center-harbor-light"
+  },
+  {
+    "id": "f3addf45-234e-4424-b928-6f5250305106",
+    "title": "Inner Voice (Pioneer House)",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr. Capacity: 17 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "24hr",
+    "contact_phone": "(773) 921-5290",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "4458 W Jackson Blvd, Chicago, IL 60624-2530, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "No elevator",
+      "Not wheelchair accessible?",
+      "Shelter on 2nd floor",
+      "Single beds",
+      "Kitchen on 1st floor"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [],
+    "service_tags": [
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults",
+      "single_beds"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 17,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-009-inner-voice-pioneer-house"
+  },
+  {
+    "id": "b026d665-c3c8-4f58-8034-ea6f6b5075a4",
+    "title": "Inner Voice (Robert Johnson House)",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term",
+      "wheelchair"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "24hr",
+    "contact_phone": "(312) 994-4352",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "8040 S Western Ave, Chicago, IL 60620-5936, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "Has elevator",
+      "Wheelchair accessible",
+      "Shelter on 2nd floor",
+      "Shared rooms, single beds",
+      "Kitchen on 1st floor"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [
+      "elevator",
+      "wheelchair_accessible"
+    ],
+    "service_tags": [
+      "accessible",
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults",
+      "single_beds"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": null,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-010-inner-voice-robert-johnson-house"
+  },
+  {
+    "id": "bd772f6c-93af-49d8-8c67-ef84b3717871",
+    "title": "Northside Housing and Supportive Services",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr. Capacity: 70 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term",
+      "wheelchair",
+      "ground-floor"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "24hr",
+    "contact_phone": "(773) 754-7607",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "7464 N Clark St, Chicago, IL 60626-1620, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "Wheelchair accessible",
+      "(1) main floor",
+      "(2) people per room"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [
+      "ground_floor",
+      "wheelchair_accessible"
+    ],
+    "service_tags": [
+      "accessible",
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 70,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-004-northside-housing-and-supportive-services"
+  },
+  {
+    "id": "cdc1671f-19aa-4335-83d1-fb21713019dc",
+    "title": "Olive Branch Mission Lamplight #1 Single Men",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr. Capacity: 110 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "24hr",
+    "contact_phone": "(773) 476-6200 x10, x18",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "6310 S Claremont Ave, Chicago, IL 60636-2439, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "No elevator",
+      "Not wheelchair accessible",
+      "Shelter on 2nd floor",
+      "Bunk beds",
+      "Kitchen on 1st floor",
+      "No suitcases"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [],
+    "service_tags": [
+      "bunk_beds",
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 110,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-005-olive-branch-mission-lamplight-1-single-men"
+  },
+  {
+    "id": "3757746f-1a67-4757-972c-1588224aa4c2",
+    "title": "Olive Branch Mission Lamplight #2 Single Men",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr. Capacity: 50 beds.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term"
+    ],
+    "eligibility": "Single adult men seeking shelter.",
+    "hours": "24hr",
+    "contact_phone": "(773) 660-8625",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "544 W 123rd St, Chicago, IL 60628-6443, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "No elevator",
+      "Not wheelchair accessible",
+      "Shelter on 2nd floor",
+      "Bunk beds",
+      "Kitchen on 1st floor",
+      "No suitcases"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [],
+    "service_tags": [
+      "bunk_beds",
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 50,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-006-olive-branch-mission-lamplight-2-single-men"
+  },
+  {
+    "id": "4e63cb7d-4409-45e2-a4c6-ebaa11a4a763",
+    "title": "St. Leonard’s Ministry Men’s Interim Housing",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr. Capacity: 36 beds. Returning citizens only.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term"
+    ],
+    "eligibility": "Returning citizens only.",
+    "hours": "24hr",
+    "contact_phone": "(312) 738-1414 x24",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "2100 W Warren Blvd, Chicago, IL 60612-2310, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "Returning citizens only",
+      "Returning citizens on pretrial probation, probation, parole, or have an assigned case worker through the court",
+      "No arson/sex offense allowed",
+      "Client’s parole or probation officer is supposed to facilitate in place of client"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [],
+    "service_tags": [
+      "emergency_shelter",
+      "men",
+      "returning_citizens",
+      "shelter",
+      "single_adults"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 36,
+    "intake_type": "referral",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-008-st-leonard-s-ministry-men-s-interim-housing"
   },
   {
     "id": "5d0de615-3e47-4f55-ac6a-2455a2f050e2",
@@ -107,7 +884,23 @@
       "Bring bags if you have them."
     ],
     "call_script": "Say: Hi, I'm looking for food assistance. Are you open for pantry pickup today?",
-    "created_at": "2026-03-19T00:26:00.343743+00:00"
+    "created_at": "2026-03-19T00:26:00.343743+00:00",
+    "domain": "food",
+    "resource_type": "food_resource",
+    "population_tags": [],
+    "accessibility_tags": [],
+    "service_tags": [
+      "demo",
+      "food pantry",
+      "groceries",
+      "right-now",
+      "this-week"
+    ],
+    "availability_type": "scheduled",
+    "beds": null,
+    "intake_type": null,
+    "source_dataset": null,
+    "source_record_id": null
   },
   {
     "id": "c5f7242c-76a4-4e0f-89ae-7a89603c50fd",
@@ -143,7 +936,147 @@
       "Bring bags if you have them."
     ],
     "call_script": "Say: Hi, I'm looking for food assistance. Are you open for pantry pickup today?",
-    "created_at": "2026-03-19T00:32:58.676002+00:00"
+    "created_at": "2026-03-19T00:32:58.676002+00:00",
+    "domain": "food",
+    "resource_type": "food_resource",
+    "population_tags": [],
+    "accessibility_tags": [],
+    "service_tags": [
+      "demo",
+      "food pantry",
+      "groceries",
+      "right-now",
+      "this-week"
+    ],
+    "availability_type": "scheduled",
+    "beds": null,
+    "intake_type": null,
+    "source_dataset": null,
+    "source_record_id": null
+  },
+  {
+    "id": "da7f6542-42bf-4656-bf70-ea739c6ac0f1",
+    "title": "The Boulevard",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr. Capacity: 46 beds. Acute medical conditions with 30-day supply (High blood pressure, diabetes, etc).",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term",
+      "wheelchair"
+    ],
+    "eligibility": "Clients must be able to care for themselves.",
+    "hours": "24hr",
+    "contact_phone": "(773) 533-6013 x234 / or / Option 4",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "3456 W Franklin Blvd, Chicago, IL 60624-1308, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "Has elevator",
+      "Wheelchair accessible",
+      "Acute medical conditions with 30-day supply (High blood pressure, diabetes, etc)",
+      "(4) persons to 1 room (single beds)",
+      "Dining in basement",
+      "The client must be able to care for him/herself (504-compliant)"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [
+      "elevator",
+      "wheelchair_accessible"
+    ],
+    "service_tags": [
+      "accessible",
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults",
+      "single_beds"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 46,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-014-the-boulevard"
+  },
+  {
+    "id": "9e3f992a-d40f-47df-be9c-f2867d25af52",
+    "title": "Wholistic House",
+    "description": "Men's single-adult emergency shelter in Chicago. Availability: 24hr. Capacity: 50 beds. Clients must be 35 or older.",
+    "categories": [
+      "Housing"
+    ],
+    "tags": [
+      "shelter",
+      "emergency shelter",
+      "single adults",
+      "men"
+    ],
+    "sub_tags": [
+      "tonight",
+      "short-term",
+      "ground-floor"
+    ],
+    "eligibility": "Clients must be 35 or older.",
+    "hours": "24hr",
+    "contact_phone": "(773) 699-8573",
+    "contact_email": null,
+    "contact_website": null,
+    "location": "7000 S Racine Ave, Chicago, IL 60636-3509, United States",
+    "coordinates": null,
+    "featured": false,
+    "urgency": 1,
+    "status": "approved",
+    "return_comment": null,
+    "tips": [
+      "No elevator",
+      "Not wheelchair accessible",
+      "Shelter 1st and 2nd floor",
+      "Bunk beds and single beds",
+      "Clients must be 35 or older"
+    ],
+    "call_script": "Say: Hi, I'm looking for a men's shelter bed tonight. Do you have availability and what is the intake process?",
+    "created_at": "2026-03-19T01:37:19.933932+00:00",
+    "domain": "housing",
+    "resource_type": "emergency_shelter",
+    "population_tags": [
+      "men",
+      "single_adults"
+    ],
+    "accessibility_tags": [
+      "ground_floor"
+    ],
+    "service_tags": [
+      "bunk_beds",
+      "emergency_shelter",
+      "men",
+      "shelter",
+      "single_adults",
+      "single_beds"
+    ],
+    "availability_type": "twenty_four_hours",
+    "beds": 50,
+    "intake_type": "call_first",
+    "source_dataset": "mens_singles_only_2e00637c552080baac8bcf05fd599187",
+    "source_record_id": "mens_singles_only_2e00637c552080baac8bcf05fd599187-012-wholistic-house"
   },
   {
     "id": "0e654a73-bf57-4c60-ab75-6379e00a7f09",
@@ -178,7 +1111,22 @@
       "Walk-ins are accepted before 3 PM."
     ],
     "call_script": "Say: Hi, I need to see a doctor and I do not have regular care. Do you take walk-ins?",
-    "created_at": "2026-03-19T00:26:00.343743+00:00"
+    "created_at": "2026-03-19T00:26:00.343743+00:00",
+    "domain": "healthcare",
+    "resource_type": "healthcare_resource",
+    "population_tags": [],
+    "accessibility_tags": [],
+    "service_tags": [
+      "clinic",
+      "demo",
+      "primary-care",
+      "walk-in"
+    ],
+    "availability_type": "scheduled",
+    "beds": null,
+    "intake_type": null,
+    "source_dataset": null,
+    "source_record_id": null
   },
   {
     "id": "165de4d0-f3fb-4891-b652-13c65c1d8603",
@@ -213,6 +1161,21 @@
       "Walk-ins are accepted before 3 PM."
     ],
     "call_script": "Say: Hi, I need to see a doctor and I do not have regular care. Do you take walk-ins?",
-    "created_at": "2026-03-19T00:32:58.676002+00:00"
+    "created_at": "2026-03-19T00:32:58.676002+00:00",
+    "domain": "healthcare",
+    "resource_type": "healthcare_resource",
+    "population_tags": [],
+    "accessibility_tags": [],
+    "service_tags": [
+      "clinic",
+      "demo",
+      "primary-care",
+      "walk-in"
+    ],
+    "availability_type": "scheduled",
+    "beds": null,
+    "intake_type": null,
+    "source_dataset": null,
+    "source_record_id": null
   }
 ]
