@@ -18,13 +18,11 @@ const App = () => (
       <Sonner />
       <ResourceProvider>
         <BrowserRouter basename={routerBasename}>
-          <div className="theme-navy">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/resource/:id" element={<ResourceDetail />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/resource/:id" element={<ResourceDetail />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
       </ResourceProvider>
     </TooltipProvider>

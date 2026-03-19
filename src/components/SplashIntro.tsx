@@ -21,18 +21,18 @@ export default function SplashIntro({ onComplete }: { onComplete: () => void }) 
     <div
       className={cn(
         "fixed inset-0 z-[100] flex items-center justify-center",
-        "bg-[hsl(222,97%,18%)]",
+        "bg-background",
         phase === "exit" && "animate-splash-fade-out"
       )}
     >
       <h1
         className={cn(
-          "text-5xl font-black tracking-tight text-primary-foreground",
+          "text-5xl font-black tracking-tight text-foreground",
           "animate-splash-glow"
         )}
       >
         <span className="gradient-star-text">STAR</span>
-        <span className="text-primary-foreground/80">Light</span>
+        <span className="text-foreground/80">Light</span>
       </h1>
     </div>
   );
