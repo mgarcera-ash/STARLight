@@ -30,7 +30,7 @@ This repo now treats Supabase as a fresh integration pass.
 1. Copy `.env.example` to `.env`.
 2. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
 3. Run the SQL in `supabase/migrations/20260318_create_resources.sql`.
-4. In GitHub, add repository variables named `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` so the Pages build can use your Supabase project.
+4. In GitHub, add either repository variables or repository secrets named `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
 5. Add approved resources directly in the Supabase dashboard.
 
-The app will try to read approved resources from Supabase first. If the database is not ready yet, or the build has no Supabase env vars configured, it falls back to the local seed data so the prototype stays usable.
+The GitHub Pages workflow now fails fast if those values are missing, so it will not silently ship a seed-data build when Supabase config is absent.
