@@ -17,15 +17,17 @@ interface ResourceContextValue {
 const ResourceContext = createContext<ResourceContextValue | null>(null);
 
 export function ResourceProvider({ children }: { children: React.ReactNode }) {
-  const [resources, setResources] = useState<Resource[]>(fallbackResources);
+  const [resources, setResources] = useState<Resource[]>(isSupabaseConfigured ? [] : fallbackResources);
   const [isLoading, setIsLoading] = useState(isSupabaseConfigured);
-  const [source, setSource] = useState<"seed" | "supabase">("seed");
+  const [source, setSource] = useState<"seed" | "supabase">(isSupabaseConfigured ? "supabase" : "seed");
 
   useEffect(() => {
     let isActive = true;
 
     async function loadResources() {
       if (!supabase) {
+        setResources(fallbackResources);
+        setSource("seed");
         setIsLoading(false);
         return;
       }
@@ -50,12 +52,12 @@ export function ResourceProvider({ children }: { children: React.ReactNode }) {
         setResources(normalizeResourceRows(data as ResourceRow[]));
         setSource("supabase");
       } catch (error) {
-        console.warn("Falling back to seed resources because Supabase is unavailable.", error);
+        console.warn("Supabase query failed. Returning an empty resource list instead of seed fallback.", error);
         if (!isActive) {
           return;
         }
-        setResources(fallbackResources);
-        setSource("seed");
+        setResources([]);
+        setSource("supabase");
       } finally {
         if (isActive) {
           setIsLoading(false);
