@@ -4,7 +4,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ResourceProvider } from "@/context/ResourceContext";
-import DebugResourceState from "@/components/DebugResourceState";
 import Index from "./pages/Index";
 import ResourceDetail from "./pages/ResourceDetail";
 import NotFound from "./pages/NotFound";
@@ -20,7 +19,6 @@ const App = () => (
       <ResourceProvider>
         <BrowserRouter basename={routerBasename}>
           <div className="theme-navy">
-            <DebugResourceState />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/resource/:id" element={<ResourceDetail />} />
