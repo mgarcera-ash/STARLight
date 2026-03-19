@@ -318,11 +318,11 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     };
 
     return (
-      <div className="relative min-h-screen overflow-hidden bg-background px-6 pt-12 pb-20">
+      <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(13,148,136,0.2),transparent_34%),radial-gradient(circle_at_86%_24%,rgba(37,99,235,0.15),transparent_30%),linear-gradient(180deg,rgba(244,252,250,1)_0%,rgba(255,255,255,1)_40%,rgba(246,250,255,1)_100%)] px-6 pt-12 pb-20">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-16 left-[-4rem] h-72 w-72 rounded-full bg-primary/14 blur-3xl" />
-          <div className="absolute top-40 right-[-5rem] h-80 w-80 rounded-full bg-star-blue/10 blur-3xl" />
-          <div className="absolute bottom-[-5rem] left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/7 blur-3xl" />
+          <div className="absolute -top-16 left-[-4rem] h-72 w-72 rounded-full bg-primary/22 blur-3xl" />
+          <div className="absolute top-40 right-[-5rem] h-80 w-80 rounded-full bg-star-blue/15 blur-3xl" />
+          <div className="absolute bottom-[-5rem] left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/11 blur-3xl" />
         </div>
 
         <div className="relative mx-auto w-full max-w-md">
@@ -453,10 +453,10 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   if (total === 0) {
     const isHousingJourney = needs.includes(HOUSING);
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-8 text-center">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(13,148,136,0.2),transparent_34%),radial-gradient(circle_at_88%_78%,rgba(37,99,235,0.14),transparent_32%),linear-gradient(180deg,rgba(244,252,250,1)_0%,rgba(255,255,255,1)_52%,rgba(246,250,255,1)_100%)] px-8 text-center">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute top-16 left-[-4rem] h-72 w-72 rounded-full bg-primary/14 blur-3xl" />
-          <div className="absolute bottom-[-4rem] right-[-4rem] h-72 w-72 rounded-full bg-star-blue/10 blur-3xl" />
+          <div className="absolute top-16 left-[-4rem] h-72 w-72 rounded-full bg-primary/22 blur-3xl" />
+          <div className="absolute bottom-[-4rem] right-[-4rem] h-72 w-72 rounded-full bg-star-blue/15 blur-3xl" />
         </div>
 
         <div className="relative">
@@ -490,11 +490,11 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   const guidance = generateStepGuidance(resource, answerSubTags, currentStep);
 
   return (
-    <div className="relative flex h-[100dvh] flex-col overflow-hidden bg-background">
+    <div className="relative flex h-[100dvh] flex-col overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(13,148,136,0.18),transparent_34%),radial-gradient(circle_at_86%_24%,rgba(37,99,235,0.14),transparent_30%),linear-gradient(180deg,rgba(244,252,250,1)_0%,rgba(255,255,255,1)_42%,rgba(246,250,255,1)_100%)]">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-10 left-[-4rem] h-72 w-72 rounded-full bg-primary/14 blur-3xl" />
-        <div className="absolute top-32 right-[-6rem] h-80 w-80 rounded-full bg-star-blue/10 blur-3xl" />
-        <div className="absolute bottom-[-5rem] left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/7 blur-3xl" />
+        <div className="absolute -top-10 left-[-4rem] h-72 w-72 rounded-full bg-primary/22 blur-3xl" />
+        <div className="absolute top-32 right-[-6rem] h-80 w-80 rounded-full bg-star-blue/15 blur-3xl" />
+        <div className="absolute bottom-[-5rem] left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/11 blur-3xl" />
       </div>
 
       <div className="relative z-10 px-4 pt-4 pb-2">
