@@ -48,8 +48,13 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
   }
 
   return (
-    <div className="min-h-screen bg-background px-4 pt-6 pb-8">
-      <div className="mx-auto flex min-h-[calc(100vh-3.5rem)] w-full max-w-md flex-col">
+    <div className="page-ambient relative min-h-screen overflow-hidden px-4 pt-6 pb-8">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-16 left-[-4rem] h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
+        <div className="absolute top-28 right-[-5rem] h-72 w-72 rounded-full bg-star-blue/14 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto flex min-h-[calc(100vh-3.5rem)] w-full max-w-md flex-col">
         <div className="mb-8 flex items-center gap-3">
           <motion.button
             onClick={currentIndex === 0 ? onBack : () => {

@@ -22,11 +22,16 @@ export default function TransitionMoment({ answers, onComplete }: TransitionMome
 
   return (
     <div
-      className="min-h-screen bg-background flex flex-col items-center justify-center px-8 cursor-pointer"
+      className="page-ambient relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-8 cursor-pointer"
       onClick={onComplete}
     >
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-20 left-[-5rem] h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
+        <div className="absolute bottom-[-4rem] right-[-5rem] h-72 w-72 rounded-full bg-star-blue/14 blur-3xl" />
+      </div>
+
       <motion.p
-        className="text-lg font-semibold text-primary mb-3"
+        className="relative z-10 text-lg font-semibold text-primary mb-3"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
@@ -35,7 +40,7 @@ export default function TransitionMoment({ answers, onComplete }: TransitionMome
       </motion.p>
 
       <motion.p
-        className="text-xl font-bold text-foreground text-center leading-relaxed max-w-[280px]"
+        className="relative z-10 text-xl font-bold text-foreground text-center leading-relaxed max-w-[280px]"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.8 }}
@@ -45,7 +50,7 @@ export default function TransitionMoment({ answers, onComplete }: TransitionMome
 
       {/* Subtle pulsing dots */}
       <motion.div
-        className="flex gap-1.5 mt-10"
+        className="relative z-10 flex gap-1.5 mt-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 1.4 }}

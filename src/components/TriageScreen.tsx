@@ -72,7 +72,7 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(13,148,136,0.22),transparent_34%),radial-gradient(circle_at_88%_22%,rgba(37,99,235,0.14),transparent_30%),linear-gradient(180deg,rgba(244,252,250,1)_0%,rgba(255,255,255,1)_42%,rgba(246,250,255,1)_100%)] px-5 pt-12 pb-24">
+    <div className="page-ambient-soft relative min-h-screen overflow-hidden px-5 pt-12 pb-24">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-20 left-1/2 h-72 w-72 -translate-x-[68%] rounded-full bg-primary/24 blur-3xl" />
         <div className="absolute top-32 right-[-5.5rem] h-72 w-72 rounded-full bg-star-blue/16 blur-3xl" />

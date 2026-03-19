@@ -21,7 +21,7 @@ export default function ResourceDetail() {
 
   if (isLoading && !resource) {
     return (
-      <div className="flex min-h-screen items-center justify-center px-6 text-center">
+      <div className="page-ambient flex min-h-screen items-center justify-center px-6 text-center">
         <p className="text-sm text-muted-foreground">Loading resource details...</p>
       </div>
     );
@@ -29,7 +29,7 @@ export default function ResourceDetail() {
 
   if (!resource) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="page-ambient flex min-h-screen items-center justify-center">
         <div className="text-center">
           <p className="mb-4 text-muted-foreground">Resource not found.</p>
           <Link to="/" className="font-semibold text-primary">← Back</Link>
@@ -43,7 +43,7 @@ export default function ResourceDetail() {
   const HeroIcon = hero.icon;
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="page-ambient min-h-screen pb-24">
       <div className="no-print px-4 pt-6 pb-4">
         <div className="mx-auto w-full max-w-md rounded-[28px] border border-border bg-card px-5 py-5 shadow-sm">
           <Link to="/" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground">

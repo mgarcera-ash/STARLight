@@ -21,7 +21,7 @@ export default function SplashIntro({ onComplete }: { onComplete: () => void }) 
     <div
       className={cn(
         "fixed inset-0 z-[100] flex items-center justify-center",
-        "bg-background",
+        "page-ambient-soft",
         phase === "exit" && "animate-splash-fade-out"
       )}
     >

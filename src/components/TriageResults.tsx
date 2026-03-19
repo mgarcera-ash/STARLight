@@ -264,9 +264,14 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
 
   if (showConfirm) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8">
+      <div className="page-ambient-warm relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-8">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-20 left-[-4rem] h-72 w-72 rounded-full bg-orange-400/20 blur-3xl" />
+          <div className="absolute bottom-[-4rem] right-[-5rem] h-80 w-80 rounded-full bg-violet-500/16 blur-3xl" />
+        </div>
+
         <motion.p
-          className="text-lg font-semibold text-primary mb-3"
+          className="relative z-10 text-lg font-semibold text-primary mb-3"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -275,7 +280,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
         </motion.p>
 
         <motion.p
-          className="text-xl font-bold text-foreground text-center leading-relaxed max-w-[280px] mb-10"
+          className="relative z-10 text-xl font-bold text-foreground text-center leading-relaxed max-w-[280px] mb-10"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
@@ -284,7 +289,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
         </motion.p>
 
         <motion.div
-          className="flex flex-col gap-3 w-full max-w-[280px]"
+          className="relative z-10 flex flex-col gap-3 w-full max-w-[280px]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 1.0 }}
@@ -318,7 +323,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     };
 
     return (
-      <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(13,148,136,0.2),transparent_34%),radial-gradient(circle_at_86%_24%,rgba(37,99,235,0.15),transparent_30%),linear-gradient(180deg,rgba(244,252,250,1)_0%,rgba(255,255,255,1)_40%,rgba(246,250,255,1)_100%)] px-6 pt-12 pb-20">
+      <div className="page-ambient relative min-h-screen overflow-hidden px-6 pt-12 pb-20">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -top-16 left-[-4rem] h-72 w-72 rounded-full bg-primary/22 blur-3xl" />
           <div className="absolute top-40 right-[-5rem] h-80 w-80 rounded-full bg-star-blue/15 blur-3xl" />
@@ -453,7 +458,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   if (total === 0) {
     const isHousingJourney = needs.includes(HOUSING);
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(13,148,136,0.2),transparent_34%),radial-gradient(circle_at_88%_78%,rgba(37,99,235,0.14),transparent_32%),linear-gradient(180deg,rgba(244,252,250,1)_0%,rgba(255,255,255,1)_52%,rgba(246,250,255,1)_100%)] px-8 text-center">
+      <div className="page-ambient relative flex min-h-screen items-center justify-center overflow-hidden px-8 text-center">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute top-16 left-[-4rem] h-72 w-72 rounded-full bg-primary/22 blur-3xl" />
           <div className="absolute bottom-[-4rem] right-[-4rem] h-72 w-72 rounded-full bg-star-blue/15 blur-3xl" />
@@ -490,7 +495,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   const guidance = generateStepGuidance(resource, answerSubTags, currentStep);
 
   return (
-    <div className="relative flex h-[100dvh] flex-col overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(13,148,136,0.18),transparent_34%),radial-gradient(circle_at_86%_24%,rgba(37,99,235,0.14),transparent_30%),linear-gradient(180deg,rgba(244,252,250,1)_0%,rgba(255,255,255,1)_42%,rgba(246,250,255,1)_100%)]">
+    <div className="page-ambient relative flex h-[100dvh] flex-col overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-10 left-[-4rem] h-72 w-72 rounded-full bg-primary/22 blur-3xl" />
         <div className="absolute top-32 right-[-6rem] h-80 w-80 rounded-full bg-star-blue/15 blur-3xl" />
