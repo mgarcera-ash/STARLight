@@ -72,7 +72,8 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background px-5 pt-12 pb-24">
+    <div className="min-h-screen bg-background px-5 pt-12 pb-24">
+      <div className="mx-auto flex min-h-[calc(100vh-6rem)] w-full max-w-md flex-col">
       {/* Header */}
       <motion.div
         className="mb-8 text-center"
@@ -160,6 +161,7 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
           Show me my options
         </Button>
       </motion.div>
+      </div>
     </div>
   );
 }

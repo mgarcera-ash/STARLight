@@ -45,19 +45,21 @@ export default function ResourceDetail() {
   return (
     <div className="min-h-screen bg-background pb-24">
       <div className={cn("no-print bg-gradient-to-br px-4 pt-6 pb-8 relative overflow-hidden", hero.gradient)}>
-        <HeroIcon
-          className="absolute right-[-20px] bottom-[-10px] h-40 w-40 text-primary-foreground/10"
-          strokeWidth={0.8}
-        />
-        <Link to="/" className="inline-flex items-center gap-1 text-primary-foreground/80 text-sm mb-4 hover:text-primary-foreground transition-colors relative z-10">
-          <ArrowLeft className="h-4 w-4" /> Back
-        </Link>
-        <h1 className="text-2xl font-black text-primary-foreground leading-tight relative z-10">
-          {resource.title}
-        </h1>
+        <div className="mx-auto w-full max-w-md">
+          <HeroIcon
+            className="absolute right-[-20px] bottom-[-10px] h-40 w-40 text-primary-foreground/10"
+            strokeWidth={0.8}
+          />
+          <Link to="/" className="inline-flex items-center gap-1 text-primary-foreground/80 text-sm mb-4 hover:text-primary-foreground transition-colors relative z-10">
+            <ArrowLeft className="h-4 w-4" /> Back
+          </Link>
+          <h1 className="text-2xl font-black text-primary-foreground leading-tight relative z-10">
+            {resource.title}
+          </h1>
+        </div>
       </div>
 
-      <div className="px-4 pt-5 print-flyer">
+      <div className="mx-auto w-full max-w-md px-4 pt-5 print-flyer">
         <ResourceInfo resource={resource} />
         <div className="mt-8">
           <ShareActions resource={resource} />

@@ -48,7 +48,8 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col px-4 pt-6 pb-8">
+    <div className="min-h-screen bg-background px-4 pt-6 pb-8">
+      <div className="mx-auto flex min-h-[calc(100vh-3.5rem)] w-full max-w-md flex-col">
       {/* Progress */}
       <div className="flex items-center gap-3 mb-8">
         <motion.button
@@ -113,6 +114,7 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
           </button>
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
   );
 }
