@@ -11,6 +11,7 @@ interface ResourceContextValue {
   approvedResources: Resource[];
   isLoading: boolean;
   source: "seed" | "supabase";
+  errorMessage: string | null;
   getResource: (id: string) => Resource | undefined;
 }
 
@@ -45,6 +46,7 @@ export function ResourceProvider({ children }: { children: React.ReactNode }) {
   const [resources, setResources] = useState<Resource[]>(isSupabaseConfigured ? [] : fallbackResources);
   const [isLoading, setIsLoading] = useState(isSupabaseConfigured);
   const [source, setSource] = useState<"seed" | "supabase">(isSupabaseConfigured ? "supabase" : "seed");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     renderDebugBadge(source, resources.length);
@@ -57,6 +59,7 @@ export function ResourceProvider({ children }: { children: React.ReactNode }) {
       if (!supabase) {
         setResources(fallbackResources);
         setSource("seed");
+        setErrorMessage(null);
         setIsLoading(false);
         return;
       }
@@ -80,6 +83,7 @@ export function ResourceProvider({ children }: { children: React.ReactNode }) {
 
         setResources(normalizeResourceRows(data as ResourceRow[]));
         setSource("supabase");
+        setErrorMessage(null);
       } catch (error) {
         console.warn("Supabase query failed. Returning an empty resource list instead of seed fallback.", error);
         if (!isActive) {
@@ -87,6 +91,7 @@ export function ResourceProvider({ children }: { children: React.ReactNode }) {
         }
         setResources([]);
         setSource("supabase");
+        setErrorMessage(error instanceof Error ? error.message : String(error));
       } finally {
         if (isActive) {
           setIsLoading(false);
@@ -118,6 +123,7 @@ export function ResourceProvider({ children }: { children: React.ReactNode }) {
         approvedResources,
         isLoading,
         source,
+        errorMessage,
         getResource,
       }}
     >

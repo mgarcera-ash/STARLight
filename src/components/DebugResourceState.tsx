@@ -2,7 +2,7 @@ import { useResources } from "@/context/ResourceContext";
 import { isSupabaseConfigured } from "@/lib/supabase";
 
 export default function DebugResourceState() {
-  const { resources, approvedResources, isLoading, source } = useResources();
+  const { resources, approvedResources, isLoading, source, errorMessage } = useResources();
 
   return (
     <div className="fixed left-3 top-3 z-[9999] rounded-xl bg-slate-950/90 px-3 py-2 text-xs text-white shadow-lg backdrop-blur">
@@ -12,6 +12,7 @@ export default function DebugResourceState() {
       <div>approved: {approvedResources.length}</div>
       <div>loading: {isLoading ? "yes" : "no"}</div>
       <div>base: {import.meta.env.BASE_URL}</div>
+      {errorMessage ? <div>err: {errorMessage}</div> : null}
     </div>
   );
 }
