@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState, useCall
 import { Resource } from "@/types";
 import { seedResources } from "@/data/seed";
 import { RESOURCE_SELECT_FIELDS, ResourceRow, normalizeResource, normalizeResourceRows } from "@/lib/resources";
-import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+import { isSupabaseConfigured, supabase, supabasePublishableKey, supabaseUrl } from "@/lib/supabase";
 
 const fallbackResources = seedResources.map(normalizeResource);
 
@@ -41,6 +41,34 @@ function formatUnknownError(error: unknown) {
   }
 
   return String(error);
+}
+
+
+async function fetchResourcesViaRest() {
+  if (!supabaseUrl || !supabasePublishableKey) {
+    throw new Error("Supabase REST fallback is not configured.");
+  }
+
+  const params = new URLSearchParams({
+    select: RESOURCE_SELECT_FIELDS.replace(/\s+/g, ""),
+    status: "eq.approved",
+  });
+
+  const response = await fetch(`${supabaseUrl}/rest/v1/resources?${params.toString()}`, {
+    headers: {
+      apikey: supabasePublishableKey,
+      Authorization: `Bearer ${supabasePublishableKey}`,
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(`REST fallback failed (${response.status}): ${details}`);
+  }
+
+  const data = (await response.json()) as ResourceRow[];
+  return normalizeResourceRows(data);
 }
 
 function renderDebugBadge(source: "seed" | "supabase", count: number) {
@@ -111,13 +139,29 @@ export function ResourceProvider({ children }: { children: React.ReactNode }) {
         setSource("supabase");
         setErrorMessage(null);
       } catch (error) {
-        console.warn("Supabase query failed. Returning an empty resource list instead of seed fallback.", error);
-        if (!isActive) {
-          return;
+        console.warn("Supabase query failed. Trying REST fallback.", error);
+
+        try {
+          const fallbackData = await fetchResourcesViaRest();
+
+          if (!isActive) {
+            return;
+          }
+
+          setResources(fallbackData);
+          setSource("supabase");
+          setErrorMessage(null);
+        } catch (fallbackError) {
+          console.warn("Supabase REST fallback also failed.", fallbackError);
+
+          if (!isActive) {
+            return;
+          }
+
+          setResources([]);
+          setSource("supabase");
+          setErrorMessage(`${formatUnknownError(error)} || ${formatUnknownError(fallbackError)}`);
         }
-        setResources([]);
-        setSource("supabase");
-        setErrorMessage(formatUnknownError(error));
       } finally {
         if (isActive) {
           setIsLoading(false);
