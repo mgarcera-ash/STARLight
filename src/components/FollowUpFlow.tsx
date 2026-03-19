@@ -17,7 +17,7 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
 
   const question = questions[currentIndex];
   const total = questions.length;
-  const progress = ((currentIndex) / total) * 100;
+  const progress = total === 0 ? 100 : (currentIndex / total) * 100;
 
   const advance = (subTag?: string) => {
     const updated = { ...answers };
@@ -50,70 +50,78 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
   return (
     <div className="min-h-screen bg-background px-4 pt-6 pb-8">
       <div className="mx-auto flex min-h-[calc(100vh-3.5rem)] w-full max-w-md flex-col">
-      {/* Progress */}
-      <div className="flex items-center gap-3 mb-8">
-        <motion.button
-          onClick={currentIndex === 0 ? onBack : () => {
-            setDirection(-1);
-            setCurrentIndex((i) => i - 1);
-          }}
-          className="text-muted-foreground hover:text-foreground transition-colors text-sm"
-          whileTap={{ scale: 0.95 }}
-        >
-          ← Back
-        </motion.button>
-        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-primary rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          />
-        </div>
-        <span className="text-xs text-muted-foreground font-medium tabular-nums">
-          {currentIndex + 1} of {total}
-        </span>
-      </div>
-
-      {/* Question */}
-      <AnimatePresence mode="wait" custom={direction}>
-        <motion.div
-          key={question.id}
-          custom={direction}
-          initial={{ opacity: 0, x: direction * 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: direction * -60 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="flex-1 flex flex-col"
-        >
-          <h1 className="text-2xl font-bold text-foreground mb-2 leading-tight">
-            {question.question}
-          </h1>
-          <p className="text-sm text-muted-foreground mb-8">
-            Tap what fits best. You can always change later.
-          </p>
-
-          <div className="flex flex-col gap-3">
-            {question.options.map((opt) => (
-              <motion.button
-                key={opt.subTag}
-                onClick={() => handleSelect(opt.subTag)}
-                className="w-full text-left px-5 py-4 rounded-2xl border-2 border-border bg-card text-foreground font-medium text-base transition-all hover:border-primary hover:bg-primary/10 active:scale-[0.98]"
-                whileTap={{ scale: 0.97 }}
-              >
-                {opt.label}
-              </motion.button>
-            ))}
-          </div>
-
-          <button
-            onClick={handleSkip}
-            className="mt-auto pt-8 text-sm text-muted-foreground hover:text-foreground transition-colors self-center"
+        <div className="mb-8 flex items-center gap-3">
+          <motion.button
+            onClick={currentIndex === 0 ? onBack : () => {
+              setDirection(-1);
+              setCurrentIndex((i) => i - 1);
+            }}
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            whileTap={{ scale: 0.95 }}
           >
-            Skip this question
-          </button>
-        </motion.div>
-      </AnimatePresence>
+            ← Back
+          </motion.button>
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+            <motion.div
+              className="h-full rounded-full bg-primary"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            />
+          </div>
+          <span className="text-xs font-medium tabular-nums text-muted-foreground">
+            {currentIndex + 1} of {total}
+          </span>
+        </div>
+
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={question.id}
+            custom={direction}
+            initial={{ opacity: 0, x: direction * 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: direction * -60 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="flex flex-1 flex-col"
+          >
+            <div className="mb-6 rounded-3xl border border-border/70 bg-card/70 p-5 shadow-sm">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+                Let&apos;s narrow this down together
+              </p>
+              <h1 className="mb-3 text-2xl font-bold leading-tight text-foreground">
+                {question.question}
+              </h1>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {question.supportText ?? "Tap what fits best. You can always change later."}
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              {question.options.map((opt) => (
+                <motion.button
+                  key={opt.subTag}
+                  onClick={() => handleSelect(opt.subTag)}
+                  className="w-full rounded-2xl border-2 border-border bg-card px-5 py-4 text-left transition-all hover:border-primary hover:bg-primary/5 active:scale-[0.98]"
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <div className="text-base font-medium text-foreground">{opt.label}</div>
+                  {opt.description && (
+                    <div className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      {opt.description}
+                    </div>
+                  )}
+                </motion.button>
+              ))}
+            </div>
+
+            <button
+              onClick={handleSkip}
+              className="mt-auto self-center pt-8 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Skip this question
+            </button>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

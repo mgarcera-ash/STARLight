@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Category } from "@/types";
+import { Category, Resource } from "@/types";
 import { useResources } from "@/context/ResourceContext";
 import { generateStepGuidance } from "@/data/guidanceCopy";
 import GuidanceStep from "@/components/GuidanceStep";
@@ -18,6 +18,14 @@ interface TriageResultsProps {
 }
 
 const MAX_GUIDED_STEPS = 3;
+const HOUSING = "Housing";
+const HOUSING_QUESTION_IDS = {
+  timeline: "housing-timeline",
+  household: "housing-household",
+  population: "housing-population",
+  access: "housing-access",
+  intake: "housing-intake",
+} as const;
 
 const startOverMessages = [
   "That's okay. Let's try again together.",
@@ -27,6 +35,193 @@ const startOverMessages = [
 
 function getStartOverMessage() {
   return startOverMessages[Math.floor(Math.random() * startOverMessages.length)];
+}
+
+function getOpenPriority(resource: Resource) {
+  return getOpenStatus(parseHours(resource.hours)).isOpen ? 0 : 1;
+}
+
+function compareDefault(a: Resource, b: Resource) {
+  const openDelta = getOpenPriority(a) - getOpenPriority(b);
+  if (openDelta !== 0) return openDelta;
+  return a.urgency - b.urgency || a.title.localeCompare(b.title);
+}
+
+function includesAny(values: string[], targets: string[]) {
+  return targets.some((target) => values.includes(target));
+}
+
+function getHousingAnswers(followUpAnswers: Record<string, string>) {
+  return {
+    timeline: followUpAnswers[HOUSING_QUESTION_IDS.timeline],
+    household: followUpAnswers[HOUSING_QUESTION_IDS.household],
+    population: followUpAnswers[HOUSING_QUESTION_IDS.population],
+    access: followUpAnswers[HOUSING_QUESTION_IDS.access],
+    intake: followUpAnswers[HOUSING_QUESTION_IDS.intake],
+  };
+}
+
+function isHousingHardMismatch(resource: Resource, followUpAnswers: Record<string, string>) {
+  const { household, population } = getHousingAnswers(followUpAnswers);
+  const populations = resource.populationTags;
+
+  if (populations.length === 0) {
+    return false;
+  }
+
+  if (household === "families" && !populations.includes("families")) {
+    return true;
+  }
+
+  if (household === "youth" && !populations.includes("youth")) {
+    return true;
+  }
+
+  if (population === "men" && !populations.includes("men") && includesAny(populations, ["women", "families", "youth"])) {
+    return true;
+  }
+
+  if (population === "women" && !populations.includes("women") && includesAny(populations, ["men", "families", "youth"])) {
+    return true;
+  }
+
+  return false;
+}
+
+function getHousingScore(resource: Resource, followUpAnswers: Record<string, string>) {
+  const { timeline, household, population, access, intake } = getHousingAnswers(followUpAnswers);
+  let score = 0;
+
+  if (resource.domain === "housing") score += 10;
+  if (resource.resourceType === "emergency_shelter") score += 4;
+  if (resource.featured) score += 1;
+  score += Math.max(0, 4 - resource.urgency);
+
+  if (timeline === "tonight") {
+    if (resource.availabilityType === "twenty_four_hours") score += 9;
+    else if (resource.availabilityType === "overnight") score += 7;
+    else if (resource.hours) score += 3;
+  } else if (timeline === "short-term") {
+    if (includesAny(resource.subTags, ["short-term", "tonight"])) score += 4;
+    if (resource.availabilityType === "twenty_four_hours" || resource.availabilityType === "overnight") score += 2;
+  } else if (timeline === "long-term") {
+    if (resource.resourceType === "emergency_shelter") score -= 2;
+  }
+
+  if (household === "single_adults") {
+    if (resource.populationTags.includes("single_adults")) score += 6;
+  } else if (household === "families") {
+    if (resource.populationTags.includes("families")) score += 10;
+  } else if (household === "youth") {
+    if (resource.populationTags.includes("youth")) score += 10;
+  }
+
+  if (population === "men") {
+    if (resource.populationTags.includes("men")) score += 9;
+  } else if (population === "women") {
+    if (resource.populationTags.includes("women")) score += 9;
+  } else if (population === "returning_citizens") {
+    if (includesAny(resource.serviceTags, ["returning_citizens"]) || resource.populationTags.includes("returning_citizens")) {
+      score += 8;
+    }
+  }
+
+  if (access === "wheelchair_accessible") {
+    if (resource.accessibilityTags.includes("wheelchair_accessible")) score += 10;
+    else score -= 7;
+  } else if (access === "ground_floor") {
+    if (includesAny(resource.accessibilityTags, ["ground_floor", "wheelchair_accessible"])) score += 7;
+    else score -= 3;
+  }
+
+  if (intake === "walk_in") {
+    if (resource.intakeType === "walk_in") score += 8;
+    else if (resource.intakeType === "call_first") score += 3;
+    else if (resource.intakeType === "referral") score -= 4;
+  } else if (intake === "call_first") {
+    if (resource.intakeType === "call_first") score += 7;
+    else if (resource.intakeType === "walk_in") score += 4;
+    else if (resource.intakeType === "referral") score -= 2;
+  } else if (intake === "referral") {
+    if (resource.intakeType === "referral") score += 7;
+    else if (resource.intakeType === "call_first") score += 2;
+  }
+
+  if (typeof resource.beds === "number") {
+    score += Math.min(3, Math.floor(resource.beds / 50));
+  }
+
+  return score;
+}
+
+function getMatchedResources(
+  approvedResources: Resource[],
+  needs: Category[],
+  followUpAnswers: Record<string, string>,
+  answerSubTags: string[]
+) {
+  const matched = approvedResources.filter((resource) =>
+    resource.categories.some((category) => needs.includes(category))
+  );
+
+  if (!needs.includes(HOUSING)) {
+    if (answerSubTags.length === 0) {
+      const sorted = [...matched].sort(compareDefault);
+      return {
+        guidedResources: sorted.slice(0, MAX_GUIDED_STEPS),
+        remainingResources: sorted.slice(MAX_GUIDED_STEPS),
+      };
+    }
+
+    const best: Resource[] = [];
+    const other: Resource[] = [];
+
+    for (const resource of matched) {
+      const matchCount = answerSubTags.filter((tag) => resource.subTags.includes(tag)).length;
+      if (matchCount > 0) {
+        best.push(resource);
+      } else {
+        other.push(resource);
+      }
+    }
+
+    best.sort((a, b) => {
+      const openDelta = getOpenPriority(a) - getOpenPriority(b);
+      if (openDelta !== 0) return openDelta;
+      const aCount = answerSubTags.filter((tag) => a.subTags.includes(tag)).length;
+      const bCount = answerSubTags.filter((tag) => b.subTags.includes(tag)).length;
+      if (bCount !== aCount) return bCount - aCount;
+      return a.urgency - b.urgency || a.title.localeCompare(b.title);
+    });
+
+    other.sort(compareDefault);
+
+    const all = [...best, ...other];
+    return {
+      guidedResources: all.slice(0, MAX_GUIDED_STEPS),
+      remainingResources: all.slice(MAX_GUIDED_STEPS),
+    };
+  }
+
+  const eligible = matched.filter((resource) => !isHousingHardMismatch(resource, followUpAnswers));
+  const ranked = [...eligible].sort((a, b) => {
+    const scoreDelta = getHousingScore(b, followUpAnswers) - getHousingScore(a, followUpAnswers);
+    if (scoreDelta !== 0) return scoreDelta;
+
+    const openDelta = getOpenPriority(a) - getOpenPriority(b);
+    if (openDelta !== 0) return openDelta;
+
+    const aBeds = a.beds ?? -1;
+    const bBeds = b.beds ?? -1;
+    if (bBeds !== aBeds) return bBeds - aBeds;
+
+    return a.urgency - b.urgency || a.title.localeCompare(b.title);
+  });
+
+  return {
+    guidedResources: ranked.slice(0, MAX_GUIDED_STEPS),
+    remainingResources: ranked.slice(MAX_GUIDED_STEPS),
+  };
 }
 
 export default function TriageResults({ needs, followUpAnswers, onBack }: TriageResultsProps) {
@@ -43,59 +238,10 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     [followUpAnswers]
   );
 
-  const { guidedResources, remainingResources } = useMemo(() => {
-    const matched = approvedResources.filter((r) =>
-      r.categories.some((c) => needs.includes(c))
-    );
-
-    if (answerSubTags.length === 0) {
-      const sorted = [...matched].sort((a, b) => {
-        const aOpen = getOpenStatus(parseHours(a.hours)).isOpen ? 0 : 1;
-        const bOpen = getOpenStatus(parseHours(b.hours)).isOpen ? 0 : 1;
-        if (aOpen !== bOpen) return aOpen - bOpen;
-        return a.urgency - b.urgency;
-      });
-      return {
-        guidedResources: sorted.slice(0, MAX_GUIDED_STEPS),
-        remainingResources: sorted.slice(MAX_GUIDED_STEPS),
-      };
-    }
-
-    const best: typeof matched = [];
-    const other: typeof matched = [];
-
-    for (const r of matched) {
-      const matchCount = answerSubTags.filter((tag) => r.subTags.includes(tag)).length;
-      if (matchCount > 0) {
-        best.push(r);
-      } else {
-        other.push(r);
-      }
-    }
-
-    best.sort((a, b) => {
-      const aOpen = getOpenStatus(parseHours(a.hours)).isOpen ? 0 : 1;
-      const bOpen = getOpenStatus(parseHours(b.hours)).isOpen ? 0 : 1;
-      if (aOpen !== bOpen) return aOpen - bOpen;
-      const aCount = answerSubTags.filter((t) => a.subTags.includes(t)).length;
-      const bCount = answerSubTags.filter((t) => b.subTags.includes(t)).length;
-      if (bCount !== aCount) return bCount - aCount;
-      return a.urgency - b.urgency;
-    });
-
-    other.sort((a, b) => {
-      const aOpen = getOpenStatus(parseHours(a.hours)).isOpen ? 0 : 1;
-      const bOpen = getOpenStatus(parseHours(b.hours)).isOpen ? 0 : 1;
-      if (aOpen !== bOpen) return aOpen - bOpen;
-      return a.urgency - b.urgency;
-    });
-
-    const all = [...best, ...other];
-    return {
-      guidedResources: all.slice(0, MAX_GUIDED_STEPS),
-      remainingResources: all.slice(MAX_GUIDED_STEPS),
-    };
-  }, [approvedResources, needs, answerSubTags]);
+  const { guidedResources, remainingResources } = useMemo(
+    () => getMatchedResources(approvedResources, needs, followUpAnswers, answerSubTags),
+    [approvedResources, needs, followUpAnswers, answerSubTags]
+  );
 
   const total = guidedResources.length;
   const isOnFinalPage = currentStep >= total;
@@ -116,7 +262,6 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     handleNext();
   };
 
-  // Confirmation screen
   if (showConfirm) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8">
@@ -159,7 +304,6 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     );
   }
 
-  // Final summary page
   if (isOnFinalPage) {
     const summaryHeadline = hasSkips
       ? "We noticed some of those didn't fit."
@@ -176,21 +320,19 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     return (
       <div className="min-h-screen bg-background flex flex-col px-6 pt-12 pb-20">
         <div className="w-full max-w-md mx-auto">
-
-          {/* Step list */}
           <motion.div
             className="flex flex-col gap-3 mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
           >
-            {guidedResources.map((r, i) => {
-              const wasSkipped = skippedSteps.has(i);
-              const status = getOpenStatus(parseHours(r.hours));
+            {guidedResources.map((resource, index) => {
+              const wasSkipped = skippedSteps.has(index);
+              const status = getOpenStatus(parseHours(resource.hours));
               return (
                 <button
-                  key={r.id}
-                  onClick={() => goToStep(i)}
+                  key={resource.id}
+                  onClick={() => goToStep(index)}
                   className={cn(
                     "w-full rounded-2xl p-4 text-left flex items-center gap-3 transition-colors active:scale-[0.98]",
                     wasSkipped
@@ -204,14 +346,14 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
                       ? "bg-muted-foreground/20 text-muted-foreground"
                       : "bg-primary/15 text-primary"
                   )}>
-                    {i + 1}
+                    {index + 1}
                   </span>
                   <div className="flex-1 min-w-0">
                     <p className={cn(
                       "text-sm font-medium truncate",
                       wasSkipped ? "text-muted-foreground line-through" : "text-foreground"
                     )}>
-                      {r.title}
+                      {resource.title}
                     </p>
                     <div className="flex items-center gap-1.5 mt-0.5">
                       <span className={cn(
@@ -245,7 +387,6 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
             {summaryBody}
           </motion.p>
 
-          {/* Actions */}
           <motion.div
             className="flex flex-col gap-3"
             initial={{ opacity: 0 }}
@@ -274,14 +415,14 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
                       className="overflow-hidden"
                     >
                       <div className="flex flex-col gap-3 mt-2">
-                        {remainingResources.map((r, i) => (
+                        {remainingResources.map((resource, index) => (
                           <motion.div
-                            key={r.id}
+                            key={resource.id}
                             initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3, delay: i * 0.1 }}
+                            transition={{ duration: 0.3, delay: index * 0.1 }}
                           >
-                            <ResourceCard resource={r} size="sm" />
+                            <ResourceCard resource={resource} size="sm" />
                           </motion.div>
                         ))}
                       </div>
@@ -303,26 +444,35 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     );
   }
 
-  // Empty state
   if (total === 0) {
+    const isHousingJourney = needs.includes(HOUSING);
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8">
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8 text-center">
         <motion.p
-          className="text-muted-foreground mb-4"
+          className="mb-3 text-lg font-semibold text-primary"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          No resources match your selection right now.
+          {isHousingJourney ? "Nothing here looks like a safe fit yet." : "Nothing matched that combination yet."}
+        </motion.p>
+        <motion.p
+          className="mb-6 max-w-sm text-sm leading-relaxed text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          {isHousingJourney
+            ? "Let's back up and change a couple answers. A different intake path, access need, or household type may open up better options."
+            : "Try a different answer or go back and choose another kind of help."}
         </motion.p>
         <Button onClick={onBack} variant="outline">
-          Try different needs
+          Go back and try again
         </Button>
       </div>
     );
   }
 
-  // Paginated guided steps
   const resource = guidedResources[currentStep];
   const guidance = generateStepGuidance(resource, answerSubTags, currentStep);
 

@@ -31,7 +31,17 @@ export const RESOURCE_SELECT_FIELDS = `
   return_comment,
   tips,
   call_script,
-  created_at
+  created_at,
+  domain,
+  resource_type,
+  population_tags,
+  accessibility_tags,
+  service_tags,
+  availability_type,
+  beds,
+  intake_type,
+  source_dataset,
+  source_record_id
 `;
 
 export interface ResourceRow {
@@ -55,6 +65,16 @@ export interface ResourceRow {
   tips: string[] | null;
   call_script: string | null;
   created_at: string;
+  domain: string | null;
+  resource_type: string | null;
+  population_tags: string[] | null;
+  accessibility_tags: string[] | null;
+  service_tags: string[] | null;
+  availability_type: string | null;
+  beds: number | null;
+  intake_type: string | null;
+  source_dataset: string | null;
+  source_record_id: string | null;
 }
 
 function isCategory(value: string): value is Category {
@@ -107,6 +127,14 @@ function normalizeUrgency(value: number | null | undefined): Resource["urgency"]
   return 3;
 }
 
+function normalizeBeds(value: number | null | undefined) {
+  if (typeof value !== "number" || Number.isNaN(value) || value < 0) {
+    return undefined;
+  }
+
+  return Math.round(value);
+}
+
 export function normalizeResource(resource: Partial<Resource> & Pick<Resource, "id" | "title" | "description">): Resource {
   return {
     id: resource.id,
@@ -131,6 +159,16 @@ export function normalizeResource(resource: Partial<Resource> & Pick<Resource, "
     tips: normalizeStringList(resource.tips),
     callScript: normalizeOptionalText(resource.callScript),
     createdAt: normalizeText(resource.createdAt) || new Date().toISOString().split("T")[0],
+    domain: normalizeOptionalText(resource.domain),
+    resourceType: normalizeOptionalText(resource.resourceType),
+    populationTags: normalizeStringList(resource.populationTags),
+    accessibilityTags: normalizeStringList(resource.accessibilityTags),
+    serviceTags: normalizeStringList(resource.serviceTags),
+    availabilityType: normalizeOptionalText(resource.availabilityType),
+    beds: normalizeBeds(resource.beds),
+    intakeType: normalizeOptionalText(resource.intakeType),
+    sourceDataset: normalizeOptionalText(resource.sourceDataset),
+    sourceRecordId: normalizeOptionalText(resource.sourceRecordId),
   };
 }
 
@@ -158,6 +196,16 @@ export function normalizeResourceRow(row: ResourceRow): Resource {
     tips: row.tips ?? [],
     callScript: row.call_script ?? undefined,
     createdAt: row.created_at,
+    domain: row.domain ?? undefined,
+    resourceType: row.resource_type ?? undefined,
+    populationTags: row.population_tags ?? [],
+    accessibilityTags: row.accessibility_tags ?? [],
+    serviceTags: row.service_tags ?? [],
+    availabilityType: row.availability_type ?? undefined,
+    beds: row.beds ?? undefined,
+    intakeType: row.intake_type ?? undefined,
+    sourceDataset: row.source_dataset ?? undefined,
+    sourceRecordId: row.source_record_id ?? undefined,
   });
 }
 

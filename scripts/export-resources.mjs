@@ -35,7 +35,17 @@ const params = new URLSearchParams({
     "return_comment",
     "tips",
     "call_script",
-    "created_at"
+    "created_at",
+    "domain",
+    "resource_type",
+    "population_tags",
+    "accessibility_tags",
+    "service_tags",
+    "availability_type",
+    "beds",
+    "intake_type",
+    "source_dataset",
+    "source_record_id"
   ].join(","),
   status: "eq.approved",
   order: "featured.desc,urgency.asc,title.asc"

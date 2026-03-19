@@ -29,13 +29,30 @@ export interface Resource {
   tips?: string[];
   callScript?: string;
   createdAt: string;
+  domain?: string;
+  resourceType?: string;
+  populationTags: string[];
+  accessibilityTags: string[];
+  serviceTags: string[];
+  availabilityType?: string;
+  beds?: number;
+  intakeType?: string;
+  sourceDataset?: string;
+  sourceRecordId?: string;
 }
 
 export type NewResource = Omit<Resource, "id" | "status" | "createdAt">;
+
+export interface FollowUpQuestionOption {
+  label: string;
+  subTag: string;
+  description?: string;
+}
 
 export interface FollowUpQuestion {
   id: string;
   category: Category;
   question: string;
-  options: { label: string; subTag: string }[];
+  supportText?: string;
+  options: FollowUpQuestionOption[];
 }
