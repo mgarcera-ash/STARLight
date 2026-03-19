@@ -318,8 +318,14 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
     };
 
     return (
-      <div className="min-h-screen bg-background flex flex-col px-6 pt-12 pb-20">
-        <div className="w-full max-w-md mx-auto">
+      <div className="relative min-h-screen overflow-hidden bg-background px-6 pt-12 pb-20">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-16 left-[-4rem] h-72 w-72 rounded-full bg-primary/14 blur-3xl" />
+          <div className="absolute top-40 right-[-5rem] h-80 w-80 rounded-full bg-star-blue/10 blur-3xl" />
+          <div className="absolute bottom-[-5rem] left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/7 blur-3xl" />
+        </div>
+
+        <div className="relative mx-auto w-full max-w-md">
           <motion.div
             className="flex flex-col gap-3 mb-8"
             initial={{ opacity: 0 }}
@@ -447,7 +453,13 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   if (total === 0) {
     const isHousingJourney = needs.includes(HOUSING);
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-8 text-center">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-8 text-center">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute top-16 left-[-4rem] h-72 w-72 rounded-full bg-primary/14 blur-3xl" />
+          <div className="absolute bottom-[-4rem] right-[-4rem] h-72 w-72 rounded-full bg-star-blue/10 blur-3xl" />
+        </div>
+
+        <div className="relative">
         <motion.p
           className="mb-3 text-lg font-semibold text-primary"
           initial={{ opacity: 0 }}
@@ -469,6 +481,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
         <Button onClick={onBack} variant="outline">
           Go back and try again
         </Button>
+        </div>
       </div>
     );
   }
@@ -477,8 +490,14 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   const guidance = generateStepGuidance(resource, answerSubTags, currentStep);
 
   return (
-    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
-      <div className="px-4 pt-4 pb-2 z-10">
+    <div className="relative flex h-[100dvh] flex-col overflow-hidden bg-background">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-10 left-[-4rem] h-72 w-72 rounded-full bg-primary/14 blur-3xl" />
+        <div className="absolute top-32 right-[-6rem] h-80 w-80 rounded-full bg-star-blue/10 blur-3xl" />
+        <div className="absolute bottom-[-5rem] left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/7 blur-3xl" />
+      </div>
+
+      <div className="relative z-10 px-4 pt-4 pb-2">
         <motion.button
           onClick={() => setShowConfirm(true)}
           className="text-muted-foreground hover:text-foreground transition-colors text-sm"
@@ -496,7 +515,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: direction * -30 }}
           transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
-          className="flex-1 flex flex-col overflow-hidden"
+          className="relative z-10 flex flex-1 flex-col overflow-hidden"
         >
           <GuidanceStep
             resource={resource}

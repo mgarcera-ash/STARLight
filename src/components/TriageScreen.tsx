@@ -72,8 +72,14 @@ export default function TriageScreen({ onSubmit }: TriageScreenProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background px-5 pt-12 pb-24">
-      <div className="mx-auto flex min-h-[calc(100vh-6rem)] w-full max-w-md flex-col">
+    <div className="relative min-h-screen overflow-hidden bg-background px-5 pt-12 pb-24">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-20 left-1/2 h-72 w-72 -translate-x-[68%] rounded-full bg-primary/16 blur-3xl" />
+        <div className="absolute top-32 right-[-5.5rem] h-72 w-72 rounded-full bg-star-blue/10 blur-3xl" />
+        <div className="absolute bottom-0 left-[-4.5rem] h-64 w-64 rounded-full bg-accent/8 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto flex min-h-[calc(100vh-6rem)] w-full max-w-md flex-col">
       {/* Header */}
       <motion.div
         className="mb-8 text-center"
