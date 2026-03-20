@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Resource } from "@/types";
 import { Tile, stagger } from "./types";
 
-function buildTiles(resource: Resource): (Tile & { bg: string })[] {
+function buildTiles(resource: Resource): (Tile & { bg: string; className?: string; iconClassName?: string; labelClassName?: string })[] {
   const hasPhone = !!resource.contact.phone;
   const hasWebsite = !!resource.contact.website;
   const hasEmail = !!resource.contact.email;
@@ -14,10 +14,13 @@ function buildTiles(resource: Resource): (Tile & { bg: string })[] {
   if (hasPhone) {
     candidates.push({
       key: "call",
-      icon: <Phone className="h-5 w-5 text-amber-500" />,
+      icon: <Phone className="h-6 w-6 text-white" />,
       label: "Tap to call",
       href: `tel:${resource.contact.phone}`,
-      bg: "bg-amber-500/10 border border-amber-500/15",
+      bg: "bg-star-blue border border-star-blue/90 shadow-[0_16px_36px_-18px_rgba(37,99,235,0.65)]",
+      className: "aspect-square max-w-[112px] flex-none rounded-full",
+      iconClassName: "gap-1.5",
+      labelClassName: "text-primary-foreground text-center text-xs font-semibold leading-tight",
     });
   }
 
@@ -65,12 +68,12 @@ export default function ActionTiles({ resource, delay = 0.8 }: ActionTilesProps)
             href={tile.href}
             target={tile.external ? "_blank" : undefined}
             rel={tile.external ? "noopener noreferrer" : undefined}
-            className={`flex-1 rounded-2xl overflow-hidden relative flex flex-col items-center justify-center ${tile.bg} hover:opacity-90 transition-opacity active:scale-[0.97] animate-soft-pulse`}
-            style={{ minHeight: "100px" }}
+            className={`relative flex flex-col items-center justify-center overflow-hidden transition-opacity active:scale-[0.97] animate-soft-pulse ${tile.bg} ${tile.className ?? "flex-1 rounded-2xl"}`}
+            style={{ minHeight: tile.key === "call" ? "112px" : "100px" }}
           >
-            <div className="relative z-10 flex flex-col items-center gap-2 p-4">
+            <div className={`relative z-10 flex flex-col items-center ${tile.iconClassName ?? "gap-2"} p-4`}>
               {tile.icon}
-              <span className="text-sm font-medium text-foreground">{tile.label}</span>
+              <span className={tile.labelClassName ?? "text-sm font-medium text-foreground"}>{tile.label}</span>
             </div>
           </a>
         ))}
