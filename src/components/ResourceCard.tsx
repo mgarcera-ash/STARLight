@@ -88,11 +88,11 @@ export default function ResourceCard({ resource, size = "sm" }: ResourceCardProp
               <IconComp className={cn(isLarge ? "h-7 w-7" : "h-6 w-6")} strokeWidth={1.8} />
             </div>
             <div className="flex flex-wrap justify-end gap-2">
-              <span className={cn("rounded-full border border-border/60 bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]", config.badge)}>
+              <span className={cn("rounded-full border border-border/60 bg-white/90 px-3 py-1 text-xs font-semibold", config.badge)}>
                 {primaryCat}
               </span>
               {resource.featured && (
-                <span className="rounded-full border border-star-gold/45 bg-star-gold/25 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-800">
+                <span className="rounded-full border border-star-gold/45 bg-star-gold/25 px-3 py-1 text-xs font-semibold text-amber-800">
                   Featured
                 </span>
               )}
