@@ -159,7 +159,7 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
                   aria-label={detail}
                 >
                   <span className={cn(
-                    "text-[11px] font-medium",
+                    "text-[11px] font-semibold",
                     isToday ? "text-foreground" : "text-muted-foreground"
                   )}>
                     {label}
