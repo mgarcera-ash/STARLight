@@ -37,8 +37,6 @@ export default function GuidanceStepSplit({
     resource.populationTags.includes("women") ? "Women" : null,
     resource.populationTags.includes("families") ? "Families" : null,
     resource.populationTags.includes("single_adults") ? "Single adults" : null,
-    resource.availabilityType === "twenty_four_hours" ? "24 hours" : null,
-    resource.availabilityType === "overnight" ? "Overnight" : null,
     resource.intakeType === "walk_in" ? "Walk in" : null,
     resource.intakeType === "call_first" ? "Call first" : null,
     resource.intakeType === "referral" ? "Referral needed" : null,
@@ -55,6 +53,9 @@ export default function GuidanceStepSplit({
               {summaryBits.join(" • ")}
             </p>
           )}
+          <div className="mb-5">
+            <HoursIndicator hours={resource.hours} />
+          </div>
           {resource.contact.phone && (
             <div className="flex justify-center">
               <a
@@ -70,18 +71,6 @@ export default function GuidanceStepSplit({
           )}
         </motion.div>
 
-        <motion.div className="mb-6 flex justify-center" {...stagger(0.35)}>
-          <HoursIndicator hours={resource.hours} />
-        </motion.div>
-
-        {resource.location && (
-          <LocationCard
-            location={resource.location}
-            hasCoords={!!resource.coordinates}
-            delay={0.7}
-          />
-        )}
-
         <InfoCarousel
           resource={resource}
           guidance={guidance}
@@ -89,6 +78,13 @@ export default function GuidanceStepSplit({
           callScript={callScript}
         />
 
+        {resource.location && (
+          <LocationCard
+            location={resource.location}
+            hasCoords={!!resource.coordinates}
+            delay={1.35}
+          />
+        )}
         <GuidanceFooter
           tips={tips}
           onSkip={onSkip}
