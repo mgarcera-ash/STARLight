@@ -332,7 +332,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
 
         <div className="relative mx-auto w-full max-w-md">
           <motion.div
-            className="flex flex-col gap-3 mb-8"
+            className="mb-8 flex flex-col gap-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
@@ -345,17 +345,17 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
                   key={resource.id}
                   onClick={() => goToStep(index)}
                   className={cn(
-                    "w-full rounded-2xl p-4 text-left flex items-center gap-3 transition-colors active:scale-[0.98]",
+                    "flex w-full items-center gap-3 rounded-3xl border-2 p-4 text-left shadow-[0_18px_48px_-32px_rgba(15,23,42,0.18)] transition-colors active:scale-[0.98]",
                     wasSkipped
-                      ? "bg-muted/30 border border-border/30"
-                      : "bg-muted/50 border border-border/50 hover:bg-muted/80"
+                      ? "border-border/50 bg-muted/25"
+                      : "border-border/70 bg-card/90 hover:border-primary/35 hover:bg-card"
                   )}
                 >
                   <span className={cn(
-                    "flex items-center justify-center h-7 w-7 rounded-full text-xs font-bold shrink-0",
+                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl border text-xs font-bold",
                     wasSkipped
-                      ? "bg-muted-foreground/20 text-muted-foreground"
-                      : "bg-primary/15 text-primary"
+                      ? "border-border/40 bg-muted-foreground/15 text-muted-foreground"
+                      : "border-primary/25 bg-primary/12 text-primary"
                   )}>
                     {index + 1}
                   </span>
@@ -371,7 +371,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
                         "h-1.5 w-1.5 rounded-full shrink-0",
                         status.isOpen ? "bg-emerald-500" : "bg-destructive"
                       )} />
-                      <span className="text-xs text-muted-foreground">{status.label}</span>
+                      <span className="text-sm font-medium text-muted-foreground">{status.label}</span>
                     </div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
@@ -381,7 +381,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           </motion.div>
 
           <motion.p
-            className="text-lg font-semibold text-primary mb-3 text-center"
+            className="mb-3 text-center text-lg font-semibold text-primary"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
@@ -390,7 +390,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
           </motion.p>
 
           <motion.p
-            className="text-xl font-bold text-foreground text-center leading-relaxed mb-8"
+            className="mb-8 text-center text-xl font-bold leading-relaxed text-foreground"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.0 }}
@@ -407,7 +407,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
             {remainingResources.length > 0 && (
               <>
                 <Button
-                  className="w-full rounded-xl bg-violet-600 hover:bg-violet-700 text-white border-0"
+                  className="w-full rounded-2xl border-2 border-primary bg-primary px-4 py-6 text-base font-semibold text-primary-foreground shadow-[0_18px_40px_-24px_rgba(13,148,136,0.55)] hover:bg-primary/90"
                   onClick={() => setShowAllOptions(!showAllOptions)}
                 >
                   <ChevronDown
@@ -445,7 +445,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
 
             <Button
               onClick={() => setShowConfirm(true)}
-              className="w-full rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground border-0"
+              className="w-full rounded-2xl border-2 border-border/70 bg-card/90 px-4 py-6 text-base font-semibold text-foreground hover:border-primary/35 hover:bg-card"
             >
               Start over
             </Button>
@@ -483,7 +483,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
             ? "Let's back up and change a couple answers. A different intake path, access need, or household type may open up better options."
             : "Try a different answer or go back and choose another kind of help."}
         </motion.p>
-        <Button onClick={onBack} variant="outline">
+        <Button onClick={onBack} variant="outline" className="rounded-2xl border-2 border-border/70 bg-card/90 px-5 py-5 text-sm font-semibold">
           Go back and try again
         </Button>
         </div>
