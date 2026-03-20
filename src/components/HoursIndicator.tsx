@@ -138,7 +138,7 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
 
   return (
     <div className={cn("w-full", className)}>
-      <div className="flex items-start justify-between gap-2">
+      <div className="flex items-start justify-between gap-1">
         {DAY_LABELS.map((label, i) => {
           const isToday = i === todayIdx;
           const isSelected = i === selectedDay;
@@ -155,7 +155,7 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
               <PopoverTrigger asChild>
                 <button
                   type="button"
-                  className="flex flex-1 flex-col items-center gap-1.5 rounded-2xl px-1 py-1 transition-colors"
+                  className="flex flex-1 flex-col items-center gap-1.5 rounded-2xl px-0.5 py-1 transition-colors"
                   aria-label={detail}
                 >
                   <span className={cn(
@@ -166,7 +166,7 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
                   </span>
                   <span
                     className={cn(
-                      "h-3 w-3 rounded-full border transition-all",
+                      "h-4 w-4 rounded-full border transition-all",
                       isOpenDay
                         ? "border-primary/20 bg-primary"
                         : "border-rose-200 bg-rose-500",
