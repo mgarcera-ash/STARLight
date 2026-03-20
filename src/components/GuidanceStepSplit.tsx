@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
+import { Phone } from "lucide-react";
 import { Resource } from "@/types";
 import { StepGuidance, generateContextTips, generateCallScript } from "@/data/guidanceCopy";
 import { stagger } from "./guidance/types";
 import HoursIndicator from "@/components/HoursIndicator";
-import ActionTiles from "./guidance/ActionTiles";
 import GuidanceFooter from "./guidance/GuidanceFooter";
 import InfoCarousel from "./guidance/InfoCarousel";
 
@@ -55,9 +55,22 @@ export default function GuidanceStepSplit({
             </p>
           )}
           {guidance.detail && (
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="mb-5 text-sm leading-relaxed text-muted-foreground">
               {guidance.detail}
             </p>
+          )}
+          {resource.contact.phone && (
+            <div className="flex justify-center">
+              <a
+                href={`tel:${resource.contact.phone}`}
+                className="relative flex aspect-square w-28 flex-none flex-col items-center justify-center overflow-hidden rounded-full border border-star-blue/90 bg-star-blue text-primary-foreground shadow-[0_16px_36px_-18px_rgba(37,99,235,0.65)] transition-opacity active:scale-[0.97] animate-soft-pulse"
+              >
+                <div className="relative z-10 flex flex-col items-center gap-1.5 p-4">
+                  <Phone className="h-6 w-6 text-white" />
+                  <span className="text-center text-xs font-semibold leading-tight text-primary-foreground">Tap to call</span>
+                </div>
+              </a>
+            </div>
           )}
         </motion.div>
 
@@ -65,7 +78,6 @@ export default function GuidanceStepSplit({
           <HoursIndicator hours={resource.hours} />
         </motion.div>
 
-        <ActionTiles resource={resource} />
 
         <InfoCarousel
           resource={resource}
