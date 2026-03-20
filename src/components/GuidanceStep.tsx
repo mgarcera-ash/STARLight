@@ -29,7 +29,7 @@ export default function GuidanceStep({ resource, guidance, subTags = [], onSkip,
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-md px-6 pt-12 pb-20">
         <motion.div className="mb-6 rounded-3xl border-2 border-border/70 bg-card/90 p-5 text-center shadow-[0_20px_60px_-32px_rgba(15,23,42,0.22)] backdrop-blur-sm" {...stagger(0)}>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary/80">
+          <p className="mb-3 text-lg font-semibold text-primary">
             {guidance.headline}
           </p>
           <p className="mb-3 text-2xl font-bold leading-tight text-foreground">
