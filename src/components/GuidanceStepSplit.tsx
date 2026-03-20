@@ -53,11 +53,8 @@ export default function GuidanceStepSplit({
               {summaryBits.join(" • ")}
             </p>
           )}
-          <div className="mb-5">
-            <HoursIndicator hours={resource.hours} />
-          </div>
           {resource.contact.phone && (
-            <div className="flex justify-center">
+            <div className="mb-5 flex justify-center">
               <a
                 href={`tel:${resource.contact.phone}`}
                 className="relative flex aspect-square w-28 flex-none flex-col items-center justify-center overflow-hidden rounded-full border border-star-blue/90 bg-star-blue text-primary-foreground shadow-[0_16px_36px_-18px_rgba(37,99,235,0.65)] transition-opacity active:scale-[0.97] animate-soft-pulse"
@@ -69,6 +66,9 @@ export default function GuidanceStepSplit({
               </a>
             </div>
           )}
+          <div className="">
+            <HoursIndicator hours={resource.hours} />
+          </div>
         </motion.div>
 
         <InfoCarousel
