@@ -38,10 +38,6 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
     advance(subTag);
   };
 
-  const handleSkip = () => {
-    advance();
-  };
-
   if (!question) {
     onComplete(answers);
     return null;
@@ -95,7 +91,7 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
               </h1>
             </div>
 
-            <div className="mt-auto flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
               {question.options.map((opt) => (
                 <motion.button
                   key={opt.subTag}
@@ -106,14 +102,6 @@ export default function FollowUpFlow({ needs, onComplete, onBack }: FollowUpFlow
                   <div className="text-base font-medium text-foreground">{opt.label}</div>
                 </motion.button>
               ))}
-
-              <motion.button
-                onClick={handleSkip}
-                className="w-full rounded-2xl border border-dashed border-border/80 bg-card/60 px-5 py-4 text-left transition-all hover:border-primary/50 hover:bg-primary/5 active:scale-[0.98]"
-                whileTap={{ scale: 0.97 }}
-              >
-                <div className="text-base font-medium text-muted-foreground">Skip this question</div>
-              </motion.button>
             </div>
           </motion.div>
         </AnimatePresence>
