@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 const DAY_LABELS = ["M", "T", "W", "T", "F", "S", "S"] as const;
@@ -30,7 +31,7 @@ export function parseHours(hours: string): ParsedHours {
   const h = hours.toLowerCase();
   const openDays = Array(7).fill(false) as boolean[];
 
-  if (h.includes("24/7") || h.includes("24-hour") || h.includes("24 hour")) {
+  if (/(?:24\s*\/\s*7|24\s*-\s*hour|24\s*hours?|24\s*hrs?|24hr)\b/.test(h)) {
     return { is247: true, openDays: Array(7).fill(true), openTime: null, closeTime: null, raw: hours };
   }
 
@@ -133,9 +134,7 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
   const now = new Date();
   const jsDay = now.getDay();
   const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
-  const [selectedDay, setSelectedDay] = useState(todayIdx);
-
-  const detail = getDayDetail(parsed, selectedDay);
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   return (
     <div className={cn("w-full", className)}>
@@ -145,35 +144,50 @@ export default function HoursIndicator({ hours, className }: HoursIndicatorProps
           const isSelected = i === selectedDay;
           const isOpenDay = parsed.is247 || parsed.openDays[i];
 
+          const detail = getDayDetail(parsed, i);
+
           return (
-            <button
+            <Popover
               key={`${label}-${i}`}
-              type="button"
-              onClick={() => setSelectedDay(i)}
-              className="flex flex-1 flex-col items-center gap-1.5 rounded-2xl px-1 py-1 transition-colors"
-              aria-label={getDayDetail(parsed, i)}
+              open={isSelected}
+              onOpenChange={(open) => setSelectedDay(open ? i : null)}
             >
-              <span className={cn(
-                "text-[11px] font-medium",
-                isToday ? "text-foreground" : "text-muted-foreground"
-              )}>
-                {label}
-              </span>
-              <span
-                className={cn(
-                  "h-3 w-3 rounded-full border transition-all",
-                  isOpenDay
-                    ? "border-primary/20 bg-primary"
-                    : "border-rose-200 bg-rose-500",
-                  isSelected && "scale-110 ring-2 ring-foreground/10 ring-offset-2 ring-offset-card",
-                  isToday && !isSelected && "ring-2 ring-primary/20 ring-offset-2 ring-offset-card"
-                )}
-              />
-            </button>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className="flex flex-1 flex-col items-center gap-1.5 rounded-2xl px-1 py-1 transition-colors"
+                  aria-label={detail}
+                >
+                  <span className={cn(
+                    "text-[11px] font-medium",
+                    isToday ? "text-foreground" : "text-muted-foreground"
+                  )}>
+                    {label}
+                  </span>
+                  <span
+                    className={cn(
+                      "h-3 w-3 rounded-full border transition-all",
+                      isOpenDay
+                        ? "border-primary/20 bg-primary"
+                        : "border-rose-200 bg-rose-500",
+                      isSelected && "scale-110 ring-2 ring-foreground/10 ring-offset-2 ring-offset-card",
+                      isToday && !isSelected && "ring-2 ring-primary/20 ring-offset-2 ring-offset-card"
+                    )}
+                  />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent
+                side="top"
+                align="center"
+                sideOffset={10}
+                className="w-auto rounded-2xl border-border/70 bg-card/95 px-3 py-2 text-xs font-medium text-foreground shadow-[0_16px_40px_-24px_rgba(15,23,42,0.45)] backdrop-blur-sm"
+              >
+                {detail}
+              </PopoverContent>
+            </Popover>
           );
         })}
       </div>
-      <p className="mt-3 text-center text-xs font-medium text-muted-foreground">{detail}</p>
     </div>
   );
 }
