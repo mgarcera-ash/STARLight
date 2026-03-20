@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Category, Resource } from "@/types";
 import { useResources } from "@/context/ResourceContext";
 import { generateStepGuidance } from "@/data/guidanceCopy";
-import GuidanceStep from "@/components/GuidanceStep";
+import GuidanceStep, { GuidanceStepVariant } from "@/components/GuidanceStep";
 import ResourceCard from "@/components/ResourceCard";
 import { parseHours, getOpenStatus } from "@/components/HoursIndicator";
 
@@ -232,6 +232,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmMessage] = useState(getStartOverMessage);
   const [skippedSteps, setSkippedSteps] = useState<Set<number>>(new Set());
+  const [guidanceVariant, setGuidanceVariant] = useState<GuidanceStepVariant>("split");
 
   const answerSubTags = useMemo(
     () => Object.values(followUpAnswers).filter(Boolean),
@@ -503,13 +504,40 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
       </div>
 
       <div className="relative z-10 px-4 pt-4 pb-2">
-        <motion.button
-          onClick={() => setShowConfirm(true)}
-          className="text-muted-foreground hover:text-foreground transition-colors text-sm"
-          whileTap={{ scale: 0.95 }}
-        >
-          ← Start over
-        </motion.button>
+        <div className="flex items-center justify-between gap-3">
+          <motion.button
+            onClick={() => setShowConfirm(true)}
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm"
+            whileTap={{ scale: 0.95 }}
+          >
+            ← Start over
+          </motion.button>
+
+          <div className="flex items-center gap-1 rounded-full border border-border/70 bg-card/85 p-1 shadow-sm backdrop-blur-sm">
+            <button
+              onClick={() => setGuidanceVariant("split")}
+              className={cn(
+                "rounded-full px-3 py-1.5 text-xs font-semibold transition-colors",
+                guidanceVariant === "split"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Split
+            </button>
+            <button
+              onClick={() => setGuidanceVariant("action-first")}
+              className={cn(
+                "rounded-full px-3 py-1.5 text-xs font-semibold transition-colors",
+                guidanceVariant === "action-first"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Action-first
+            </button>
+          </div>
+        </div>
       </div>
 
       <AnimatePresence mode="wait" custom={direction}>
@@ -531,6 +559,7 @@ export default function TriageResults({ needs, followUpAnswers, onBack }: Triage
             onBack={currentStep > 0 ? handleBack : undefined}
             showBack={currentStep > 0}
             nextLabel={currentStep + 1 < total ? "Next step" : "See summary"}
+            variant={guidanceVariant}
           />
         </motion.div>
       </AnimatePresence>
