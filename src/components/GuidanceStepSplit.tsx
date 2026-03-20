@@ -6,6 +6,7 @@ import { stagger } from "./guidance/types";
 import HoursIndicator from "@/components/HoursIndicator";
 import GuidanceFooter from "./guidance/GuidanceFooter";
 import InfoCarousel from "./guidance/InfoCarousel";
+import LocationCard from "./guidance/LocationCard";
 
 interface GuidanceStepSplitProps {
   resource: Resource;
@@ -50,13 +51,8 @@ export default function GuidanceStepSplit({
           <p className="mb-3 text-lg font-semibold text-primary">{guidance.headline}</p>
           <p className="mb-3 text-2xl font-bold leading-tight text-foreground">{resource.title}</p>
           {summaryBits.length > 0 && (
-            <p className="mb-3 text-sm font-semibold leading-relaxed text-muted-foreground">
+            <p className="mb-5 text-sm font-semibold leading-relaxed text-muted-foreground">
               {summaryBits.join(" • ")}
-            </p>
-          )}
-          {guidance.detail && (
-            <p className="mb-5 text-sm leading-relaxed text-muted-foreground">
-              {guidance.detail}
             </p>
           )}
           {resource.contact.phone && (
@@ -78,6 +74,13 @@ export default function GuidanceStepSplit({
           <HoursIndicator hours={resource.hours} />
         </motion.div>
 
+        {resource.location && (
+          <LocationCard
+            location={resource.location}
+            hasCoords={!!resource.coordinates}
+            delay={0.7}
+          />
+        )}
 
         <InfoCarousel
           resource={resource}

@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Globe, MapPin, MessageCircle, Clock3, ShieldCheck } from "lucide-react";
+import { ExternalLink, Globe, MessageCircle, Clock3, ShieldCheck } from "lucide-react";
 import { Resource } from "@/types";
 import { StepGuidance } from "@/data/guidanceCopy";
-import { getMapsUrl, stagger } from "./types";
+import { stagger } from "./types";
 
 interface InfoCarouselProps {
   resource: Resource;
@@ -32,8 +32,15 @@ function getPopulationLabel(resource: Resource) {
 
 function getInfoCards(resource: Resource, guidance: StepGuidance, tips: string[], callScript: string | null): InfoCardProps[] {
   const cards: InfoCardProps[] = [];
-  const hasCoords = !!resource.coordinates;
   const population = getPopulationLabel(resource);
+
+  if (guidance.detail) {
+    cards.push({
+      title: "What to know",
+      body: guidance.detail,
+      icon: <MessageCircle className="h-4.5 w-4.5" />,
+    });
+  }
 
   if (resource.contact.website) {
     cards.push({
@@ -41,16 +48,6 @@ function getInfoCards(resource: Resource, guidance: StepGuidance, tips: string[]
       body: "Visit their site for updates, forms, and contact details.",
       icon: <Globe className="h-4.5 w-4.5" />,
       href: resource.contact.website,
-      external: true,
-    });
-  }
-
-  if (resource.location) {
-    cards.push({
-      title: "Directions",
-      body: resource.location,
-      icon: <MapPin className="h-4.5 w-4.5" />,
-      href: getMapsUrl(resource.location, hasCoords),
       external: true,
     });
   }
@@ -82,7 +79,9 @@ function getInfoCards(resource: Resource, guidance: StepGuidance, tips: string[]
   if (fitDetails.length > 0 || resource.eligibility) {
     cards.push({
       title: "Fit and intake",
-      body: resource.eligibility ? `${fitDetails.join(" • ")}${fitDetails.length ? " • " : ""}${resource.eligibility}` : fitDetails.join(" • "),
+      body: resource.eligibility
+        ? `${fitDetails.join(" • ")}${fitDetails.length ? " • " : ""}${resource.eligibility}`
+        : fitDetails.join(" • "),
       icon: <ShieldCheck className="h-4.5 w-4.5" />,
     });
   }
@@ -91,12 +90,6 @@ function getInfoCards(resource: Resource, guidance: StepGuidance, tips: string[]
     cards.push({
       title: "When they pick up",
       body: callScript.replace(/^Say:\s*/i, ""),
-      icon: <MessageCircle className="h-4.5 w-4.5" />,
-    });
-  } else if (guidance.detail) {
-    cards.push({
-      title: "What to know",
-      body: guidance.detail,
       icon: <MessageCircle className="h-4.5 w-4.5" />,
     });
   }
